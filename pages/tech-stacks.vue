@@ -1,0 +1,136 @@
+<template>
+  <div>
+    <AppLoadingIndicator :is-loading="status === 'pending' && !error" />
+
+    <AppError
+      :has-error="status === 'error' || Boolean(error)"
+      :error="error"
+      :status="status"
+      @try-again="refresh" />
+
+    <template v-if="stacks?.data">
+      <UFormField
+        class="pt-8"
+        :label="$t('MyTechStacks')"
+        :description="$t('TechStackHelpText')"
+        :ui="{ label: 'max-sm:hidden text-lg', description: 'prose text-md' }" />
+
+      <div class="pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+        <ULink
+          v-for="item in stacks?.data"
+          :key="item.id"
+          :to="item.website"
+          :ui="{ base: 'h-full' }"
+          target="_blank"
+          rel="noopener noreferrer">
+          <UCard
+            as="article"
+            :ui="{
+              root: 'group h-full transition hover:shadow-lg hover:bg-elevated/50',
+              body: 'space-y-2',
+            }">
+            <UButton
+              as="div"
+              class="p-0 text-md"
+              variant="link">
+              <img
+                class="mr-2 h-8 max-w-[100px] object-contain select-none"
+                :src="item.logo?.url"
+                :alt="item.logo?.alternativeText || item.name" />
+              <span class="stackName transition text-default group-hover:text-primary line-clamp-2">
+                {{ item.name }}
+              </span>
+              <template #trailing>
+                <UIcon
+                  name="material-symbols:arrow-outward-rounded"
+                  class="self-center text-muted transition group-hover:text-primary group-hover:-translate-y-1 group-hover:translate-x-1" />
+              </template>
+            </UButton>
+            <div>
+              <UBadge
+                v-if="item.purpose"
+                :key="item.id"
+                class="truncate font-light ml-auto"
+                variant="soft"
+                color="neutral"
+                :label="item.purpose" />
+            </div>
+            <MDC
+              :value="stripMarkdownLinks(item.description)"
+              class="line-clamp-5 text-md text-muted text-pretty whitespace-pre-line prose dark:prose-invert"
+              tag="article" />
+          </UCard>
+        </ULink>
+      </div>
+    </template>
+  </div>
+</template>
+
+<!--
+status (reactive):
+idle = request has not yet started
+pending = loading
+success = 200
+error = fetch failed
+-->
+
+<script setup lang="ts">
+import type { TechStackResponse } from '@/types';
+
+const { t: $t, locale } = useI18n();
+const route = useRoute();
+const nuxtApp = useNuxtApp();
+
+useSeoMeta({
+  title: () => $t('TechStacks'),
+  description: () => $t('TechStackHelpText'),
+  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
+  ogTitle: () => $t('TechStacks'),
+  ogDescription: () => $t('TechStackHelpText'),
+  ogImage: '/og_banner.png',
+  ogUrl: `https://duetocodes.com${route.fullPath}`,
+  ogType: 'website',
+  twitterTitle: () => $t('TechStacks'),
+  twitterDescription: () => $t('TechStackHelpText'),
+  twitterCard: 'summary_large_image',
+  twitterImage: '/og_banner.png',
+});
+
+const {
+  status,
+  refresh,
+  data: stacks,
+  error,
+} = useFetch<{ data: TechStackResponse[] | null }>(
+  `/api/tech-stacks`,
+  {
+    method: 'GET',
+    key: route.fullPath,
+    query: {
+      locale: locale.value,
+    },
+    getCachedData(key) {
+      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      return data;
+    },
+  },
+);
+</script>
+
+<style scoped>
+@media (pointer:coarse) {
+  .group:hover {
+    background-color: color-mix(in oklch, var(--ui-bg-elevated) 50%, transparent);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .group:hover .iconify {
+    color: var(--ui-primary);
+    transform: translateX(4px) translateY(-4px);
+  }
+
+  .group:hover .stackName {
+    color: var(--ui-primary);
+  }
+}
+</style>

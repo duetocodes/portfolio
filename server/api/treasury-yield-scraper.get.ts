@@ -1,0 +1,54 @@
+import type { FetchError } from 'ofetch';
+import { useDateFormat } from '@vueuse/core';
+import type { TreasuryChartRowData } from '~/types';
+
+// by year = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2023'
+// by month = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202306'
+const BASE_URL = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=';
+
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event);
+
+  const ascendingSorted = Array.from(
+    { length: Number(query.to) - Number(query.from) + 1 },
+    (_, index) => String(Number(query.from) + index),
+  );
+
+  try {
+    const chartData = await Promise.all(ascendingSorted.map(year => getPerYearChartData(year)));
+    return chartData.flat();
+  }
+  catch (err) {
+    const error = err as FetchError;
+
+    throw createError({
+      statusCode: error?.statusCode,
+      statusMessage: error?.statusMessage,
+    });
+  }
+});
+
+const getPerYearChartData = async (year: string) => {
+  // no conditional regex as the web already included all yield data per view
+  return $fetch<string>(BASE_URL + year)
+    .then((html) => {
+      const match = html.match(/<tbody>(.*?)<\/tbody>/s); // extract string between tbody
+      const content = match ? match[1].trim() : '';
+      const cleaned = content.replace(/\s+/g, ''); // remove all white spaces
+
+      const chartData = [...cleaned.matchAll(/<tr>(.*?)<\/tr>/g)].map((rowItem): TreasuryChartRowData => {
+        const dateTime = rowItem[1].match(/<timedatetime="([^"]+)"/g)?.[0]?.match(/datetime="(.*?)"/)?.[1];
+        const cell3mth = rowItem[1].match(/<tdclass="bc3monthviews-fieldviews-field-field-bc-3month"headers="view-field-bc-3month-table-column">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
+        const cell2yr = rowItem[1].match(/<tdheaders="view-field-bc-2year-table-column"class="views-fieldviews-field-field-bc-2year">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
+        const cell10yr = rowItem[1].match(/<tdheaders="view-field-bc-10year-table-column"class="views-fieldviews-field-field-bc-10year">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
+
+        return {
+          'dateTime': useDateFormat(dateTime, 'DD-MMM-YYYY').value || '',
+          '3mth': Number(cell3mth),
+          '2yr': Number(cell2yr),
+          '10yr': Number(cell10yr),
+        };
+      });
+      return chartData;
+    });
+};

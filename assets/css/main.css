@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* 
+https://github.com/tailwindlabs/tailwindcss-typography
+*/
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+}
+
+@layer utilities {
+  a:hover {
+    @apply text-primary;
+  }
+}
+
+@layer utilities {
+  @media (pointer: coarse) {
+    a:hover {
+      @apply text-primary;
+    }
+
+    button[class~="hover:bg-elevated"]:hover {
+      @apply bg-elevated;
+    }
+
+    button[class~="hover:bg-inverted/90"]:hover {
+      @apply bg-inverted/90;
+    }
+  }
+}
+
+:root {
+  --app-header-height: 64px;
+}
