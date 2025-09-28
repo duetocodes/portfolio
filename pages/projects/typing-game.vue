@@ -16,38 +16,33 @@
       {{ $t('SelfDevelopedApplications', 1) }}
     </p>
 
-    <div
-      v-if="landingConfig.hasAlert"
-      class="absolute z-100 inset-0 bg-default backdrop-blur-[1px] flex justify-center items-center">
-      <UAlert
-        :title="landingConfig.title"
-        class="max-w-sm md:max-w-md"
-        color="info"
-        variant="subtle">
-        <template
-          v-if="landingConfig.hasButton"
-          #description>
-          <p>
-            {{ $t('TypingGameText1') }}
-          </p>
-          <UButton
-            class="mt-4"
-            :label="$t('Continue')"
-            block
-            color="neutral"
-            variant="subtle"
-            @click="() => {
-              hasKeyboard = true;
-              execute();
-            }" />
-        </template>
-      </UAlert>
-    </div>
-
-    <!-- <TurnstileWidget
-      v-if="!isVerified && landingConfig.hasTurnstile"
-      class="w-full min-h-[inherit] flex justify-center items-center"
-      @on-verified="onVerified" /> -->
+    <ClientOnly>
+      <div
+        v-if="isSmallerThan1024 && !isForceContinue"
+        class="absolute z-100 inset-0 bg-default/1 backdrop-blur-[1px] flex justify-center items-center">
+        <UAlert
+          :title="$t('PhysicalKeyboardRequired')"
+          class="max-w-sm md:max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          color="info"
+          variant="subtle">
+          <template #description>
+            <p>
+              {{ $t('TypingGameText1') }}
+            </p>
+            <UButton
+              class="mt-4"
+              :label="$t('Continue')"
+              block
+              color="neutral"
+              variant="subtle"
+              @click="() => {
+                isForceContinue = true;
+                execute();
+              }" />
+          </template>
+        </UAlert>
+      </div>
+    </ClientOnly>
 
     <AppLoadingIndicator
       :is-loading="status === 'pending' && !error"
@@ -346,13 +341,11 @@ type TypingGameStats = {
   finalAccuracy: number
 };
 
-const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1280 });
+const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 640 }); // 640px is 'sm' in Tailwind by default
+// true or false compared to ssrWidth. So we took the mobile-first approach, and aimed for true onMounted
 const isSmallerThan1024 = breakpoints.smaller('lg');
-const isSmallerThan1280 = breakpoints.smaller('xl');
-const isGreaterOrEqual1280 = breakpoints.greaterOrEqual('xl');
 
-const hasKeyboard = ref(false);
-
+const isForceContinue = ref(false);
 const controller = ref<AbortController>();
 
 const passageStyleIndex = ref(2);
@@ -365,7 +358,6 @@ const PASSAGE_STYLE_OPTIONS = [
 const GAME_DURATION = 60; // seconds
 const CHARACTERS_PER_WORD = 5;
 const passageContainer = ref<HTMLElement | null>(null);
-// const isVerified = ref(false);
 
 const game = reactive<Game>({
   hasFocus: false,
@@ -382,15 +374,6 @@ const { t: $t, locale } = useI18n();
 const localePath = useLocalePath();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
-
-const landingConfig = computed(() => {
-  return {
-    hasAlert: isSmallerThan1280.value && !hasKeyboard.value,
-    hasButton: !isSmallerThan1024.value,
-    // hasTurnstile: isGreaterOrEqual1280.value || hasKeyboard.value,
-    title: isSmallerThan1024.value ? $t('TypingGameText1') : $t('PhysicalKeyboardRequired'),
-  };
-});
 
 const crumbItems = computed<BreadcrumbItem[]>(() => [
   {
@@ -476,20 +459,21 @@ const {
       resetGame();
       const temp = response._data.passage.split('');
 
-      passage.value = temp.map((char: string): Character => {
-        const isNewline = char === '\n';
-        return {
-          char,
-          display: isNewline ? '↵\n' : char,
-          expectedKey: isNewline ? 'Enter' : char,
-          lastTypedKey: undefined,
-          status: 'pending',
-          numberOfTry: 0,
-          firstTryAt: undefined,
-        };
-      });
-
+      passage.value = []; // reset first to avoid flickering
       nextTick(() => {
+        passage.value = temp.map((char: string): Character => {
+          const isNewline = char === '\n';
+          return {
+            char,
+            display: isNewline ? '↵\n' : char,
+            expectedKey: isNewline ? 'Enter' : char,
+            lastTypedKey: undefined,
+            status: 'pending',
+            numberOfTry: 0,
+            firstTryAt: undefined,
+          };
+        });
+      }).then(() => {
         passageContainer.value?.focus();
       });
     }
@@ -535,14 +519,13 @@ const {
   },
 });
 
-// const onVerified = () => {
-//   isVerified.value = true;
-//   execute();
-// };
 onMounted(() => {
-  if (import.meta.client && isGreaterOrEqual1280.value && !hasKeyboard.value) {
-    execute();
-  }
+  nextTick(() => {
+    // start with client-side updated value (see ClientOnly above)
+    if (import.meta.client && !isSmallerThan1024.value) {
+      execute();
+    }
+  });
 });
 
 const onType = (event: KeyboardEvent) => {
