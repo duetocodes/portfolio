@@ -2,6 +2,15 @@
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  nitro: {
+    routeRules: {
+      '/**': {
+        headers: {
+          'Content-Security-Policy': `script-src 'self' https://challenges.cloudflare.com;`,
+        },
+      },
+    },
+  },
   ssr: true,
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
