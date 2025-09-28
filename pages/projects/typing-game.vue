@@ -36,15 +36,18 @@
             block
             color="neutral"
             variant="subtle"
-            @click="hasKeyboard = true" />
+            @click="() => {
+              hasKeyboard = true;
+              execute();
+            }" />
         </template>
       </UAlert>
     </div>
 
-    <TurnstileWidget
+    <!-- <TurnstileWidget
       v-if="!isVerified && landingConfig.hasTurnstile"
       class="w-full min-h-[inherit] flex justify-center items-center"
-      @on-verified="onVerified" />
+      @on-verified="onVerified" /> -->
 
     <AppLoadingIndicator
       :is-loading="status === 'pending' && !error"
@@ -362,7 +365,7 @@ const PASSAGE_STYLE_OPTIONS = [
 const GAME_DURATION = 60; // seconds
 const CHARACTERS_PER_WORD = 5;
 const passageContainer = ref<HTMLElement | null>(null);
-const isVerified = ref(false);
+// const isVerified = ref(false);
 
 const game = reactive<Game>({
   hasFocus: false,
@@ -384,8 +387,8 @@ const landingConfig = computed(() => {
   return {
     hasAlert: isSmallerThan1280.value && !hasKeyboard.value,
     hasButton: !isSmallerThan1024.value,
-    hasTurnstile: isGreaterOrEqual1280.value || hasKeyboard.value,
-    title: isSmallerThan1024.value ? $t('For the best experience, please switch to a desktop with a physical keyboard') : $t('PhysicalKeyboardRequired'),
+    // hasTurnstile: isGreaterOrEqual1280.value || hasKeyboard.value,
+    title: isSmallerThan1024.value ? $t('TypingGameText1') : $t('PhysicalKeyboardRequired'),
   };
 });
 
@@ -532,10 +535,15 @@ const {
   },
 });
 
-const onVerified = () => {
-  isVerified.value = true;
-  execute();
-};
+// const onVerified = () => {
+//   isVerified.value = true;
+//   execute();
+// };
+onMounted(() => {
+  if (import.meta.client && isGreaterOrEqual1280.value && !hasKeyboard.value) {
+    execute();
+  }
+});
 
 const onType = (event: KeyboardEvent) => {
   const accepted = ['Backspace', 'Enter'];
