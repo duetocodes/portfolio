@@ -9,8 +9,10 @@
     "500": "服务器内部错误"
   },
   "VueNuxtDeveloper": "Vue/Nuxt 开发者",
-  "TreasuryYieldVisualizer": "国债收益率可视化工具",
+  "TreasuryYieldVisualiser": "国债收益率可视化工具",
   "CurrencyConverter": "货币转换器",  
+  "TypingGame": "打字游戏",
+  "Continue": "继续",
   "NotFound": "未找到",
   "ServerError": "服务器错误",
   "Loading...": "加载中...",
@@ -62,5 +64,9 @@
   "References": "参考资料",
   "MidMarketExchangeRate": "中间市场汇率",
   "Simulation": "模拟",
-  "Unknown": "未知"
+  "Unknown": "未知",
+  "VerificationFailed": "验证失败",
+  "Expired": "已过期",
+  "TypingGameText1": "为了获得最佳体验，请切换到台式电脑。",
+  "PhysicalKeyboardRequired": "需要物理键盘"
 }

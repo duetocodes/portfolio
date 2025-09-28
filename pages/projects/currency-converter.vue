@@ -203,7 +203,7 @@
 
 <script setup lang="ts">
 import { z } from 'zod';
-import type { CurrencyItem, CurrenciesListComputed, RatesItem, AvatarImage } from '~/types';
+import type { CurrencyItem, CurrenciesListComputed, RatesItem, ProjectItemData } from '~/types';
 import type { BreadcrumbItem } from '@nuxt/ui';
 
 const { t: $t, locale } = useI18n();
@@ -211,12 +211,6 @@ const nuxtApp = useNuxtApp();
 const route = useRoute();
 const toast = useToast();
 const localePath = useLocalePath();
-
-type ProjectItemData = {
-  data: Array<{
-    description: string | undefined
-  } & { preview: { image: AvatarImage } }>
-};
 
 const crumbItems = computed<BreadcrumbItem[]>(() => [
   {

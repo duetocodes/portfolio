@@ -119,6 +119,7 @@
             color="neutral"
             variant="solid"
             icon="material-symbols:chart-data-outline"
+            loading-icon="material-symbols:app-badging-outline"
             :label="$t('View')"
             :aria-label="$t('View')"
             :loading="statusChart === 'pending'"
@@ -145,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TreasuryChartRowData, AvatarImage } from '~/types';
+import type { TreasuryChartRowData, ProjectItemData } from '~/types';
 import type { BreadcrumbItem } from '@nuxt/ui';
 
 const { t: $t, locale } = useI18n();
@@ -167,7 +168,7 @@ const crumbItems = computed<BreadcrumbItem[]>(() => [
   },
   {
     to: route.fullPath,
-    label: $t('TreasuryYieldVisualizer'),
+    label: $t('TreasuryYieldVisualiser'),
   },
 ]);
 
@@ -189,11 +190,11 @@ const {
   },
 );
 
-type ProjectItemData = {
-  data: Array<{
-    description: string | undefined
-  } & { preview: { image: AvatarImage } }>
-};
+// type ProjectItemData = {
+//   data: Array<{
+//     description: string | undefined
+//   } & { preview: { image: AvatarImage } }>
+// };
 
 const {
   // non-crucial data
@@ -209,7 +210,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[identifier][$eq]': 'treasury-yield-visualizer',
+      'filters[identifier][$eq]': 'treasury-yield-visualiser',
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },
@@ -217,9 +218,9 @@ const {
 );
 
 useSeoMeta({
-  title: () => $t('TreasuryYieldVisualizer'),
+  title: () => $t('TreasuryYieldVisualiser'),
   ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('TreasuryYieldVisualizer'),
+  ogTitle: () => $t('TreasuryYieldVisualiser'),
   ogDescription: 'duetocodes', // cant use .description due to markdown nature
   ogImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,
@@ -230,7 +231,7 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('TreasuryYieldVisualizer'),
+  twitterTitle: () => $t('TreasuryYieldVisualiser'),
   twitterDescription: 'duetocodes',
   twitterCard: 'summary_large_image',
   twitterImage: () => ({

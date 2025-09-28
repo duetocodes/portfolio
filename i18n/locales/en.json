@@ -9,8 +9,10 @@
     "500": "Internal server error"
   },
   "VueNuxtDeveloper": "Vue/Nuxt Developer",
-  "TreasuryYieldVisualizer": "Treasury Yield Visualizer",
+  "TreasuryYieldVisualiser": "Treasury Yield Visualiser",
   "CurrencyConverter": "Currency Converter",
+  "TypingGame": "Typing Game",
+  "Continue": "Continue",
   "NotFound": "Not Found",
   "ServerError": "Server Error",
   "Loading...": "Loading...",
@@ -62,5 +64,9 @@
   "References": "References",
   "MidMarketExchangeRate": "Mid-market exchange rate",
   "Simulation": "Simulation",
-  "Unknown": "Unknown"
+  "Unknown": "Unknown",
+  "VerificationFailed": "Verification failed",
+  "Expired": "Expired",
+  "TypingGameText1": "For the best experience, please switch to a desktop computer.",
+  "PhysicalKeyboardRequired": "Physical keyboard required"
 }
