@@ -2,15 +2,6 @@
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  nitro: {
-    routeRules: {
-      '/**': {
-        headers: {
-          'Content-Security-Policy': `script-src 'self' https://challenges.cloudflare.com;`,
-        },
-      },
-    },
-  },
   ssr: true,
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -33,7 +24,15 @@ export default defineNuxtConfig({
     enabled: true,
   },
   routeRules: {
-    '/**': { prerender: true },
+    '/**': {
+      prerender: true,
+      headers: {
+        'Content-Security-Policy': `
+          script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com https://vercel.live;
+          frame-src https://challenges.cloudflare.com;
+        `,
+      },
+    },
   },
   css: ['~/assets/css/main.css'],
   image: {
