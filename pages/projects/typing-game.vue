@@ -18,7 +18,7 @@
 
     <ClientOnly>
       <div
-        v-if="isSmallerThan1024 && !isForceContinue"
+        v-if="isSmallerBreakpoint && !isForceContinue"
         class="absolute z-100 inset-0 bg-default/1 backdrop-blur-[1px] flex justify-center items-center">
         <UAlert
           :title="$t('PhysicalKeyboardRequired')"
@@ -341,9 +341,9 @@ type TypingGameStats = {
   finalAccuracy: number
 };
 
-const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 640 }); // 640px is 'sm' in Tailwind by default
+const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
 // true or false compared to ssrWidth. So we took the mobile-first approach, and aimed for true onMounted
-const isSmallerThan1024 = breakpoints.smaller('lg');
+const isSmallerBreakpoint = breakpoints.smaller('xl'); // smaller than 1280px
 
 const isForceContinue = ref(false);
 const controller = ref<AbortController>();
@@ -522,7 +522,7 @@ const {
 onMounted(() => {
   nextTick(() => {
     // start with client-side updated value (see ClientOnly above)
-    if (import.meta.client && !isSmallerThan1024.value) {
+    if (import.meta.client && !isSmallerBreakpoint.value) {
       execute();
     }
   });
