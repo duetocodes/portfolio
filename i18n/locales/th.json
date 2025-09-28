@@ -9,8 +9,10 @@
     "500": "ข้อผิดพลาดภายในเซิร์ฟเวอร์"
   },
   "VueNuxtDeveloper": "นักพัฒนา Vue/Nuxt",
-  "TreasuryYieldVisualizer": "ตัวแสดงผลอัตราผลตอบแทนพันธบัตรรัฐบาล",
+  "TreasuryYieldVisualiser": "ตัวแสดงผลอัตราผลตอบแทนพันธบัตรรัฐบาล",
   "CurrencyConverter": "เครื่องแปลงสกุลเงิน",
+  "TypingGame": "เกมพิมพ์",
+  "Continue": "ดำเนินการต่อ",
   "NotFound": "ไม่พบ",
   "ServerError": "ข้อผิดพลาดของเซิร์ฟเวอร์",
   "Loading...": "กำลังโหลด...",
@@ -62,5 +64,9 @@
   "References": "แหล่งอ้างอิง",
   "MidMarketExchangeRate": "อัตราแลกเปลี่ยนกลางตลาด",
   "Simulation": "การจำลอง",
-  "Unknown": "ไม่ทราบ"
+  "Unknown": "ไม่ทราบ",
+  "VerificationFailed": "การยืนยันล้มเหลว",
+  "Expired": "หมดอายุ",
+  "TypingGameText1": "เพื่อประสบการณ์ที่ดีที่สุด กรุณาเปลี่ยนไปใช้คอมพิวเตอร์เดสก์ท็อป.",
+  "PhysicalKeyboardRequired": "ต้องใช้แป้นพิมพ์จริง"
 }

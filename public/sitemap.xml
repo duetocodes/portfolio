@@ -25,16 +25,15 @@
   </url>
 
   <url>
-    <loc>https://duetocodes.com/en/projects/treasury-yield-visualizer</loc>
+    <loc>https://duetocodes.com/en/projects/treasury-yield-visualiser</loc>
     <lastmod>2025-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects/treasury-yield-visualizer" />
-    <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/treasury-yield-visualizer" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/treasury-yield-visualizer" />
-    <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/treasury-yield-visualizer" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/treasury-yield-visualizer" />
-
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects/treasury-yield-visualiser" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/treasury-yield-visualiser" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/treasury-yield-visualiser" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/treasury-yield-visualiser" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/treasury-yield-visualiser" />
   </url>
   <url>
     <loc>https://duetocodes.com/en/projects/currency-converter</loc>
@@ -46,7 +45,17 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/currency-converter" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/currency-converter" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/currency-converter" />
-
+  </url>
+  <url>
+    <loc>https://duetocodes.com/en/projects/typing-game</loc>
+    <lastmod>2025-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects/typing-game" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/typing-game" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/typing-game" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/typing-game" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/typing-game" />
   </url>
 
   <url>
