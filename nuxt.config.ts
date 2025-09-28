@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     '/**': {
       prerender: true,
       headers: {
-        'Content-Security-Policy': process.env.NUXT_VERCEL_ENV === 'production' ? prodHeadersCsp : previewHeadersCsp,
+        'Content-Security-Policy': previewHeadersCsp,
       },
     },
   },
