@@ -27,10 +27,7 @@ export default defineNuxtConfig({
     '/**': {
       prerender: true,
       headers: {
-        'Content-Security-Policy': `
-          script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com https://vercel.live;
-          frame-src https://challenges.cloudflare.com;
-        `,
+        'Content-Security-Policy': `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com https://vercel.live; frame-src https://challenges.cloudflare.com;`,
       },
     },
   },
