@@ -16,34 +16,6 @@
       {{ $t('SelfDevelopedApplications', 1) }}
     </p>
 
-    <ClientOnly>
-      <div
-        v-if="isSmallerBreakpoint && !isForceContinue"
-        class="absolute z-100 inset-0 bg-default/1 backdrop-blur-[1px] flex justify-center items-center">
-        <UAlert
-          :title="$t('PhysicalKeyboardRequired')"
-          class="max-w-sm md:max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          color="info"
-          variant="subtle">
-          <template #description>
-            <p>
-              {{ $t('TypingGameText1') }}
-            </p>
-            <UButton
-              class="mt-4"
-              :label="$t('Continue')"
-              block
-              color="neutral"
-              variant="subtle"
-              @click="() => {
-                isForceContinue = true;
-                execute();
-              }" />
-          </template>
-        </UAlert>
-      </div>
-    </ClientOnly>
-
     <AppLoadingIndicator
       :is-loading="status === 'pending' && !error"
       icon="simple-icons:openai"
@@ -55,8 +27,47 @@
       :status="status"
       @try-again="refresh" />
 
+    <ClientOnly>
+      <div
+        v-if="isPrompt"
+        class="mt-44 w-full flex justify-center items-center">
+        <UAlert
+          :title="$t('PhysicalKeyboardRequired')"
+          icon="material-symbols:keyboard-external-input-outline"
+          class="max-w-sm md:max-w-md"
+          color="info"
+          variant="subtle">
+          <template #description>
+            <p>
+              {{ $t('TypingGameText1') }}
+            </p>
+
+            <div class="flex justify-end mt-8 gap-x-2">
+              <UButton
+                :label="$t('GoBack')"
+                :aria-label="$t('GoBack')"
+                size="lg"
+                color="neutral"
+                variant="ghost"
+                icon="material-symbols:u-turn-right-rounded"
+                @click="navigateTo(localePath('/projects'))" />
+              <UButton
+                :label="$t('Continue')"
+                :aria-label="$t('Continue')"
+                size="lg"
+                color="neutral"
+                variant="ghost"
+                icon="material-symbols:play-arrow"
+                @click="isPrompt = false" />
+            </div>
+          </template>
+        </UAlert>
+      </div>
+    </ClientOnly>
+
     <div
-      v-if="passage.length"
+      v-if="data?.mappedPassage.length"
+      v-show="!isPrompt"
       class="mt-8 flex gap-x-4">
       <UAlert
         class="w-44"
@@ -221,6 +232,8 @@
 
     <div
       v-if="data?.topic"
+      v-show="!isPrompt"
+
       class="mt-6 gap-x-4 flex justify-between items-center">
       <span class="flex items-center gap-x-4">
         <span class="text-3xl text-toned font-semibold">
@@ -262,7 +275,7 @@
           class="self-center order-last"
           size="md"
           color="neutral"
-          variant="soft"
+          variant="outline"
           icon="material-symbols:app-badging-outline"
           loading-icon="material-symbols:app-badging-outline"
           :label="game.status === 'gameover' ? 'Play Again' : 'Reset'"
@@ -270,8 +283,10 @@
           @click="onRefreshGame" />
       </div>
     </div>
+
     <div
-      v-if="passage.length"
+      v-if="data?.mappedPassage?.length"
+      v-show="!isPrompt"
       ref="passageContainer"
       class="container mt-2 focus:outline-none"
       tabindex="0"
@@ -282,7 +297,7 @@
         class="font-mono whitespace-break-spaces"
         :class="[PASSAGE_STYLE_OPTIONS[passageStyleIndex]]">
         <span
-          v-for="(char, index) in passage"
+          v-for="(char, index) in data.mappedPassage"
           :key="index"
           class="relative">
           <span
@@ -310,24 +325,16 @@
 </template>
 
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
-
+import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { BreadcrumbItem } from '@nuxt/ui';
 import type {
-  typingGameFeedbackRequestCharacter,
-  typingGameGptFeedbackPayload,
+  TypingGameFeedbackRequestCharacter,
+  TypingGameGptFeedbackPayload,
+  TypingGameUpdatedData,
   ProjectItemData,
+  Character,
 } from '~/types';
 
-type Character = {
-  char: string
-  display: string
-  expectedKey: string
-  lastTypedKey: string | undefined
-  status: 'pending' | 'correct' | 'wrong'
-  numberOfTry: number
-  firstTryAt: number | undefined
-};
 type Game = {
   hasFocus: boolean
   timerId: number
@@ -342,10 +349,14 @@ type TypingGameStats = {
 };
 
 const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
-// true or false compared to ssrWidth. So we took the mobile-first approach, and aimed for true onMounted
-const isSmallerBreakpoint = breakpoints.smaller('xl'); // smaller than 1280px
+// true or false compared to ssrWidth. Go mobile-first approach, and aimed for true onMounted
+const isSmallerBreakpoint = breakpoints.smaller('xl'); // xl=1280px
 
-const isForceContinue = ref(false);
+const isPrompt = useStorage(
+  'dtc-typing-game-prompt',
+  true,
+  import.meta.client ? sessionStorage : undefined);
+
 const controller = ref<AbortController>();
 
 const passageStyleIndex = ref(2);
@@ -366,10 +377,7 @@ const game = reactive<Game>({
   status: 'standby',
 });
 
-const passage = ref<Character[]>([]);
 const currentIndex = ref(0); // where the cursor is now
-
-const toast = useToast();
 const { t: $t, locale } = useI18n();
 const localePath = useLocalePath();
 const route = useRoute();
@@ -387,7 +395,7 @@ const crumbItems = computed<BreadcrumbItem[]>(() => [
 ]);
 
 const gameStats = computed((): TypingGameStats => {
-  const pressed = passage.value.filter(char => char.status !== 'pending');
+  const pressed = (data.value?.mappedPassage || []).filter(char => char.status !== 'pending');
 
   if (game.status === 'playing' || game.status === 'gameover') {
     const elapsedTime = (GAME_DURATION - game.timeLeft) || GAME_DURATION;
@@ -417,6 +425,25 @@ const gameStats = computed((): TypingGameStats => {
   }
 });
 
+whenever(
+  () => !isPrompt.value,
+  () => nextTick(() => passageContainer.value?.focus()),
+);
+
+onMounted(() => {
+  nextTick(() => {
+    if (!isSmallerBreakpoint.value)
+      isPrompt.value = false;
+  })
+    .then(() => {
+      passageContainer.value?.focus();
+    });
+});
+
+onUnmounted(() => {
+  clearInterval(game.timerId);
+});
+
 const {
   // non-crucial data
   data: overview,
@@ -443,45 +470,9 @@ const {
   status,
   error,
   refresh,
-  execute,
-} = await useLazyFetch('/api/gpt-typing-game', {
+} = useFetch<TypingGameUpdatedData>('/api/gpt-typing-game', {
   method: 'GET',
-  immediate: false,
-  server: false,
   watch: false,
-  retry: 0, // disable re-tries
-  onResponseError() {
-    toastUnsuccessful();
-    // also handled with <AppError />
-  },
-  onResponse({ response }) {
-    if (response._data?.passage) {
-      resetGame();
-      const temp = response._data.passage.split('');
-
-      passage.value = []; // reset first to avoid flickering
-      nextTick(() => {
-        passage.value = temp.map((char: string): Character => {
-          const isNewline = char === '\n';
-          return {
-            char,
-            display: isNewline ? '↵\n' : char,
-            expectedKey: isNewline ? 'Enter' : char,
-            lastTypedKey: undefined,
-            status: 'pending',
-            numberOfTry: 0,
-            firstTryAt: undefined,
-          };
-        });
-      }).then(() => {
-        passageContainer.value?.focus();
-      });
-    }
-    else {
-      // unknown situation
-      toastUnsuccessful();
-    }
-  },
 });
 
 const {
@@ -496,7 +487,7 @@ const {
   watch: false,
   retry: 0, // disable re-tries
   onRequest({ options }) {
-    const attempted = passage.value.reduce((acc: typingGameFeedbackRequestCharacter[], char: Character) => {
+    const attempted = (data.value?.mappedPassage || []).reduce((acc: TypingGameFeedbackRequestCharacter[], char: Character) => {
       if (char.numberOfTry > 0) {
         acc.push({
           expectedKey: char.expectedKey,
@@ -512,20 +503,11 @@ const {
     options.body = {
       result: attempted,
       ...gameStats.value,
-    } satisfies typingGameGptFeedbackPayload;
+    } satisfies TypingGameGptFeedbackPayload;
 
     controller.value = new AbortController(); // renews for every fetch
     options.signal = controller.value.signal;
   },
-});
-
-onMounted(() => {
-  nextTick(() => {
-    // start with client-side updated value (see ClientOnly above)
-    if (import.meta.client && !isSmallerBreakpoint.value) {
-      execute();
-    }
-  });
 });
 
 const onType = (event: KeyboardEvent) => {
@@ -540,7 +522,7 @@ const onType = (event: KeyboardEvent) => {
     case 'gameover':
       return;
     case 'playing':
-      if (currentIndex.value >= passage.value.length) {
+      if (currentIndex.value >= (data.value?.mappedPassage || []).length) {
         // in case user finishes before time's up
         endGame();
         return;
@@ -557,18 +539,18 @@ const onType = (event: KeyboardEvent) => {
     case 'Backspace': {
       if (currentIndex.value > 0) {
         currentIndex.value--;
-        const prevChar = { ...passage.value[currentIndex.value] };
+        const prevChar = { ...(data.value?.mappedPassage || [])[currentIndex.value] };
         prevChar.status = 'pending';
         prevChar.lastTypedKey = undefined;
-        passage.value[currentIndex.value] = prevChar;
+        (data.value?.mappedPassage || [])[currentIndex.value] = prevChar;
       }
       break;
     }
 
     default: {
-      const char = { ...passage.value[currentIndex.value] };
+      const char = (data.value?.mappedPassage || [])[currentIndex.value];
 
-      if (char.numberOfTry === 0) {
+      if (char && char.numberOfTry === 0) {
         char.firstTryAt = new Date().getTime();
       }
       char.numberOfTry++;
@@ -581,7 +563,7 @@ const onType = (event: KeyboardEvent) => {
       else {
         char.status = 'wrong';
       }
-      passage.value[currentIndex.value] = char;
+
       currentIndex.value++;
       break;
     }
@@ -593,8 +575,11 @@ const onRefreshGame = () => {
     clearFeedback(); // reset feedback
     controller.value?.abort(); // abort ongoing feedback request (still completes server-side)
   }
-  clearInterval(game.timerId);
-  refresh();
+
+  refresh().then(() => {
+    resetGame();
+    nextTick(() => passageContainer.value?.focus());
+  });
 };
 
 const resetGame = () => {
@@ -602,6 +587,7 @@ const resetGame = () => {
   currentIndex.value = 0;
   game.timeLeft = GAME_DURATION;
   game.status = 'standby';
+  clearFeedback();
 };
 
 const startGame = () => {
@@ -627,14 +613,6 @@ const startCountdown = () => {
       executeFeedback();
     }
   }, 1000);
-};
-
-const toastUnsuccessful = () => {
-  toast.add({
-    title: $t('Unsuccessful'),
-    description: $t('UnexpectedErrorOccurred'),
-    color: 'error',
-  });
 };
 </script>
 

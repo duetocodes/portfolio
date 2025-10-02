@@ -159,17 +159,32 @@ export type RatesItem = {
   time: string
 };
 
-export type typingGameFeedbackRequestCharacter = {
+export type Character = {
+  char: string
+  display: string
   expectedKey: string
   lastTypedKey: string | undefined
   status: 'pending' | 'correct' | 'wrong'
   numberOfTry: number
   firstTryAt: number | undefined
 };
-export type typingGameGptFeedbackPayload = {
-  result: typingGameFeedbackRequestCharacter[]
+
+export type TypingGameFeedbackRequestCharacter = {
+  expectedKey: string
+  lastTypedKey: string | undefined
+  status: 'pending' | 'correct' | 'wrong'
+  numberOfTry: number
+  firstTryAt: number | undefined
+};
+export type TypingGameGptFeedbackPayload = {
+  result: TypingGameFeedbackRequestCharacter[]
   rawWpm: number
   rawAccuracy: number
   finalWpm: number
   finalAccuracy: number
+};
+export type TypingGameUpdatedData = {
+  id: string
+  topic: string
+  mappedPassage: Character[]
 };

@@ -1,8 +1,5 @@
 /* eslint-disable nuxt/nuxt-config-keys-order */
 
-// const prodHeadersCsp = `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com; frame-src https://challenges.cloudflare.com;`;
-// const previewHeadersCsp = `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com https://vercel.live https://va.vercel-scripts.com; frame-src https://challenges.cloudflare.com https://vercel.live;`;
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
@@ -29,9 +26,6 @@ export default defineNuxtConfig({
   routeRules: {
     '/**': {
       prerender: true,
-      // headers: {
-      //   'Content-Security-Policy': process.env.NUXT_VERCEL_ENV === 'production' ? prodHeadersCsp : previewHeadersCsp,
-      // },
     },
   },
   css: ['~/assets/css/main.css'],

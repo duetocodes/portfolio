@@ -23,10 +23,12 @@ https://github.com/tailwindlabs/tailwindcss-typography
     }
 
     button[class~="hover:bg-elevated"]:hover {
+      /* color=neutral, variant=outline|ghost */
       @apply bg-elevated;
     }
 
     button[class~="hover:bg-inverted/90"]:hover {
+      /* color=neutral, variant=solid */
       @apply bg-inverted/90;
     }
   }

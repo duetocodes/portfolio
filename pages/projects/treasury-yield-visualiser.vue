@@ -190,12 +190,6 @@ const {
   },
 );
 
-// type ProjectItemData = {
-//   data: Array<{
-//     description: string | undefined
-//   } & { preview: { image: AvatarImage } }>
-// };
-
 const {
   // non-crucial data
   data: overview,

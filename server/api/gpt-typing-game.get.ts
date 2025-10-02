@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import type { FetchError } from 'ofetch';
+import type { Character } from '~/types';
 
 const config = useRuntimeConfig();
 
@@ -9,6 +10,7 @@ const openai = new OpenAI({
 
 export default defineEventHandler(async () => {
   const topic = getRandomTopic();
+
   try {
     const response = await openai.responses.create({
       model: 'gpt-4o-mini',
@@ -39,15 +41,15 @@ export default defineEventHandler(async () => {
       });
     }
     else {
-      const normalised = response.output_text
-        .replace(/ *\n\n+/g, '\n')
-        .replace(/[“”]/g, '"')
-        .replace(/[‘’]/g, `'`);
+      const mapped = passageMapper(textNormaliser(response.output_text || ''));
 
-      return {
+      const data = {
+        id: response.id,
         topic,
-        passage: normalised.trim(),
+        mappedPassage: mapped,
       };
+
+      return data;
     }
   }
   catch (err) {
@@ -59,6 +61,32 @@ export default defineEventHandler(async () => {
     });
   };
 });
+
+const textNormaliser = (txt: string) => {
+  const normalised = (txt || '').replace(/ *\n\n+/g, '\n')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, `'`);
+
+  return normalised.trim();
+};
+
+const passageMapper = (txt: string) => {
+  const split = (txt || '').split('');
+
+  const mapped = split.map((char: string): Character => {
+    const isNewline = char === '\n';
+    return {
+      char,
+      display: isNewline ? '↵\n' : char,
+      expectedKey: isNewline ? 'Enter' : char,
+      lastTypedKey: undefined,
+      status: 'pending',
+      numberOfTry: 0,
+      firstTryAt: undefined,
+    };
+  });
+  return mapped;
+};
 
 const getRandomTopic = () => {
   const topics = [
