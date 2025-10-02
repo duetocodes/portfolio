@@ -466,6 +466,32 @@ const {
   },
 );
 
+useSeoMeta({
+  title: () => $t('TypingGame'),
+  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
+  ogTitle: () => $t('TypingGame'),
+  ogDescription: () => 'duetocodes',
+  ogImage: () => ({
+    url: overview.value?.data?.[0].preview?.image?.url,
+    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
+    width: overview.value?.data?.[0].preview?.image?.width,
+    height: overview.value?.data?.[0].preview?.image?.height,
+    type: overview.value?.data?.[0].preview?.image?.mime,
+  }),
+  ogUrl: () => `https://duetocodes.com${route.fullPath}`,
+  ogType: 'website',
+  twitterTitle: () => $t('TypingGame'),
+  twitterDescription: () => 'duetocodes',
+  twitterCard: 'summary_large_image',
+  twitterImage: () => ({
+    url: overview.value?.data?.[0].preview?.image?.url,
+    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
+    width: overview.value?.data?.[0].preview?.image?.width,
+    height: overview.value?.data?.[0].preview?.image?.height,
+    type: overview.value?.data?.[0].preview?.image?.mime,
+  }),
+});
+
 const {
   data,
   status,
