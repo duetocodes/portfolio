@@ -328,8 +328,9 @@
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { BreadcrumbItem } from '@nuxt/ui';
 import type {
-  typingGameFeedbackRequestCharacter,
-  typingGameGptFeedbackPayload,
+  TypingGameFeedbackRequestCharacter,
+  TypingGameGptFeedbackPayload,
+  TypingGameUpdatedData,
   ProjectItemData,
   Character,
 } from '~/types';
@@ -345,12 +346,6 @@ type TypingGameStats = {
   rawAccuracy: number
   finalWpm: number
   finalAccuracy: number
-};
-
-type TypingGameUpdatedData = {
-  id: string
-  topic: string
-  mappedPassage: Character[]
 };
 
 const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
@@ -492,7 +487,7 @@ const {
   watch: false,
   retry: 0, // disable re-tries
   onRequest({ options }) {
-    const attempted = (data.value?.mappedPassage || []).reduce((acc: typingGameFeedbackRequestCharacter[], char: Character) => {
+    const attempted = (data.value?.mappedPassage || []).reduce((acc: TypingGameFeedbackRequestCharacter[], char: Character) => {
       if (char.numberOfTry > 0) {
         acc.push({
           expectedKey: char.expectedKey,
@@ -508,7 +503,7 @@ const {
     options.body = {
       result: attempted,
       ...gameStats.value,
-    } satisfies typingGameGptFeedbackPayload;
+    } satisfies TypingGameGptFeedbackPayload;
 
     controller.value = new AbortController(); // renews for every fetch
     options.signal = controller.value.signal;
@@ -619,7 +614,6 @@ const startCountdown = () => {
     }
   }, 1000);
 };
-
 </script>
 
 <style scoped>

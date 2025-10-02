@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import type { FetchError } from 'ofetch';
-import type { typingGameGptFeedbackPayload } from '~/types';
+import type { TypingGameGptFeedbackPayload } from '~/types';
 
 const config = useRuntimeConfig();
 
@@ -9,7 +9,7 @@ const openai = new OpenAI({
 });
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<typingGameGptFeedbackPayload>(event);
+  const body = await readBody<TypingGameGptFeedbackPayload>(event);
   const result = body?.result ? JSON.stringify(body.result) : 'no data';
 
   try {
