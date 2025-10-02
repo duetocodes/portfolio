@@ -9,6 +9,10 @@ export type QueryValue =
   | Record<string, unknown>;
 export type QueryObject = Record<string, QueryValue | Array<QueryValue>>;
 
+export type TurnstileResponse = {
+  success: boolean
+};
+
 export type StrapiPagination = {
   page: number
   pageSize: number
@@ -71,12 +75,12 @@ export type AvatarImage = {
   mime: 'image/jpeg' | 'image/gif' | 'image/png' | undefined
   size: number
   url: string | undefined
-}
+};
 
 type Avatar = {
   id: number
   image: AvatarImage
-}
+};
 
 type SocialMediaItem = {
   id: number
@@ -86,7 +90,7 @@ type SocialMediaItem = {
   url: string
   icon: string
   description: string | null
-}
+};
 
 export type AboutMeResponse = {
   id: number
@@ -102,7 +106,7 @@ export type AboutMeResponse = {
   hero_light: Avatar
   hero_dark: Avatar
   socialMedia: Array<SocialMediaItem>
-}
+};
 export type TreasuryChartRowData = {
   'dateTime': string
   '3mth': number
@@ -122,8 +126,12 @@ export type Project = {
   publishedAt: string
   locale: string
   identifier: string
-}
-
+};
+export type ProjectItemData = {
+  data: Array<{
+    description: string | undefined
+  } & { preview: { image: AvatarImage } }>
+};
 export type CurrencyItem = {
   code: string
   symbol: string
@@ -149,4 +157,28 @@ export type RatesItem = {
   source: string
   target: string
   time: string
-}
+};
+
+export type Character = {
+  char: string
+  display: string
+  expectedKey: string
+  lastTypedKey: string | undefined
+  status: 'pending' | 'correct' | 'wrong'
+  numberOfTry: number
+  firstTryAt: number | undefined
+};
+export type typingGameFeedbackRequestCharacter = {
+  expectedKey: string
+  lastTypedKey: string | undefined
+  status: 'pending' | 'correct' | 'wrong'
+  numberOfTry: number
+  firstTryAt: number | undefined
+};
+export type typingGameGptFeedbackPayload = {
+  result: typingGameFeedbackRequestCharacter[]
+  rawWpm: number
+  rawAccuracy: number
+  finalWpm: number
+  finalAccuracy: number
+};

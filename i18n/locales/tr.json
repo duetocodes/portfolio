@@ -9,8 +9,10 @@
     "500": "Sunucu iç hatası"
   },
   "VueNuxtDeveloper": "Vue/Nuxt Geliştirici",
-  "TreasuryYieldVisualizer": "Hazine Getiri Görselleştirici",
+  "TreasuryYieldVisualiser": "Hazine Getiri Görselleştirici",
   "CurrencyConverter": "Döviz Çevirici",  
+  "TypingGame": "Yazma Oyunu",
+  "Continue": "Devam et",
   "NotFound": "Bulunamadı",
   "ServerError": "Sunucu Hatası",
   "Loading...": "Yükleniyor...",
@@ -62,5 +64,9 @@
   "References": "Referanslar",
   "MidMarketExchangeRate": "Orta piyasa döviz kuru",
   "Simulation": "Simülasyon",
-  "Unknown": "Bilinmiyor"
+  "Unknown": "Bilinmiyor",
+  "VerificationFailed": "Doğrulama başarısız oldu",
+  "Expired": "Süresi doldu",
+  "TypingGameText1": "En iyi deneyim için lütfen masaüstü bilgisayara geçin.",
+  "PhysicalKeyboardRequired": "Fiziksel klavye gerekli"
 }

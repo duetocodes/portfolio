@@ -1,5 +1,8 @@
 /* eslint-disable nuxt/nuxt-config-keys-order */
 
+// const prodHeadersCsp = `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com; frame-src https://challenges.cloudflare.com;`;
+// const previewHeadersCsp = `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.vercel-insights.com https://vercel.live https://va.vercel-scripts.com; frame-src https://challenges.cloudflare.com https://vercel.live;`;
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
@@ -12,13 +15,24 @@ export default defineNuxtConfig({
     strapiApiBase: process.env.NUXT_STRAPI_API_BASE,
     wiseReadOnlyToken: process.env.NUXT_WISE_READ_ONLY_TOKEN,
     wiseApiBase: process.env.NUXT_WISE_API_BASE,
+    turnstileSecretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
+    openAiSecretKey: process.env.NUXT_OPENAI_API_KEY,
+
+    public: {
+      turnstileSiteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
+    },
   },
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@nuxtjs/mdc', 'nuxt-charts', '@nuxt/image'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@nuxtjs/mdc', 'nuxt-charts', '@nuxt/image', '@vueuse/nuxt'],
   devtools: {
     enabled: true,
   },
   routeRules: {
-    '/**': { prerender: true },
+    '/**': {
+      prerender: true,
+      // headers: {
+      //   'Content-Security-Policy': process.env.NUXT_VERCEL_ENV === 'production' ? prodHeadersCsp : previewHeadersCsp,
+      // },
+    },
   },
   css: ['~/assets/css/main.css'],
   image: {
@@ -35,6 +49,7 @@ export default defineNuxtConfig({
     clientBundle: {
       icons: [
         'material-symbols:app-badging-outline',
+        'material-symbols:chart-data-outline',
         'material-symbols:moon-stars-outline-rounded',
         'material-symbols:arrow-outward-rounded',
         'material-symbols:sunny-outline-rounded',

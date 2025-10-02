@@ -23,10 +23,12 @@ https://github.com/tailwindlabs/tailwindcss-typography
     }
 
     button[class~="hover:bg-elevated"]:hover {
+      /* color=neutral, variant=outline|ghost */
       @apply bg-elevated;
     }
 
     button[class~="hover:bg-inverted/90"]:hover {
+      /* color=neutral, variant=solid */
       @apply bg-inverted/90;
     }
   }
@@ -34,4 +36,27 @@ https://github.com/tailwindlabs/tailwindcss-typography
 
 :root {
   --app-header-height: 64px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
+}
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
 }
