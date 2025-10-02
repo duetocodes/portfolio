@@ -287,6 +287,7 @@
     <div
       v-if="data?.mappedPassage?.length"
       v-show="!isPrompt"
+      :key="data.id"
       ref="passageContainer"
       class="container mt-2 focus:outline-none"
       tabindex="0"
