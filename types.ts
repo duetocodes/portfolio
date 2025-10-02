@@ -168,6 +168,7 @@ export type Character = {
   numberOfTry: number
   firstTryAt: number | undefined
 };
+
 export type typingGameFeedbackRequestCharacter = {
   expectedKey: string
   lastTypedKey: string | undefined

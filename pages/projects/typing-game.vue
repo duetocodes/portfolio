@@ -41,6 +41,7 @@
             <p>
               {{ $t('TypingGameText1') }}
             </p>
+
             <div class="flex justify-end mt-8 gap-x-2">
               <UButton
                 :label="$t('GoBack')"
@@ -232,6 +233,7 @@
     <div
       v-if="data?.topic"
       v-show="!isPrompt"
+
       class="mt-6 gap-x-4 flex justify-between items-center">
       <span class="flex items-center gap-x-4">
         <span class="text-3xl text-toned font-semibold">
@@ -344,6 +346,7 @@ type TypingGameStats = {
   finalWpm: number
   finalAccuracy: number
 };
+
 type TypingGameUpdatedData = {
   id: string
   topic: string
@@ -380,7 +383,6 @@ const game = reactive<Game>({
 });
 
 const currentIndex = ref(0); // where the cursor is now
-
 const { t: $t, locale } = useI18n();
 const localePath = useLocalePath();
 const route = useRoute();
@@ -566,6 +568,7 @@ const onType = (event: KeyboardEvent) => {
       else {
         char.status = 'wrong';
       }
+
       currentIndex.value++;
       break;
     }
@@ -616,6 +619,7 @@ const startCountdown = () => {
     }
   }, 1000);
 };
+
 </script>
 
 <style scoped>
