@@ -466,6 +466,13 @@ const {
   },
 );
 
+useHead({
+  link: [{
+    rel: 'canonical',
+    href: `https://duetocodes.com${route.fullPath}`,
+  }],
+});
+
 useSeoMeta({
   title: () => $t('TypingGame'),
   ogSiteName: () => `Freddie — ${$t('meta.title')}`,
@@ -598,6 +605,7 @@ const onType = (event: KeyboardEvent) => {
 };
 
 const onRefreshGame = () => {
+  clearInterval(game.timerId);
   if (feedbackStatus.value === 'pending') {
     clearFeedback(); // reset feedback
     controller.value?.abort(); // abort ongoing feedback request (still completes server-side)

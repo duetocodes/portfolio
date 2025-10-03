@@ -66,20 +66,19 @@
   </div>
 </template>
 
-<!--
-status (reactive):
-idle = request has not yet started
-pending = loading
-success = 200
-error = fetch failed
--->
-
 <script setup lang="ts">
 import type { TechStackResponse } from '@/types';
 
 const { t: $t, locale } = useI18n();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
+
+useHead({
+  link: [{
+    rel: 'canonical',
+    href: `https://duetocodes.com${route.fullPath}`,
+  }],
+});
 
 useSeoMeta({
   title: () => $t('TechStacks'),

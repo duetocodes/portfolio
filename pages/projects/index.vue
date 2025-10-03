@@ -93,6 +93,13 @@ const {
   },
 );
 
+useHead({
+  link: [{
+    rel: 'canonical',
+    href: `https://duetocodes.com${route.fullPath}`, // equals <loc>
+  }],
+});
+
 useSeoMeta({
   title: () => $t('Projects'),
   description: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),

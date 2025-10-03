@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://duetocodes.com/en</loc>
-    <lastmod>2025-08-18</lastmod>
+    <loc>https://duetocodes.com</loc>
+    <lastmod>2025-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com" />
     <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com" />
   </url>
 
   <url>
-    <loc>https://duetocodes.com/en/projects</loc>
-    <lastmod>2025-08-18</lastmod>
+    <loc>https://duetocodes.com/projects</loc>
+    <lastmod>2025-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/projects" />
     <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/projects" />
   </url>
 
   <url>
-    <loc>https://duetocodes.com/en/projects/treasury-yield-visualiser</loc>
+    <loc>https://duetocodes.com/projects/treasury-yield-visualiser</loc>
     <lastmod>2025-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects/treasury-yield-visualiser" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/projects/treasury-yield-visualiser" />
     <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/treasury-yield-visualiser" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/treasury-yield-visualiser" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/treasury-yield-visualiser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/treasury-yield-visualiser" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/projects/treasury-yield-visualiser" />
   </url>
   <url>
-    <loc>https://duetocodes.com/en/projects/currency-converter</loc>
+    <loc>https://duetocodes.com/projects/currency-converter</loc>
     <lastmod>2025-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects/currency-converter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/projects/currency-converter" />
     <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/currency-converter" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/currency-converter" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/currency-converter" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/currency-converter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/projects/currency-converter" />
   </url>
   <url>
-    <loc>https://duetocodes.com/en/projects/typing-game</loc>
+    <loc>https://duetocodes.com/projects/typing-game</loc>
     <lastmod>2025-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/projects/typing-game" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/projects/typing-game" />
     <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/typing-game" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/typing-game" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/typing-game" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/projects/typing-game" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/projects/typing-game" />
   </url>
 
   <url>
-    <loc>https://duetocodes.com/en/tech-stacks</loc>
+    <loc>https://duetocodes.com/tech-stacks</loc>
     <lastmod>2025-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/en/tech-stacks" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/tech-stacks" />
     <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/tech-stacks" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/tech-stacks" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/tech-stacks" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/en/tech-stacks" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/tech-stacks" />
   </url>
 </urlset>

@@ -211,6 +211,13 @@ const {
   },
 );
 
+useHead({
+  link: [{
+    rel: 'canonical',
+    href: `https://duetocodes.com${route.fullPath}`,
+  }],
+});
+
 useSeoMeta({
   title: () => $t('TreasuryYieldVisualiser'),
   ogSiteName: () => `Freddie — ${$t('meta.title')}`,
