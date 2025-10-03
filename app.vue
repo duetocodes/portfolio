@@ -98,10 +98,6 @@ useHead({
   },
   link: [
     {
-      rel: 'canonical',
-      href: `https://duetocodes.com${route.fullPath}`,
-    },
-    {
       rel: 'icon',
       type: 'image/x-icon',
       href: '/favicon.ico?v=3', // increment this when favicon changes
@@ -137,7 +133,7 @@ watch(
 const menuItems = computed<NavigationMenuItem[]>(() => [
   {
     label: $t('Home'),
-    active: route.fullPath.endsWith(`/${locale.value}`),
+    active: route.path === localePath('/'),
     icon: 'material-symbols:home-outline-rounded',
     to: localePath('/'),
   },
@@ -149,7 +145,7 @@ const menuItems = computed<NavigationMenuItem[]>(() => [
   },
   {
     label: $t('TechStacks'),
-    active: route.fullPath.endsWith('/tech-stacks'),
+    active: route.fullPath.includes('/tech-stacks'),
     icon: 'material-symbols:layers-outline-rounded',
     to: localePath('/tech-stacks'),
   },

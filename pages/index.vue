@@ -96,6 +96,13 @@ const {
   },
 );
 
+useHead({
+  link: [{
+    rel: 'canonical',
+    href: `https://duetocodes.com${route.fullPath}`,
+  }],
+});
+
 useSeoMeta({
   title: 'duetocodes',
   description: () => $t('meta.description'),

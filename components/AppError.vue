@@ -58,6 +58,10 @@ const err = computed(() => ({
 
 <!--
   useFetch() status: 'success' | 'idle' | 'pending' | 'error'
+  idle = request has not yet started
+  pending = loading
+  success = 200
+  error = fetch failed
 -->
 <!--
 sample error:

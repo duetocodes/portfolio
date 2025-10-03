@@ -48,6 +48,7 @@ export default defineNuxtConfig({
         'material-symbols:arrow-outward-rounded',
         'material-symbols:sunny-outline-rounded',
         'material-symbols:link-rounded',
+        'material-symbols:keyboard-external-input-outline',
       ],
     },
   },
@@ -65,6 +66,6 @@ export default defineNuxtConfig({
       { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json' },
     ],
     lazy: true,
-    strategy: 'prefix', // locale prefix added for all locale
+    strategy: 'prefix_except_default',
   },
 });

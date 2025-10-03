@@ -249,6 +249,13 @@ const recentPairs = useCookie<string[]>('dtc-recent-curr-pairs', {
   maxAge: 60 * 60 * 24 * 7, // 7 days
 });
 
+useHead({
+  link: [{
+    rel: 'canonical',
+    href: `https://duetocodes.com${route.fullPath}`,
+  }],
+});
+
 useSeoMeta({
   title: () => $t('CurrencyConverter'),
   ogSiteName: () => `Freddie — ${$t('meta.title')}`,
