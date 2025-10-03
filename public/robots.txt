@@ -1,3 +1,6 @@
 User-Agent: *
 Disallow: /api
+Disallow: /_nuxt/
+Disallow: /__nuxt_error
+Disallow: /404
 Sitemap: https://duetocodes.com/sitemap.xml
