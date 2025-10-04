@@ -140,6 +140,8 @@ useHead({
   ],
   script: [
     {
+      // https://schema.org/Person
+      // https://search.google.com/test/rich-results
       type: 'application/ld+json',
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
