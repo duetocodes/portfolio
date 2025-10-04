@@ -474,10 +474,11 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('TypingGame'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('TypingGame'),
-  ogDescription: () => 'duetocodes',
+  title: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
+  ogSiteName: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  ogTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,
     alt: overview.value?.data?.[0].preview?.image?.alternativeText,
@@ -487,8 +488,8 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('TypingGame'),
-  twitterDescription: () => 'duetocodes',
+  twitterTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,

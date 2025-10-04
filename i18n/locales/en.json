@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Vue/Nuxt Developer",
-    "description": "Crafting fast, modern web apps with Vue & Nuxt",
+    "description": "duetocodes — a frontend developer portfolio showcasing modern web projects, clean interfaces, and creative coding built with the latest web technologies",
     "website": "website"
   },
   "error": {
@@ -9,6 +9,7 @@
     "500": "Internal server error"
   },
   "VueNuxtDeveloper": "Vue/Nuxt Developer",
+  "FrontendDeveloper": "Frontend Developer",
   "TreasuryYieldVisualiser": "Treasury Yield Visualiser",
   "CurrencyConverter": "Currency Converter",
   "TypingGame": "Typing Game",

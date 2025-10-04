@@ -3,11 +3,9 @@
     <header class="h-[var(--app-header-height)] grid px-4 sm:px-6 fixed z-50 w-full top-0 shadow backdrop-blur-lg">
       <div class="mx-auto w-full flex justify-between max-w-5xl">
         <div
-          v-if="activePage"
-          class="sm:hidden flex gap-x-4">
-          <span class="flex items-center font-semibold text-md text-muted">
-            {{ $t(activePage) }}
-          </span>
+          v-if="activePage?.mobileHeading"
+          class="sm:hidden flex items-center font-semibold text-md text-muted">
+          {{ activePage.mobileHeading }}
         </div>
 
         <UNavigationMenu
@@ -33,9 +31,20 @@
       </div>
     </header>
 
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <main role="main">
+      <h1 class="sr-only">
+        {{ activePage.h1 || '' }}
+      </h1>
+      <h2
+        v-if="activePage?.h2"
+        class="sr-only">
+        {{ activePage.h2 || '' }}
+      </h2>
+
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </main>
 
     <footer
       class="
@@ -109,26 +118,52 @@ useHead({
   ],
 });
 
-const activePage = ref<string>('');
+const activePage = computed(() => {
+  const path = route.path;
 
-watch(
-  () => route.fullPath,
-  (val) => {
-    const arrayed = (val || '').split('/');
+  switch (true) {
+    case path === localePath('/'):
+      return {
+        mobileHeading: $t('Home'),
+        h1: `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+        h2: $t('meta.description'),
+      };
 
-    if ((arrayed?.length ?? 0) < 3) {
-      activePage.value = 'Home';
-      return;
-    }
+    case path.endsWith(localePath('/projects')):
+      return {
+        mobileHeading: $t('Projects'),
+        h1: $t('Projects'),
+        h2: $t('SelfDevelopedApplications', 3),
+      };
+    case path.endsWith(localePath('/projects/treasury-yield-visualiser')):
+      return {
+        mobileHeading: $t('Projects'),
+        h1: `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+        h2: `${$t('Projects')}`,
+      };
+    case path.endsWith(localePath('/projects/currency-converter')):
+      return {
+        mobileHeading: $t('Projects'),
+        h1: `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+        h2: `${$t('Projects')}`,
+      };
+    case path.endsWith(localePath('/projects/typing-game')):
+      return {
+        mobileHeading: $t('Projects'),
+        h1: `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+        h2: `${$t('Projects')}`,
+      };
 
-    const slug = (arrayed).filter(Boolean).pop();
-    activePage.value = (slug ?? '')
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join('');
-  },
-  { immediate: true },
-);
+    case path.endsWith(localePath('/tech-stacks')):
+      return {
+        mobileHeading: $t('TechStacks'),
+        h1: $t('TechStacks'),
+        h2: $t('TechStackHelpText'),
+      };
+    default:
+      return {};
+  }
+});
 
 const menuItems = computed<NavigationMenuItem[]>(() => [
   {

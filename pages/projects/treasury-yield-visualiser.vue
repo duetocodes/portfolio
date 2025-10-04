@@ -219,10 +219,11 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('TreasuryYieldVisualiser'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('TreasuryYieldVisualiser'),
-  ogDescription: 'duetocodes', // cant use .description due to markdown nature
+  title: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
+  ogSiteName: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  ogTitle: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,
     alt: overview.value?.data?.[0].preview?.image?.alternativeText,
@@ -232,8 +233,8 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('TreasuryYieldVisualiser'),
-  twitterDescription: 'duetocodes',
+  twitterTitle: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,

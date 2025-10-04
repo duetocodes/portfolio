@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Vue/Nuxt Geliştirici",
-    "description": "Vue ve Nuxt ile hızlı ve modern web uygulamaları geliştiriyorum",    
+    "description": "duetocodes — modern web projelerini, sade arayüzleri ve en yeni web teknolojileriyle oluşturulmuş yaratıcı kodlamayı sergileyen bir frontend geliştirici portföyü",    
     "website": "web sitesi"
   },
   "error": {
@@ -9,6 +9,7 @@
     "500": "Sunucu iç hatası"
   },
   "VueNuxtDeveloper": "Vue/Nuxt Geliştirici",
+  "FrontendDeveloper": "Frontend Geliştirici",
   "TreasuryYieldVisualiser": "Hazine Getiri Görselleştirici",
   "CurrencyConverter": "Döviz Çevirici",  
   "TypingGame": "Yazma Oyunu",

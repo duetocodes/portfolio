@@ -35,9 +35,9 @@
                 class="mr-2 h-8 max-w-[100px] object-contain select-none"
                 :src="item.logo?.url"
                 :alt="item.logo?.alternativeText || item.name" />
-              <span class="stackName transition text-default group-hover:text-primary line-clamp-2">
+              <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
                 {{ item.name }}
-              </span>
+              </h4>
               <template #trailing>
                 <UIcon
                   name="material-symbols:arrow-outward-rounded"
@@ -79,15 +79,15 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('TechStacks'),
+  title: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   description: () => $t('TechStackHelpText'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('TechStacks'),
+  ogSiteName: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  ogTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogDescription: () => $t('TechStackHelpText'),
   ogImage: '/og_banner.png',
   ogUrl: `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('TechStacks'),
+  twitterTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterDescription: () => $t('TechStackHelpText'),
   twitterCard: 'summary_large_image',
   twitterImage: '/og_banner.png',

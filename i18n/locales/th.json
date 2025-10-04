@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "นักพัฒนา Vue/Nuxt",
-    "description": "สร้างเว็บแอปที่ทันสมัยและรวดเร็วด้วย Vue และ Nuxt",
+    "description": "duetocodes — พอร์ตโฟลิโอของนักพัฒนา Frontend ที่แสดงผลงานเว็บสมัยใหม่ อินเทอร์เฟซที่เรียบง่าย และการเขียนโค้ดเชิงสร้างสรรค์ที่สร้างขึ้นด้วยเทคโนโลยีเว็บล่าสุด",
     "website": "เว็บไซต์"
   },
   "error": {
@@ -9,6 +9,7 @@
     "500": "ข้อผิดพลาดภายในเซิร์ฟเวอร์"
   },
   "VueNuxtDeveloper": "นักพัฒนา Vue/Nuxt",
+  "FrontendDeveloper": "นักพัฒนา Frontend",
   "TreasuryYieldVisualiser": "ตัวแสดงผลอัตราผลตอบแทนพันธบัตรรัฐบาล",
   "CurrencyConverter": "เครื่องแปลงสกุลเงิน",
   "TypingGame": "เกมพิมพ์",
