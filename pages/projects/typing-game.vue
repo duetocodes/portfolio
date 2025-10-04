@@ -233,10 +233,9 @@
     <div
       v-if="data?.topic"
       v-show="!isPrompt"
-
       class="mt-6 gap-x-4 flex justify-between items-center">
       <span class="flex items-center gap-x-4">
-        <span class="text-3xl text-toned font-semibold">
+        <span class="text-lg lg:text-xl xl:text-3xl text-toned font-semibold">
           {{ data.topic }}
         </span>
         <UTooltip
@@ -360,7 +359,7 @@ const isPrompt = useStorage(
 
 const controller = ref<AbortController>();
 
-const passageStyleIndex = ref(2);
+const passageStyleIndex = ref(0);
 const PASSAGE_STYLE_OPTIONS = [
   'text-lg tracking-wide',
   'text-xl/10 tracking-wide',
@@ -433,8 +432,10 @@ whenever(
 
 onMounted(() => {
   nextTick(() => {
-    if (!isSmallerBreakpoint.value)
+    if (!isSmallerBreakpoint.value) {
+      passageStyleIndex.value = 2;
       isPrompt.value = false;
+    }
   })
     .then(() => {
       passageContainer.value?.focus();
