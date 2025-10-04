@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Vue/Nuxt 开发者",
-    "description": "使用 Vue 和 Nuxt 构建快速、现代的网页应用",
+    "description": "duetocodes — 一个前端开发者的作品集，展示了现代网页项目、简洁的界面，以及使用最新网页技术打造的创意编码",
     "website": "网站"
   },
   "error": {
@@ -9,6 +9,7 @@
     "500": "服务器内部错误"
   },
   "VueNuxtDeveloper": "Vue/Nuxt 开发者",
+  "FrontendDeveloper": "前端开发者",
   "TreasuryYieldVisualiser": "国债收益率可视化工具",
   "CurrencyConverter": "货币转换器",  
   "TypingGame": "打字游戏",

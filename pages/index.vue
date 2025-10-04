@@ -104,10 +104,10 @@ useHead({
 });
 
 useSeoMeta({
-  title: 'duetocodes',
+  title: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   description: () => $t('meta.description'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => `Freddie — ${$t('meta.title')}`,
+  ogSiteName: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  ogTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogDescription: () => $t('meta.description'),
   ogImage: () => ({
     url: about.value?.data?.og_banner?.image?.url,
@@ -118,7 +118,7 @@ useSeoMeta({
   }),
   ogUrl: `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => `Freddie — ${$t('meta.title')}`,
+  twitterTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterDescription: () => $t('meta.description'),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({

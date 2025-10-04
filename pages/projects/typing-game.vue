@@ -233,10 +233,9 @@
     <div
       v-if="data?.topic"
       v-show="!isPrompt"
-
       class="mt-6 gap-x-4 flex justify-between items-center">
       <span class="flex items-center gap-x-4">
-        <span class="text-3xl text-toned font-semibold">
+        <span class="text-lg lg:text-xl xl:text-3xl text-toned font-semibold">
           {{ data.topic }}
         </span>
         <UTooltip
@@ -360,7 +359,7 @@ const isPrompt = useStorage(
 
 const controller = ref<AbortController>();
 
-const passageStyleIndex = ref(2);
+const passageStyleIndex = ref(0);
 const PASSAGE_STYLE_OPTIONS = [
   'text-lg tracking-wide',
   'text-xl/10 tracking-wide',
@@ -433,8 +432,10 @@ whenever(
 
 onMounted(() => {
   nextTick(() => {
-    if (!isSmallerBreakpoint.value)
+    if (!isSmallerBreakpoint.value) {
+      passageStyleIndex.value = 2;
       isPrompt.value = false;
+    }
   })
     .then(() => {
       passageContainer.value?.focus();
@@ -474,10 +475,11 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('TypingGame'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('TypingGame'),
-  ogDescription: () => 'duetocodes',
+  title: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
+  ogSiteName: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  ogTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,
     alt: overview.value?.data?.[0].preview?.image?.alternativeText,
@@ -487,8 +489,8 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('TypingGame'),
-  twitterDescription: () => 'duetocodes',
+  twitterTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,

@@ -8,13 +8,11 @@
       :status="status"
       @try-again="refresh" />
 
-    <template v-if="stacks?.data">
-      <UFormField
-        class="pt-8"
-        :label="$t('MyTechStacks')"
-        :description="$t('TechStackHelpText')"
-        :ui="{ label: 'max-sm:hidden text-lg', description: 'prose text-md' }" />
+    <PageHeading
+      :heading="$t('MyTechStacks')"
+      :description="$t('TechStackHelpText')" />
 
+    <template v-if="stacks?.data">
       <div class="pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
         <ULink
           v-for="item in stacks?.data"
@@ -37,9 +35,9 @@
                 class="mr-2 h-8 max-w-[100px] object-contain select-none"
                 :src="item.logo?.url"
                 :alt="item.logo?.alternativeText || item.name" />
-              <span class="stackName transition text-default group-hover:text-primary line-clamp-2">
+              <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
                 {{ item.name }}
-              </span>
+              </h4>
               <template #trailing>
                 <UIcon
                   name="material-symbols:arrow-outward-rounded"
@@ -81,15 +79,15 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('TechStacks'),
+  title: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   description: () => $t('TechStackHelpText'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('TechStacks'),
+  ogSiteName: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  ogTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogDescription: () => $t('TechStackHelpText'),
   ogImage: '/og_banner.png',
   ogUrl: `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('TechStacks'),
+  twitterTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterDescription: () => $t('TechStackHelpText'),
   twitterCard: 'summary_large_image',
   twitterImage: '/og_banner.png',

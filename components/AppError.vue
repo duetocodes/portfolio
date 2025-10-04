@@ -35,13 +35,14 @@
 
 <script setup lang="ts">
 import type { FetchError } from 'ofetch';
+import type { AsyncDataRequestStatus } from '~/types';
 
 const { t: $t } = useI18n();
 
 const props = withDefaults(defineProps<{
   hasError?: boolean
   error?: FetchError | null
-  status: 'success' | 'idle' | 'pending' | 'error'
+  status: AsyncDataRequestStatus
 }>(),
 {
   hasError: false,

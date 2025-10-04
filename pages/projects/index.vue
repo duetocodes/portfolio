@@ -8,11 +8,9 @@
       :status="status"
       @try-again="refresh" />
 
-    <UFormField
-      class="pt-8"
-      :label="$t('Projects')"
-      :description="$t('SelfDevelopedApplications', projects?.data?.length ?? 1)"
-      :ui="{ label: 'max-sm:hidden text-lg', description: 'prose text-md' }" />
+    <PageHeading
+      :heading="$t('Projects')"
+      :description="$t('SelfDevelopedApplications', projects?.data?.length ?? 1)" />
 
     <div
       v-if="projects?.data"
@@ -24,7 +22,7 @@
         :ui="{ base: 'h-full' }"
         rel="noopener noreferrer">
         <UCard
-          as="article"
+          as="section"
           :ui="{
             root: 'group h-full transition hover:shadow-md hover:bg-elevated/50',
             body: 'space-y-2',
@@ -33,9 +31,9 @@
             as="div"
             class="p-0 text-md"
             variant="link">
-            <span class="projectName text-md line-clamp-2 text-default text-left break-ellipsis group-hover:text-primary">
+            <h4 class="projectName text-md line-clamp-2 text-default text-left break-ellipsis group-hover:text-primary">
               {{ item.title }}
-            </span>
+            </h4>
             <template #trailing>
               <UIcon
                 name="material-symbols:link-rounded"
@@ -101,15 +99,15 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('Projects'),
+  title: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   description: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('Projects'),
+  ogSiteName: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  ogTitle: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   ogImage: '/og_banner.png',
   ogUrl: `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('Projects'),
+  twitterTitle: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterCard: 'summary_large_image',
   twitterDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   twitterImage: '/og_banner.png',

@@ -257,10 +257,11 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => $t('CurrencyConverter'),
-  ogSiteName: () => `Freddie — ${$t('meta.title')}`,
-  ogTitle: () => $t('CurrencyConverter'),
-  ogDescription: () => 'duetocodes',
+  title: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
+  ogSiteName: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  ogTitle: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,
     alt: overview.value?.data?.[0].preview?.image?.alternativeText,
@@ -270,8 +271,8 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
-  twitterTitle: () => $t('CurrencyConverter'),
-  twitterDescription: () => 'duetocodes',
+  twitterTitle: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
     url: overview.value?.data?.[0].preview?.image?.url,
