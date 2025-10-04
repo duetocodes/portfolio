@@ -9,6 +9,9 @@ export type QueryValue =
   | Record<string, unknown>;
 export type QueryObject = Record<string, QueryValue | Array<QueryValue>>;
 
+// https://nuxt.com/docs/3.x/api/composables/use-fetch#type
+export type AsyncDataRequestStatus = 'idle' | 'pending' | 'success' | 'error'
+
 export type TurnstileResponse = {
   success: boolean
 };
