@@ -86,9 +86,10 @@
 <script setup lang="ts">
 import { Analytics } from '@vercel/analytics/nuxt';
 import type { NavigationMenuItem } from '@nuxt/ui';
+import type { TechStackResponse } from '@/types';
 
 const route = useRoute();
-
+const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
 
 const { t: $t, locale, locales } = useI18n();
@@ -99,6 +100,27 @@ const dir = computed(() => {
   const selected = locales.value.find(lang => lang.code === locale.value);
   return selected?.dir;
 });
+
+const {
+  data: stacks,
+} = await useFetch<string[]>(
+  `/api/tech-stacks`,
+  {
+    method: 'GET',
+    key: `root-app-stacks`,
+    query: {
+      locale: 'en',
+    },
+    onResponse({ response }) {
+      const raw = response._data?.data || [];
+      response._data = raw.map((item: TechStackResponse) => item.name);
+    },
+    getCachedData(key) {
+      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      return data;
+    },
+  },
+);
 
 useHead({
   htmlAttrs: {
@@ -114,6 +136,21 @@ useHead({
     {
       rel: 'apple-touch-icon',
       href: '/apple-touch-icon.png?v=3',
+    },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        'name': 'Freddie',
+        'email': 'duetocodes@outlook.com',
+        'url': 'https://duetocodes.com',
+        'jobTitle': $t('FrontendDeveloper'),
+        'description': $t('meta.description'),
+        'knowsAbout': stacks.value,
+      }),
     },
   ],
 });
