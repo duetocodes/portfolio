@@ -8,13 +8,11 @@
       :status="status"
       @try-again="refresh" />
 
-    <template v-if="stacks?.data">
-      <UFormField
-        class="pt-8"
-        :label="$t('MyTechStacks')"
-        :description="$t('TechStackHelpText')"
-        :ui="{ label: 'max-sm:hidden text-lg', description: 'prose text-md' }" />
+    <PageHeading
+      :heading="$t('MyTechStacks')"
+      :description="$t('TechStackHelpText')" />
 
+    <template v-if="stacks?.data">
       <div class="pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
         <ULink
           v-for="item in stacks?.data"
