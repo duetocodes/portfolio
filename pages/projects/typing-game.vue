@@ -2,6 +2,7 @@
   <div class="w-full min-h-[inherit]">
     <UBreadcrumb
       class="mt-8"
+      separator-icon="material-symbols:chevron-right"
       :items="crumbItems"
       :ui="{ link: 'text-lg' }" />
 

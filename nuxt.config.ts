@@ -41,14 +41,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   icon: {
     clientBundle: {
-      icons: [
-        'material-symbols:app-badging-outline',
-        'material-symbols:chart-data-outline',
-        'material-symbols:moon-stars-outline-rounded',
-        'material-symbols:arrow-outward-rounded',
-        'material-symbols:sunny-outline-rounded',
-        'material-symbols:link-rounded',
-        'material-symbols:keyboard-external-input-outline',
+      scan: true, // pre-render explicitly used icons from installed @iconify-json/* packages
+      icons: [ // icons rendered dynamically
+        'simple-icons:github',
+        'simple-icons:linkedin',
+        'simple-icons:twitter',
+        'simple-icons:instagram',
       ],
     },
   },
