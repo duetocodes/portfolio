@@ -2,6 +2,7 @@
   <div>
     <UBreadcrumb
       class="mt-8"
+      separator-icon="material-symbols:chevron-right"
       :items="crumbItems"
       :ui="{ link: 'text-lg' }" />
 
@@ -81,8 +82,13 @@
               variant="subtle"
               color="neutral"
               icon="material-symbols:flag-outline-rounded"
+              selected-icon="material-symbols:check"
+              trailing-icon="material-symbols:keyboard-arrow-down"
               :placeholder="$t('From')"
               :items="currenciesList.filter(item => item.code !== state.target?.code)"
+              :ui="{
+                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+              }"
               @update:model-value="onChangeSource"
               @update:open="onOpenSelect">
               <template #empty>
@@ -123,8 +129,13 @@
               variant="subtle"
               color="neutral"
               icon="material-symbols:flag-outline-rounded"
+              selected-icon="material-symbols:check"
+              trailing-icon="material-symbols:keyboard-arrow-down"
               :placeholder="$t('To')"
               :items="currenciesList.filter(item => item.code !== state.source?.code)"
+              :ui="{
+                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+              }"
               @update:open="onOpenSelect">
               <template #empty>
                 {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}

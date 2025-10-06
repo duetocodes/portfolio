@@ -11,6 +11,7 @@
     <template v-if="chart">
       <UBreadcrumb
         class="mt-8"
+        separator-icon="material-symbols:chevron-right"
         :items="crumbItems"
         :ui="{ link: 'text-lg' }" />
 
@@ -32,8 +33,13 @@
               v-model="selectedFromYear"
               size="xs"
               class="w-20"
+              trailing-icon="material-symbols:keyboard-arrow-down"
+              selected-icon="material-symbols:check"
               :disabled="statusChart === 'pending'"
               :items="yearsList"
+              :ui="{
+                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+              }"
               @change="onChange('from')" />
           </UFormField>
           <UFormField :label="$t('To')">
@@ -41,8 +47,13 @@
               v-model="selectedToYear"
               size="xs"
               class="w-20"
+              trailing-icon="material-symbols:keyboard-arrow-down"
+              selected-icon="material-symbols:check"
               :disabled="statusChart === 'pending'"
               :items="yearsList"
+              :ui="{
+                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+              }"
               @change="onChange('to')" />
           </UFormField>
         </div>
@@ -76,6 +87,7 @@
             v-model="termCheckboxes"
             required
             orientation="horizontal"
+            icon="material-symbols:check-small"
             :disabled="statusChart === 'pending'"
             :items="termItems"
             :ui="{ indicator: 'bg-transparent text-default' }">
@@ -94,6 +106,7 @@
             v-model="spreadCheckboxes"
             required
             orientation="horizontal"
+            icon="material-symbols:check-small"
             :disabled="statusChart === 'pending'"
             :items="spreadItems"
             :ui="{ indicator: 'bg-transparent text-default', fieldset: 'max-w-72' }">
