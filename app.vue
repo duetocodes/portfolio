@@ -2,11 +2,11 @@
   <UApp>
     <header class="h-[var(--app-header-height)] grid px-4 sm:px-6 fixed z-50 w-full top-0 shadow backdrop-blur-lg">
       <div class="mx-auto w-full flex justify-between max-w-5xl">
-        <div
+        <p
           v-if="activePage?.mobileHeading"
           class="sm:hidden flex items-center font-semibold text-md text-muted">
           {{ activePage.mobileHeading }}
-        </div>
+        </p>
 
         <UNavigationMenu
           :items="menuItems"
@@ -152,6 +152,9 @@ useHead({
         'jobTitle': $t('FrontendDeveloper'),
         'description': $t('meta.description'),
         'knowsAbout': stacks.value,
+        'sameAs': [
+          'https://github.com/duetocodes',
+        ],
       }),
     },
   ],
