@@ -1,70 +1,123 @@
 <template>
-  <div class="grid grid-cols-3 md:grid-cols-4 gap-1.5 mb-4">
-    <UButton
-      v-for="year in props.displayedYears"
-      :key="year"
-      :label="year?.toString() ?? '--'"
-      :disabled="isYearDisabled(year)"
-      :aria-disabled="isYearDisabled(year)"
-      :aria-selected="isInRange(year)"
-      :data-disabled="isYearDisabled(year) || null"
-      :data-selected="isInRange(year) || null"
-      :data-highlighted="isWithinRangeOfHovered(year) ?? null"
-      :data-current-year="year === new Date().getFullYear()"
-      color="neutral"
-      variant="ghost"
-      class="w-[4rem] rounded-full block
-        data-disabled:text-muted
-        data-[current-year]:font-semibold data-[current-year]:not-data-[selected]:text-primary
-        hover:not-data-[selected]:bg-primary/20"
-      :class="[isInRange(year) ? 'data-selected:bg-primary data-selected:text-inverted' : 'data-[highlighted]:bg-primary/20']"
-      @mouseenter="onHoverYear(year)"
-      @mouseleave="hoverYear = NaN"
-      @click="handleYearClick(year)" />
-  </div>
+  <UCard
+    variant="subtle"
+    :ui="{
+      header: 'flex justify-between items-center p-2 sm:px-2',
+      body: 'p-2 sm:p-2',
+      footer: 'p-2 sm:px-2',
+    }">
+    <template #header>
+      <UButton
+        :disabled="false"
+        color="neutral"
+        variant="ghost"
+        icon="material-symbols:chevron-left"
+        @click="counter--" />
+
+      <div class="text-center text-sm font-medium">
+        {{ label }}
+      </div>
+
+      <UButton
+        :disabled="false"
+        color="neutral"
+        variant="ghost"
+        icon="material-symbols:chevron-right"
+        @click="counter++" />
+    </template>
+
+    <div class="grid grid-cols-3 md:grid-cols-4 gap-1.5">
+      <UButton
+        v-for="year in displayed"
+        :key="year"
+        :label="year ? year.toString() : '--'"
+        :aria-disabled="isYearDisabled(year)"
+        :aria-selected="isInRange(year)"
+        :data-disabled="isYearDisabled(year) || null"
+        :data-selected="isInRange(year) || null"
+        :data-highlighted="isWithinRangeOfHovered(year) || null"
+        :data-currentyear="year === new Date().getFullYear() || null"
+        color="neutral"
+        variant="ghost"
+        class="w-[4rem] rounded-full block
+            data-selected:bg-primary data-selected:text-inverted
+            data-disabled:text-dimmed/50
+            data-currentyear:font-bold data-currentyear:not-data-selected:text-primary
+            hover:not-data-selected:bg-primary/20"
+        :class="[
+          { 'data-highlighted:bg-primary/20': isWithinRangeOfHovered(year) },
+        ]"
+        @mouseenter="onHoverYear(year)"
+        @mouseleave="hoverYear = NaN"
+        @click="handleYearClick(year)">
+      </UButton>
+    </div>
+  </UCard>
 </template>
 
 <script setup lang="ts">
-import type { YearPickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~/types';
 
+const { t: $t } = useI18n();
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+const counter = ref(0);
+const currentYear = ref(CURRENT_YEAR);
 const hoverYear = ref<number>(NaN);
-const range = ref<YearPickerTypeRange>({
-  start: NaN,
-  end: NaN,
+
+const range = ref<PickerTypeRange>({
+  start: CURRENT_YEAR,
+  end: CURRENT_YEAR,
+});
+
+const label = computed(() => {
+  const yearStart = displayed.value[0]?.toString();
+  const yearEnd = displayed.value[displayed.value?.length - 1]?.toString();
+
+  if (yearStart && yearEnd) {
+    return `${yearStart} - ${yearEnd}`;
+  }
+  else return $t('SelectItem', { item: $t('year') });
 });
 
 const props = withDefaults(
   defineProps<{
-    val: number | YearPickerTypeRange
+    val: number | PickerTypeRange
     minYear?: number
     maxYear?: number
     yearsPerPage?: number
-    rangeStart?: number
-    rangeEnd?: number
-    displayedYears: number[]
+    rangeStart: number
+    rangeEnd: number
+    isYearDisabled?: (args: number) => boolean
   }>(),
   {
     minYear: NaN,
     maxYear: NaN,
     yearsPerPage: 12,
-    rangeStart: 1900,
-    rangeEnd: 2200,
+    isYearDisabled: () => false,
   },
 );
 
 const emits = defineEmits<{
-  (e: 'on-select', value: YearPickerTypeRange): void
+  (e: 'on-select', value: PickerTypeRange): void
 }>();
 
-const isYearDisabled = (year: number) => {
-  if (!isNaN(props.minYear) && year < props.minYear) return true;
-  if (!isNaN(props.maxYear) && year > props.maxYear) return true;
-  return false;
-};
+const displayed = computed(() => {
+  const arr = Array.from(
+    { length: props.yearsPerPage },
+    (_, i) => {
+      const val = i + currentYear.value + (props.yearsPerPage * counter.value) - (props.yearsPerPage - 1);
+      if (val < props.rangeStart || val > props.rangeEnd)
+        return NaN;
+      else
+        return val;
+    },
+  );
+  return arr ?? [];
+});
 
 const handleYearClick = (year: number) => {
-  if (isYearDisabled(year)) return;
-
   if (!range.value.start || (range.value.start && range.value.end)) {
     range.value.start = year;
     range.value.end = NaN;
@@ -101,13 +154,12 @@ const isWithinRangeOfHovered = (year: number) => {
 };
 
 const onHoverYear = (year: number) => {
-  if (isYearDisabled(year)) return;
   if (range.value.start && !range.value.end) {
     hoverYear.value = year;
   }
 };
 
 onMounted(() => {
-  range.value = toRaw(props.val) as YearPickerTypeRange;
+  range.value = toRaw(props.val) as PickerTypeRange;
 });
 </script>

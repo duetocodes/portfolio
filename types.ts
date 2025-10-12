@@ -191,3 +191,8 @@ export type TypingGameUpdatedData = {
   topic: string
   mappedPassage: Character[]
 };
+
+export type PickerTypeRange = {
+  start: number
+  end: number
+}
