@@ -31,9 +31,9 @@
         v-for="year in displayed"
         :key="year"
         :label="year ? year.toString() : '--'"
-        :aria-disabled="isYearDisabled(year)"
+        :aria-disabled="props.isYearDisabled(year)"
         :aria-selected="isInRange(year)"
-        :data-disabled="isYearDisabled(year) || null"
+        :data-disabled="props.isYearDisabled(year) || null"
         :data-selected="isInRange(year) || null"
         :data-highlighted="isWithinRangeOfHovered(year) || null"
         :data-currentyear="year === new Date().getFullYear() || null"
@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PickerTypeRange } from '~/types';
+import type { YearPickerTypeRange } from '~/types';
 
 const { t: $t } = useI18n();
 
@@ -66,7 +66,7 @@ const counter = ref(0);
 const currentYear = ref(CURRENT_YEAR);
 const hoverYear = ref<number>(NaN);
 
-const range = ref<PickerTypeRange>({
+const range = ref<YearPickerTypeRange>({
   start: CURRENT_YEAR,
   end: CURRENT_YEAR,
 });
@@ -83,7 +83,7 @@ const label = computed(() => {
 
 const props = withDefaults(
   defineProps<{
-    val: number | PickerTypeRange
+    val: number | YearPickerTypeRange
     minYear?: number
     maxYear?: number
     yearsPerPage?: number
@@ -100,7 +100,7 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<{
-  (e: 'on-select', value: PickerTypeRange): void
+  (e: 'on-select', value: YearPickerTypeRange): void
 }>();
 
 const displayed = computed(() => {
@@ -160,6 +160,6 @@ const onHoverYear = (year: number) => {
 };
 
 onMounted(() => {
-  range.value = toRaw(props.val) as PickerTypeRange;
+  range.value = toRaw(props.val) as YearPickerTypeRange;
 });
 </script>

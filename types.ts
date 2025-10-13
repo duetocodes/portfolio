@@ -192,7 +192,7 @@ export type TypingGameUpdatedData = {
   mappedPassage: Character[]
 };
 
-export type PickerTypeRange = {
+export type YearPickerTypeRange = {
   start: number
   end: number
 }
