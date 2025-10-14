@@ -27,6 +27,7 @@
         v-for="(year, ind) in years"
         :key="`${year}-${ind}`"
         :label="year ? year.toString() : '--'"
+        :disabled="props.isYearDisabled(year)"
         :aria-disabled="props.isYearDisabled(year)"
         :data-disabled="props.isYearDisabled(year) || null"
         :aria-selected="isInRange(year)"
@@ -85,6 +86,10 @@ const range = ref<YearPickerTypeRange>({
   end: null,
 });
 
+// iso compliant
+const MIN_YEAR = 1;
+const MAX_YEAR = 9999;
+
 const label = computed(() => {
   const yearStart = years.value[0]?.toString();
   const yearEnd = years.value[years.value?.length - 1]?.toString();
@@ -97,7 +102,7 @@ const label = computed(() => {
 
 const props = withDefaults(
   defineProps<{
-    val: number | YearPickerTypeRange
+    val: YearPickerTypeRange
     minYear?: number
     maxYear?: number
     yearsPerPage?: number
@@ -112,10 +117,10 @@ const props = withDefaults(
     }
   }>(),
   {
-    minYear: 1,
-    maxYear: 9999,
-    yearsPerPage: 12,
-    hasLabel: true,
+    minYear: MIN_YEAR,
+    maxYear: MAX_YEAR,
+    yearsPerPage: 16,
+    hasLabel: false,
     isYearDisabled: () => false,
     variant: 'subtle',
     ui: () => ({
@@ -133,6 +138,7 @@ const emits = defineEmits<{
 onMounted(() => {
   // client-side date
   currentYear.value = new Date().getFullYear();
+  range.value = toRaw(props.val);
 });
 
 const years = computed(() => {
@@ -191,7 +197,8 @@ const handleYearClick = (year: number | null) => {
     }
   }
 
-  emits('on-select', toRaw(range.value));
+  if (range.value.start && range.value.end)
+    emits('on-select', toRaw(range.value));
 };
 
 const isInRange = (year: number | null) => {
