@@ -1,0 +1,13 @@
+// project level settings
+// save document explicitly to format
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": false,
+  "eslint.validate": [
+    "javascript",
+    "vue",
+    "typescript",
+  ]
+}
