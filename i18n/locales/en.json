@@ -42,6 +42,8 @@
   "work": "work",
   "From": "From",
   "To": "To",
+  "Start": "Start",
+  "End": "End",
   "Term": "Term",
   "View": "View",
   "month": "month",
