@@ -19,26 +19,29 @@ next planned feature:
 -->
 
 <script setup lang="ts">
-import type { PickerTypeRange } from '~/types';
+import type { YearPickerTypeRange } from '~/types';
 
 // iso compliant
 const MIN_YEAR = 1;
 const MAX_YEAR = 9999;
 
-const model = defineModel<number | PickerTypeRange>({ default: null });
-const currentYear = ref(new Date().getFullYear());
+const model = defineModel<number | YearPickerTypeRange>({ default: null });
 
 const props = withDefaults(
   defineProps<{
     range?: boolean
     multiple?: boolean
     yearsPerPage?: number
-    isYearDisabled?: (args: number) => boolean
+    minYear?: number
+    maxYear?: number
+    isYearDisabled?: (args: number | null) => boolean
   }>(),
   {
     range: false,
     multiple: false,
     yearsPerPage: 16,
+    minYear: MIN_YEAR,
+    maxYear: MAX_YEAR,
     isYearDisabled: () => false,
   },
 );
@@ -46,8 +49,5 @@ const props = withDefaults(
 const childProps = computed(() => ({
   ...props,
   val: model.value,
-  rangeStart: MIN_YEAR,
-  rangeEnd: MAX_YEAR,
-  currentYear: currentYear.value,
 }));
 </script>

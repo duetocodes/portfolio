@@ -193,6 +193,6 @@ export type TypingGameUpdatedData = {
 };
 
 export type YearPickerTypeRange = {
-  start: number
-  end: number
+  start: number | null
+  end: number | null
 }
