@@ -28,21 +28,19 @@
         :key="`${year}-${ind}`"
         :label="year ? year.toString() : '--'"
         :aria-disabled="props.isYearDisabled(year)"
-        :aria-selected="isInRange(year)"
         :data-disabled="props.isYearDisabled(year) || null"
+        :aria-selected="isInRange(year)"
         :data-selected="isInRange(year) || null"
         :data-highlighted="isWithinRangeOfHovered(year) || null"
-        :data-currentyear="year === new Date().getFullYear() || null"
+        :data-currentyear="year === currentYear || null"
         color="neutral"
         variant="ghost"
         class="w-[4rem] rounded-full block
             data-selected:bg-primary data-selected:text-inverted
             data-disabled:text-dimmed/50
             data-currentyear:font-bold data-currentyear:not-data-selected:text-primary
+            data-highlighted:bg-primary/20
             hover:not-data-selected:bg-primary/20"
-        :class="[
-          { 'data-highlighted:bg-primary/20': isWithinRangeOfHovered(year) },
-        ]"
         @mouseenter="onHoverYear(year)"
         @mouseleave="hoverYear = null"
         @click="handleYearClick(year)">
