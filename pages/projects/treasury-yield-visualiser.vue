@@ -135,7 +135,7 @@
 import type { TreasuryChartRowData, ProjectItemData, YearPickerTypeRange } from '~/types';
 import type { BreadcrumbItem } from '@nuxt/ui';
 
-const { t: $t, locale } = useI18n();
+const { t: $t, locale, localeProperties } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -170,10 +170,11 @@ const {
   '/api/treasury-yield-scraper',
   {
     method: 'GET',
-    query: {
-      from: computed(() => yearPicker.value.start),
-      to: computed(() => yearPicker.value.end),
-    },
+    query: computed(() => ({
+      from: yearPicker.value.start,
+      to: yearPicker.value.end,
+      dateLocale: localeProperties.value.dateLocale,
+    })),
     watch: false,
   },
 );
@@ -322,7 +323,7 @@ const chartDataComputed = computed(() => {
 
 const spreadDataComputed = computed(() => {
   return (chart.value ?? []).map(item => ({
-    'dateTime': item.dateTime,
+    'date': item.date,
     '2yr3mth': Number((item['2yr'] - item['3mth']).toFixed(2)),
     '10yr3mth': Number((item['10yr'] - item['3mth']).toFixed(2)),
     '10yr2yr': Number((item['10yr'] - item['2yr']).toFixed(2)),
@@ -337,7 +338,7 @@ const yearPickerLabel = computed((): string => {
 
 const disabledYears = (year: number | null) => {
   if (year === null) return false;
-  if (year < 1990 || year > yearNow.value) return true;
+  if (year < 1990 || year > yearNow.value) return true; // earliest data from 1990
   return false;
 };
 
@@ -357,8 +358,8 @@ const onUpdateOpen = (isOpen: boolean) => {
 
 const xFormatter = (index: number): string => {
   const data = chart.value;
-  if (data && typeof data[index]?.dateTime === 'string') {
-    return data[index].dateTime;
+  if (data && typeof data[index]?.date === 'string') {
+    return data[index].date;
   }
   return '--';
 };
