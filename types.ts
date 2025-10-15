@@ -111,7 +111,7 @@ export type AboutMeResponse = {
   socialMedia: Array<SocialMediaItem>
 };
 export type TreasuryChartRowData = {
-  'dateTime': string
+  'date': string
   '3mth': number
   '2yr': number
   '10yr': number
