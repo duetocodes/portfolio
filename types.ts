@@ -111,7 +111,7 @@ export type AboutMeResponse = {
   socialMedia: Array<SocialMediaItem>
 };
 export type TreasuryChartRowData = {
-  'dateTime': string
+  'date': string
   '3mth': number
   '2yr': number
   '10yr': number
@@ -192,7 +192,7 @@ export type TypingGameUpdatedData = {
   mappedPassage: Character[]
 };
 
-export type PickerTypeRange = {
-  start: number
-  end: number
+export type YearPickerTypeRange = {
+  start: number | null
+  end: number | null
 }

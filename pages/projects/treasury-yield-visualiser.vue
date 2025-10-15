@@ -27,36 +27,6 @@
       </p>
 
       <div class="mt-8 flex flex-wrap [&>*]:py-2 [&>*]:px-2 md:[&>*]:px-4 sm:divide-x-1 sm:divide-dotted sm:divide-[var(--ui-border-muted)] border-y-1 border-dotted border-muted">
-        <div class="flex gap-4">
-          <UFormField :label="$t('From')">
-            <USelect
-              v-model="selectedFromYear"
-              size="xs"
-              class="w-20"
-              trailing-icon="material-symbols:keyboard-arrow-down"
-              selected-icon="material-symbols:check"
-              :disabled="statusChart === 'pending'"
-              :items="yearsList"
-              :ui="{
-                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
-              }"
-              @change="onChange('from')" />
-          </UFormField>
-          <UFormField :label="$t('To')">
-            <USelect
-              v-model="selectedToYear"
-              size="xs"
-              class="w-20"
-              trailing-icon="material-symbols:keyboard-arrow-down"
-              selected-icon="material-symbols:check"
-              :disabled="statusChart === 'pending'"
-              :items="yearsList"
-              :ui="{
-                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
-              }"
-              @change="onChange('to')" />
-          </UFormField>
-        </div>
         <UFormField :label="$t('Mode')">
           <div class="flex items-center gap-2">
             <span
@@ -118,25 +88,28 @@
           </UCheckboxGroup>
         </UFormField>
         <div class="sm:ml-auto flex gap-2 items-center">
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="link"
-            icon="material-symbols:format-list-bulleted"
-            :label="$t('GoToTarget', { target: $t('List') })"
-            :aria-label="$t('GoToTarget', { target: $t('List') })"
-            :disabled="statusChart === 'pending'"
-            :to="localePath('/projects')" />
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="solid"
-            icon="material-symbols:chart-data-outline"
-            loading-icon="material-symbols:app-badging-outline"
-            :label="$t('View')"
-            :aria-label="$t('View')"
-            :loading="statusChart === 'pending'"
-            @click="() => refresh()" />
+          <div>
+            <UPopover
+              :ui="{ content: 'overflow-clip' }"
+              @update:open="onUpdateOpen">
+              <UButton
+                :label="yearPickerLabel"
+                :aria-label="$t('SelectItem', { item: $t('year') })"
+                :loading="statusChart === 'pending'"
+                color="neutral"
+                variant="outline"
+                size="lg"
+                icon="material-symbols:date-range"
+                loading-icon="material-symbols:app-badging-outline" />
+
+              <template #content>
+                <YearPicker
+                  v-model="yearPicker"
+                  range
+                  :is-year-disabled="disabledYears" />
+              </template>
+            </UPopover>
+          </div>
         </div>
       </div>
 
@@ -159,10 +132,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TreasuryChartRowData, ProjectItemData } from '~/types';
+import type { TreasuryChartRowData, ProjectItemData, YearPickerTypeRange } from '~/types';
 import type { BreadcrumbItem } from '@nuxt/ui';
 
-const { t: $t, locale } = useI18n();
+const { t: $t, locale, localeProperties } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -170,9 +143,12 @@ const localePath = useLocalePath();
 const isSpread = ref(false);
 const termCheckboxes = ref(['3mth', '2yr', '10yr']);
 const spreadCheckboxes = ref(['2yr3mth', '10yr3mth', '10yr2yr']);
-const selectedFromYear = ref((new Date().getFullYear() - 1).toString());
-const selectedToYear = ref(new Date().getFullYear().toString());
-const yearsList = ref<string[]>([]);
+const yearNow = ref(new Date().getFullYear());
+
+const yearPicker = ref<YearPickerTypeRange>({
+  start: yearNow.value,
+  end: yearNow.value,
+});
 
 const crumbItems = computed<BreadcrumbItem[]>(() => [
   {
@@ -194,11 +170,11 @@ const {
   '/api/treasury-yield-scraper',
   {
     method: 'GET',
-    query: {
-      from: selectedFromYear,
-      to: selectedToYear,
-      term: termCheckboxes,
-    },
+    query: computed(() => ({
+      from: yearPicker.value.start,
+      to: yearPicker.value.end,
+      dateLocale: localeProperties.value.dateLocale,
+    })),
     watch: false,
   },
 );
@@ -347,51 +323,52 @@ const chartDataComputed = computed(() => {
 
 const spreadDataComputed = computed(() => {
   return (chart.value ?? []).map(item => ({
-    'dateTime': item.dateTime,
+    'date': item.date,
     '2yr3mth': Number((item['2yr'] - item['3mth']).toFixed(2)),
     '10yr3mth': Number((item['10yr'] - item['3mth']).toFixed(2)),
     '10yr2yr': Number((item['10yr'] - item['2yr']).toFixed(2)),
   }));
 });
 
-const onChange = (type: string) => {
-  if (Number(selectedFromYear.value) <= Number(selectedToYear.value)) return;
+const yearPickerLabel = computed((): string => {
+  const from = yearPicker.value.start || $t('Start');
+  const to = yearPicker.value.end || $t('End');
+  return `${from} - ${to}`;
+});
 
-  const from = parseInt(selectedFromYear.value);
-  const to = parseInt(selectedToYear.value);
+const disabledYears = (year: number | null) => {
+  if (year === null) return false;
+  if (year < 1990 || year > yearNow.value) return true; // earliest data from 1990
+  return false;
+};
 
-  switch (type) {
-    case 'from':
-      selectedToYear.value = from.toString();
-      break;
-    case 'to':
-      selectedFromYear.value = to.toString();
-      break;
-    default: break;
+let previous: YearPickerTypeRange = { start: null, end: null };
+const onUpdateOpen = (isOpen: boolean) => {
+  if (isOpen)
+    previous = structuredClone(toRaw(yearPicker.value));
+  else {
+    const curr = structuredClone(toRaw(yearPicker.value));
+    if (curr.start === previous.start && curr.end === previous.end)
+      return;
+    else if (curr.start && curr.end) {
+      refresh();
+    }
   }
 };
 
 const xFormatter = (index: number): string => {
   const data = chart.value;
-  if (data && typeof data[index]?.dateTime === 'string') {
-    return data[index].dateTime;
+  if (data && typeof data[index]?.date === 'string') {
+    return data[index].date;
   }
   return '--';
 };
 
-const initYearSelector = (start = 1990) => {
-  // 1990: earliest year which data is available from website
-  const currentYear = new Date().getFullYear();
-
-  for (let y = start; y <= currentYear; y++) {
-    yearsList.value.push(y.toString());
-  };
-  yearsList.value.reverse();
-};
-
-initYearSelector();
-
 onMounted(() => {
+  // updated client-side
+  yearNow.value = new Date().getFullYear();
+  yearPicker.value.start = yearNow.value;
+  yearPicker.value.end = yearNow.value;
   refresh(); // ensures an updated chart
 });
 </script>

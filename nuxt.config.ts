@@ -58,10 +58,10 @@ export default defineNuxtConfig({
   i18n: {
     defaultLocale: 'en',
     locales: [
-      { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json' },
-      { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json' },
-      { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json' },
-      { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json' },
+      { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
+      { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
+      { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
+      { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
     ],
     lazy: true,
     strategy: 'prefix_except_default',
