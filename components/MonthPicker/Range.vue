@@ -124,14 +124,7 @@ const props = withDefaults(
     }
   }>(),
   {
-    hasLabel: false,
-    variant: 'subtle',
     isMonthDisabled: () => false,
-    ui: () => ({
-      header: 'flex justify-between items-center p-2 sm:px-2',
-      body: 'p-2 sm:p-2',
-      footer: 'p-2 sm:px-2',
-    }),
   },
 );
 

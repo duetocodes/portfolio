@@ -40,6 +40,15 @@ const props = withDefaults(
     minYear?: number
     maxYear?: number
     isMonthDisabled?: (args: CalendarDate) => boolean
+    variant?: 'subtle' | 'outline' | 'solid' | 'soft'
+    ui?: {
+      root?: string
+      header?: string
+      body?: string
+      footer?: string
+    }
+
+    hasLabel?: boolean
   }>(),
   {
     range: false,
@@ -47,6 +56,14 @@ const props = withDefaults(
     minYear: MIN_YEAR,
     maxYear: MAX_YEAR,
     isMonthDisabled: () => false,
+    variant: 'subtle',
+    ui: () => ({
+      header: 'flex justify-between items-center p-2 sm:px-2',
+      body: 'p-2 sm:p-2',
+      footer: 'p-2 sm:px-2',
+    }),
+
+    hasLabel: false,
   },
 );
 
