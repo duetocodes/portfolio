@@ -4,7 +4,9 @@
     :ui="props.ui">
     <template #header>
       <UButton
-        :disabled="false"
+        :disabled="currentYear <= props.minYear"
+        :aria-disabled="currentYear <= props.minYear"
+        :aria-label="$t('PreviousItem', { item: $t('year') })"
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-left"
@@ -15,7 +17,9 @@
       </div>
 
       <UButton
-        :disabled="false"
+        :disabled="currentYear >= props.maxYear"
+        :aria-disabled="currentYear >= props.maxYear"
+        :aria-label="$t('NextItem', { item: $t('year') })"
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-right"
@@ -27,6 +31,7 @@
         v-for="(year, ind) in years"
         :key="`${year}-${ind}`"
         :label="year ? year.toString() : '--'"
+        :aria-label="year ? year.toString() : '--'"
         :disabled="props.isYearDisabled(year)"
         :aria-disabled="props.isYearDisabled(year)"
         :data-disabled="props.isYearDisabled(year) || null"
@@ -86,10 +91,6 @@ const range = ref<YearPickerTypeRange>({
   end: null,
 });
 
-// iso compliant
-const MIN_YEAR = 1;
-const MAX_YEAR = 9999;
-
 const label = computed(() => {
   const yearStart = years.value[0]?.toString();
   const yearEnd = years.value[years.value?.length - 1]?.toString();
@@ -100,36 +101,21 @@ const label = computed(() => {
   else return $t('SelectItem', { item: $t('year') });
 });
 
-const props = withDefaults(
-  defineProps<{
-    val: YearPickerTypeRange
-    minYear?: number
-    maxYear?: number
-    yearsPerPage?: number
-    hasLabel?: boolean
-    isYearDisabled?: (args: number | null) => boolean
-    variant?: 'subtle' | 'outline' | 'solid' | 'soft'
-    ui?: {
-      root?: string
-      header?: string
-      body?: string
-      footer?: string
-    }
-  }>(),
-  {
-    minYear: MIN_YEAR,
-    maxYear: MAX_YEAR,
-    yearsPerPage: 16,
-    hasLabel: false,
-    isYearDisabled: () => false,
-    variant: 'subtle',
-    ui: () => ({
-      header: 'flex justify-between items-center p-2 sm:px-2',
-      body: 'p-2 sm:p-2',
-      footer: 'p-2 sm:px-2',
-    }),
-  },
-);
+const props = defineProps<{
+  val: YearPickerTypeRange
+  yearsPerPage: number
+  minYear: number
+  maxYear: number
+  hasLabel: boolean
+  isYearDisabled: (args: number | null) => boolean
+  variant: 'subtle' | 'outline' | 'solid' | 'soft'
+  ui: {
+    root?: string
+    header?: string
+    body?: string
+    footer?: string
+  }
+}>();
 
 const emits = defineEmits<{
   (e: 'on-select', value: YearPickerTypeRange): void
@@ -164,14 +150,13 @@ const selectionLabel = computed((): string => {
 const hasDisabledYearWithinRange = (a: number, b: number): boolean => {
   if (!a || !b) return false;
 
-  const filtered = years.value.filter((year) => {
-    if (b > a)
-      return year && (year >= a && year <= b);
-    else
-      return year && (year >= b && year <= a);
-  });
+  const step = a <= b ? 1 : -1;
+  const temp = Array.from(
+    { length: Math.abs(b - a) + 1 },
+    (_, i) => a + i * step,
+  );
 
-  return filtered.some(year => props.isYearDisabled(year));
+  return temp.some(year => props.isYearDisabled(year));
 };
 
 const handleYearClick = (year: number | null) => {
