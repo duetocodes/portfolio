@@ -48,6 +48,8 @@
   "View": "Görüntüle",
   "month": "ay",
   "year": "yıl",
+  "PreviousItem": "Önceki {item}",
+  "NextItem": "Sonraki {item}",
   "SelfDevelopedApplications": "Kendi geliştirdiğiniz uygulamalar",
   "GoBack": "Geri dön",
   "GoToTarget": "{target} adresine git",

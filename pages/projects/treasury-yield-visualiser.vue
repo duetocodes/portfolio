@@ -145,7 +145,7 @@ const termCheckboxes = ref(['3mth', '2yr', '10yr']);
 const spreadCheckboxes = ref(['2yr3mth', '10yr3mth', '10yr2yr']);
 const yearNow = ref(new Date().getFullYear());
 
-const yearPicker = ref<YearPickerTypeRange>({
+const yearPicker = ref({
   start: yearNow.value,
   end: yearNow.value,
 });

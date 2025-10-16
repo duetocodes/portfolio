@@ -148,15 +148,18 @@ const selectionLabel = computed((): string => {
 });
 
 const hasDisabledYearWithinRange = (a: number, b: number): boolean => {
-  if (!a || !b) return false;
+  if (typeof a !== 'number' || typeof b !== 'number') return false;
 
   const step = a <= b ? 1 : -1;
-  const temp = Array.from(
-    { length: Math.abs(b - a) + 1 },
-    (_, i) => a + i * step,
-  );
+  let year = a;
 
-  return temp.some(year => props.isYearDisabled(year));
+  while (true) {
+    if (props.isYearDisabled(year)) return true;
+    if (year === b) break;
+    year += step;
+  }
+
+  return false;
 };
 
 const handleYearClick = (year: number | null) => {
