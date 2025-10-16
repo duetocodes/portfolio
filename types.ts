@@ -1,3 +1,5 @@
+import type { CalendarDate } from '@internationalized/date';
+
 // see https://github.com/unjs/ufo/blob/main/src/query.ts (not sure how to import these)
 export type QueryValue =
   | string
@@ -195,4 +197,9 @@ export type TypingGameUpdatedData = {
 export type YearPickerTypeRange = {
   start: number | null
   end: number | null
+}
+
+export type MonthPickerTypeRange = {
+  start: CalendarDate | null
+  end: CalendarDate | null
 }

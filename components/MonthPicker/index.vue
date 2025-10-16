@@ -3,7 +3,7 @@
     <MonthPickerRange
       v-if="props.range"
       v-bind="childProps"
-      @on-select="data => model = data" />
+      @on-select="data => modelValue = data" />
   </div>
 </template>
 
@@ -26,7 +26,12 @@ import type { MonthPickerTypeRange } from '~/types';
 const MIN_YEAR = 1;
 const MAX_YEAR = 9999;
 
-const model = defineModel<MonthPickerTypeRange | null>({ default: null });
+const modelValue = defineModel<MonthPickerTypeRange>({
+  default: () => ({
+    start: null,
+    end: null,
+  }),
+});
 
 const props = withDefaults(
   defineProps<{
@@ -47,6 +52,6 @@ const props = withDefaults(
 
 const childProps = computed(() => ({
   ...props,
-  val: model.value,
+  modelValue: modelValue.value,
 }));
 </script>

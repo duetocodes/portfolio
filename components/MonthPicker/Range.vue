@@ -5,6 +5,8 @@
     <template #header>
       <UButton
         :disabled="counterYear <= props.minYear"
+        :aria-disabled="counterYear <= props.minYear"
+        :aria-label="$t('PreviousItem', { item: $t('year') })"
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-left"
@@ -16,6 +18,8 @@
 
       <UButton
         :disabled="counterYear >= props.maxYear"
+        :aria-disabled="counterYear >= props.maxYear"
+        :aria-label="$t('NextItem', { item: $t('year') })"
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-right"
@@ -27,13 +31,14 @@
         v-for="obj in months"
         :key="`${obj.year}-${obj.month}`"
         :label="obj ? getMonthLabel(obj) : '--'"
+        :aria-label="obj ? getMonthLabel(obj) : '--'"
         :disabled="props.isMonthDisabled(obj)"
         :aria-disabled="props.isMonthDisabled(obj)"
         :data-disabled="props.isMonthDisabled(obj) || null"
         :aria-selected="isInRange(obj)"
         :data-selected="isInRange(obj) || null"
         :data-highlighted="isWithinRangeOfHovered(obj) || null"
-        :data-currentmonth="(isSameMonth(obj, CURRENT) && isSameYear(obj, CURRENT)) || null"
+        :data-currentmonth="isDataCurrentMonth(obj) || null"
         color="neutral"
         variant="ghost"
         class="w-[4rem] rounded-full block
@@ -44,7 +49,7 @@
           hover:not-data-selected:bg-primary/20"
         @mouseenter="onHoverMonth(obj)"
         @mouseleave="hoverMonth = null"
-        @click="handleYearClick(obj)">
+        @click="handleMonthClick(obj)">
       </UButton>
     </div>
 
@@ -67,6 +72,7 @@ disabling month (parent):
   :is-month-disabled="disabledMonth" />
 
 const disabledMonth = (cal: CalendarDate) => {
+  // 4 = April, 9 = September
   if (cal.month === 9 && cal.year === 2025) return true;
   if (cal.month === 4 && cal.year === 2025) return true;
   return false;
@@ -74,16 +80,28 @@ const disabledMonth = (cal: CalendarDate) => {
 -->
 
 <script setup lang="ts">
-import { CalendarDate, today, getLocalTimeZone, isSameMonth, isSameYear } from '@internationalized/date';
+import {
+  CalendarDate,
+  today,
+  getLocalTimeZone,
+  isSameMonth,
+  isSameYear,
+  parseDate,
+} from '@internationalized/date';
+
 import type { MonthPickerTypeRange } from '~/types';
 
-const { t: $t } = useI18n();
+const { t: $t, localeProperties } = useI18n();
 
 const hoverMonth = ref<CalendarDate | null>(null);
-const getCurrentCalendarDate = () => today(getLocalTimeZone());
 
-const CURRENT = getCurrentCalendarDate();
-const counterYear = ref(CURRENT.year);
+const getCurrentCalendarDate = (): CalendarDate => {
+  const temp = today(getLocalTimeZone());
+  return new CalendarDate(temp.year, temp.month, 1);
+};
+
+const currentCalendarDate = ref<CalendarDate>(getCurrentCalendarDate());
+const counterYear = ref<number>(currentCalendarDate.value.year);
 
 const range = ref<MonthPickerTypeRange>({
   start: null,
@@ -92,7 +110,7 @@ const range = ref<MonthPickerTypeRange>({
 
 const props = withDefaults(
   defineProps<{
-    val: MonthPickerTypeRange | null
+    modelValue: MonthPickerTypeRange
     minYear: number
     maxYear: number
     hasLabel?: boolean
@@ -121,6 +139,20 @@ const emits = defineEmits<{
   (e: 'on-select', value: MonthPickerTypeRange): void
 }>();
 
+onMounted(() => {
+  // client-side date
+  currentCalendarDate.value = getCurrentCalendarDate();
+  counterYear.value = currentCalendarDate.value.year;
+
+  if (props.modelValue && (props.modelValue.start || props.modelValue.end)) {
+    // renew CalendarDate instances from v-model value
+    range.value = {
+      start: props.modelValue.start ? new CalendarDate(props.modelValue.start.year, props.modelValue.start.month, 1) : null,
+      end: props.modelValue.end ? new CalendarDate(props.modelValue.end.year, props.modelValue.end.month, 1) : null,
+    };
+  }
+});
+
 const months = computed((): CalendarDate[] => {
   const arr = Array.from({ length: 12 },
     (_, i) => {
@@ -130,21 +162,17 @@ const months = computed((): CalendarDate[] => {
   return arr;
 });
 
-const getMonthLabel = (mth: CalendarDate) => {
-  const jsDate = mth.toDate(getLocalTimeZone());
-  return jsDate.toLocaleString('default', { month: 'short' });
-};
-
 const start = computed(() => {
   if (!range.value.start) return null;
 
   const jsDate = range.value.start.toDate(getLocalTimeZone());
 
   return {
-    shortName: jsDate.toLocaleString('default', { month: 'short' }),
-    // yyyymmdd: range.value.start.toString(),
+    shortName: jsDate.toLocaleString(localeProperties.value.dateLocale as string, { month: 'short' }),
     timestamp: jsDate.getTime(),
-    calendarDate: range.value.start,
+    // ensures exact type, because CalendarDate has private properties that get lost when .i.e, emitting
+    // and thus may trigger type errors in parent component .i.e, v-model
+    calendarDate: range.value.start.copy(),
   };
 });
 
@@ -154,42 +182,51 @@ const end = computed(() => {
   const jsDate = range.value.end.toDate(getLocalTimeZone());
 
   return {
-    shortName: jsDate.toLocaleString('default', { month: 'short' }),
-    // yyyymmdd: range.value.end.toString(),
+    shortName: jsDate.toLocaleString(localeProperties.value.dateLocale as string, { month: 'short' }),
     timestamp: jsDate.getTime(),
-    calendarDate: range.value.end,
+    calendarDate: range.value.end.copy(),
+    // calendarDate: new CalendarDate(range.value.end.year, range.value.end.month, 1),
   };
 });
 
 const selectionLabel = computed((): string => {
-  let labelStart, labelEnd;
-  if (start.value)
-    labelStart = `${start.value.shortName} ${start.value.calendarDate.year}`;
-  else
-    labelStart = $t('From');
-
-  if (end.value)
-    labelEnd = `${end.value.shortName} ${end.value.calendarDate.year}`;
-  else
-    labelEnd = $t('To');
-
+  const labelStart = start.value ? `${start.value.shortName} ${start.value.calendarDate.year}` : $t('From');
+  const labelEnd = end.value ? `${end.value.shortName} ${end.value.calendarDate.year}` : $t('To');
   return `${labelStart} - ${labelEnd}`;
 });
+
+const getMonthLabel = (mth: CalendarDate) => {
+  const jsDate = mth.toDate(getLocalTimeZone());
+  return jsDate.toLocaleString(localeProperties.value.dateLocale as string, { month: 'short' });
+};
+
+const isDataCurrentMonth = (mth: CalendarDate) => {
+  const parsed = parseDate(currentCalendarDate.value.toString());
+  return isSameMonth(mth, parsed) && isSameYear(mth, parsed);
+};
 
 const hasDisabledMonthWithinRange = (a: CalendarDate, b: CalendarDate): boolean => {
   if (!a || !b) return false;
 
-  const filtered = months.value.filter((obj) => {
-    if (b.month > a.month)
-      return obj.month >= a.month && obj.month <= b.month;
-    else
-      return obj.month >= b.month && obj.month <= a.month;
-  });
+  const isForward = a.compare(b) <= 0;
+  let current = a.copy();
+  const end = b.copy();
 
-  return filtered.some(obj => props.isMonthDisabled(obj));
+  // iterate months in correct direction
+  while (true) {
+    if (props.isMonthDisabled(current)) return true; // early exit
+
+    if (current.year === end.year && current.month === end.month) break;
+
+    current = isForward
+      ? current.add({ months: 1 })
+      : current.subtract({ months: 1 });
+  }
+
+  return false;
 };
 
-const handleYearClick = (selected: CalendarDate) => {
+const handleMonthClick = (selected: CalendarDate) => {
   const selectedTimestamp = selected.toDate(getLocalTimeZone()).getTime();
 
   if ((!start.value || (start.value && end.value))) {
@@ -206,15 +243,21 @@ const handleYearClick = (selected: CalendarDate) => {
     }
 
     // updated start & end
-    if (range.value.start && range.value.end) {
-      if (hasDisabledMonthWithinRange(range.value.start as CalendarDate, range.value.end as CalendarDate)) {
+    if (start.value && end.value) {
+      if (hasDisabledMonthWithinRange(start.value.calendarDate, end.value.calendarDate)) {
         range.value.start = selected;
         range.value.end = null;
       }
     }
   }
 
-  emits('on-select', range.value as MonthPickerTypeRange);
+  if (start.value && end.value) {
+    const renewed = {
+      start: start.value.calendarDate,
+      end: end.value.calendarDate,
+    };
+    emits('on-select', renewed); // always emit with new instances
+  }
 };
 
 const isInRange = (selected: CalendarDate) => {
@@ -231,7 +274,9 @@ const isInRange = (selected: CalendarDate) => {
 
 const isWithinRangeOfHovered = (hovered: CalendarDate) => {
   if (start.value && !end.value && hoverMonth.value) {
-    if (hasDisabledMonthWithinRange(start.value.calendarDate as CalendarDate, hoverMonth.value as CalendarDate))
+    // const newHover = new CalendarDate(hovered.year, hovered.month, 1); // renew instance
+    const newHover = hovered.copy(); // renew instance
+    if (hasDisabledMonthWithinRange(start.value.calendarDate, newHover))
       return false;
 
     const hoveredTimestamp = hovered.toDate(getLocalTimeZone()).getTime();
@@ -245,8 +290,9 @@ const isWithinRangeOfHovered = (hovered: CalendarDate) => {
 };
 
 const onHoverMonth = (hovered: CalendarDate) => {
-  if (range.value.start && !range.value.end) {
-    hoverMonth.value = hovered;
+  if (start.value && !end.value) {
+    // hoverMonth.value = new CalendarDate(hovered.year, hovered.month, 1); // renew instance
+    hoverMonth.value = hovered.copy(); // renew instance
   }
 };
 </script>

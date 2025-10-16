@@ -48,6 +48,8 @@
   "View": "ดู",
   "month": "เดือน",
   "year": "ปี",
+  "PreviousItem": "{item} ก่อนหน้า",
+  "NextItem": "{item} ถัดไป",
   "SelfDevelopedApplications": "แอปพลิเคชันที่พัฒนาด้วยตนเอง",
   "GoBack": "ย้อนกลับ",
   "GoToTarget": "ไปที่ {target}",
