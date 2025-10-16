@@ -21,6 +21,10 @@ next planned feature:
 <script setup lang="ts">
 import type { YearPickerTypeRange } from '~/types';
 
+// iso compliant
+const MIN_YEAR = 1;
+const MAX_YEAR = 9999;
+
 const model = defineModel<YearPickerTypeRange>({ default: null });
 
 const props = withDefaults(
@@ -38,10 +42,22 @@ const props = withDefaults(
       body?: string
       footer?: string
     }
+    hasLabel?: boolean
   }>(),
   {
     range: false,
     multiple: false,
+    yearsPerPage: 16,
+    minYear: MIN_YEAR,
+    maxYear: MAX_YEAR,
+    isYearDisabled: () => false,
+    variant: 'subtle',
+    ui: () => ({
+      header: 'flex justify-between items-center p-2 sm:px-2',
+      body: 'p-2 sm:p-2',
+      footer: 'p-2 sm:px-2',
+    }),
+    hasLabel: false,
   },
 );
 
