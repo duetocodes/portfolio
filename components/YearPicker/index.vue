@@ -3,7 +3,7 @@
     <YearPickerRange
       v-if="props.range"
       v-bind="childProps"
-      @on-select="data => model = data" />
+      @on-select="data => modelRange = data" />
   </div>
 </template>
 
@@ -19,13 +19,19 @@ next planned feature:
 -->
 
 <script setup lang="ts">
-import type { YearPickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~/types';
+import type { CalendarDate } from '@internationalized/date';
 
 // iso compliant
 const MIN_YEAR = 1;
 const MAX_YEAR = 9999;
 
-const model = defineModel<YearPickerTypeRange>({ default: null });
+const modelRange = defineModel<PickerTypeRange>({
+  default: () => ({
+    start: null,
+    end: null,
+  }),
+});
 
 const props = withDefaults(
   defineProps<{
@@ -34,7 +40,7 @@ const props = withDefaults(
     yearsPerPage?: number
     minYear?: number
     maxYear?: number
-    isYearDisabled?: (args: number | null) => boolean
+    isYearDisabled?: (args: CalendarDate) => boolean
     variant?: 'subtle' | 'outline' | 'solid' | 'soft'
     ui?: {
       root?: string
@@ -47,7 +53,7 @@ const props = withDefaults(
   {
     range: false,
     multiple: false,
-    yearsPerPage: 16,
+    yearsPerPage: 10,
     minYear: MIN_YEAR,
     maxYear: MAX_YEAR,
     isYearDisabled: () => false,
@@ -63,6 +69,6 @@ const props = withDefaults(
 
 const childProps = computed(() => ({
   ...props,
-  val: model.value,
+  modelValue: modelRange.value,
 }));
 </script>

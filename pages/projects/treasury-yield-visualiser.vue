@@ -104,7 +104,7 @@
 
               <template #content>
                 <YearPicker
-                  v-model="yearPicker"
+                  v-model="picker"
                   range
                   :is-year-disabled="disabledYears" />
               </template>
@@ -132,22 +132,25 @@
 </template>
 
 <script setup lang="ts">
-import type { TreasuryChartRowData, ProjectItemData, YearPickerTypeRange } from '~/types';
+import type { TreasuryChartRowData, ProjectItemData } from '~/types';
 import type { BreadcrumbItem } from '@nuxt/ui';
+import { CalendarDate } from '@internationalized/date';
 
 const { t: $t, locale, localeProperties } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 
+const EARLIEST_YEAR = 1990;
+
 const isSpread = ref(false);
 const termCheckboxes = ref(['3mth', '2yr', '10yr']);
 const spreadCheckboxes = ref(['2yr3mth', '10yr3mth', '10yr2yr']);
-const yearNow = ref(new Date().getFullYear());
+const yearNow = ref(new Date().getUTCFullYear());
 
-const yearPicker = ref({
-  start: yearNow.value,
-  end: yearNow.value,
+const picker = shallowRef({
+  start: new CalendarDate(yearNow.value, 1, 1),
+  end: new CalendarDate(yearNow.value, 1, 1),
 });
 
 const crumbItems = computed<BreadcrumbItem[]>(() => [
@@ -169,10 +172,18 @@ const {
 } = useFetch<TreasuryChartRowData[]>(
   '/api/treasury-yield-scraper',
   {
-    method: 'GET',
-    query: computed(() => ({
-      from: yearPicker.value.start,
-      to: yearPicker.value.end,
+    method: 'POST',
+    body: computed(() => ({
+      from: {
+        year: picker.value.start.year,
+        month: picker.value.start.month,
+        day: picker.value.start.day,
+      },
+      to: {
+        year: picker.value.end.year,
+        month: picker.value.end.month,
+        day: picker.value.end.day,
+      },
       dateLocale: localeProperties.value.dateLocale,
     })),
     watch: false,
@@ -331,26 +342,26 @@ const spreadDataComputed = computed(() => {
 });
 
 const yearPickerLabel = computed((): string => {
-  const from = yearPicker.value.start || $t('Start');
-  const to = yearPicker.value.end || $t('End');
+  const from = picker.value.start?.year || $t('Start');
+  const to = picker.value.end?.year || $t('End');
   return `${from} - ${to}`;
 });
 
-const disabledYears = (year: number | null) => {
-  if (year === null) return false;
-  if (year < 1990 || year > yearNow.value) return true; // earliest data from 1990
+const disabledYears = (cal: CalendarDate) => {
+  if (cal.year < EARLIEST_YEAR || cal.year > yearNow.value) return true;
   return false;
 };
 
-let previous: YearPickerTypeRange = { start: null, end: null };
+let prev = toRaw(picker.value);
 const onUpdateOpen = (isOpen: boolean) => {
-  if (isOpen)
-    previous = structuredClone(toRaw(yearPicker.value));
+  if (isOpen) {
+    prev = toRaw(picker.value);
+  }
   else {
-    const curr = structuredClone(toRaw(yearPicker.value));
-    if (curr.start === previous.start && curr.end === previous.end)
+    const curr = toRaw(picker.value);
+    if (curr.start.year === prev.start.year && curr.end.year === prev.end.year)
       return;
-    else if (curr.start && curr.end) {
+    else if (curr.start.year && curr.end.year) {
       refresh();
     }
   }
@@ -367,8 +378,10 @@ const xFormatter = (index: number): string => {
 onMounted(() => {
   // updated client-side
   yearNow.value = new Date().getFullYear();
-  yearPicker.value.start = yearNow.value;
-  yearPicker.value.end = yearNow.value;
+  picker.value = {
+    start: new CalendarDate(yearNow.value, 1, 1),
+    end: new CalendarDate(yearNow.value, 1, 1),
+  };
   refresh(); // ensures an updated chart
 });
 </script>
