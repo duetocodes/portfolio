@@ -1,17 +1,30 @@
 import type { FetchError } from 'ofetch';
 import type { TreasuryChartRowData } from '~/types';
 import type { QueryValue } from 'ufo';
+import { z } from 'zod';
+
+const dateSchema = z.object({
+  year: z.coerce.number().int().min(1).max(9999),
+  month: z.coerce.number().int().min(1).max(12),
+  day: z.coerce.number().int().min(1).max(31),
+});
 
 // by year = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2023'
 // by month = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202306'
 const BASE_URL = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=';
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
+  const querySchema = z.object({
+    from: dateSchema,
+    to: dateSchema,
+    dateLocale: z.string().optional(),
+  });
+
+  const query = await readValidatedBody(event, querySchema.parse);
 
   const ascendingSorted = Array.from(
-    { length: Number(query.to) - Number(query.from) + 1 },
-    (_, index) => String(Number(query.from) + index),
+    { length: Number(query.to.year) - Number(query.from.year) + 1 },
+    (_, index) => String(Number(query.from.year) + index),
   );
 
   try {

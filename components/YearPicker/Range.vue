@@ -4,8 +4,8 @@
     :ui="props.ui">
     <template #header>
       <UButton
-        :disabled="currentYear <= props.minYear"
-        :aria-disabled="currentYear <= props.minYear"
+        :disabled="currentCalendarDate.year <= props.minYear"
+        :aria-disabled="currentCalendarDate.year <= props.minYear"
         :aria-label="$t('PreviousItem', { item: $t('year') })"
         color="neutral"
         variant="ghost"
@@ -17,8 +17,8 @@
       </div>
 
       <UButton
-        :disabled="currentYear >= props.maxYear"
-        :aria-disabled="currentYear >= props.maxYear"
+        :disabled="currentCalendarDate.year >= props.maxYear"
+        :aria-disabled="currentCalendarDate.year >= props.maxYear"
         :aria-label="$t('NextItem', { item: $t('year') })"
         color="neutral"
         variant="ghost"
@@ -26,30 +26,30 @@
         @click="counter++" />
     </template>
 
-    <div class="grid grid-cols-3 md:grid-cols-4 gap-1.5">
+    <div class="grid grid-cols-3 gap-1.5">
       <UButton
-        v-for="(year, ind) in years"
-        :key="`${year}-${ind}`"
-        :label="year ? year.toString() : '--'"
-        :aria-label="year ? year.toString() : '--'"
-        :disabled="props.isYearDisabled(year)"
-        :aria-disabled="props.isYearDisabled(year)"
-        :data-disabled="props.isYearDisabled(year) || null"
-        :aria-selected="isInRange(year)"
-        :data-selected="isInRange(year) || null"
-        :data-highlighted="isWithinRangeOfHovered(year) || null"
-        :data-currentyear="year === currentYear || null"
+        v-for="(cal, ind) in years"
+        :key="`${cal}-${ind}`"
+        :label="cal ? cal.year.toString() : '--'"
+        :aria-label="cal ? cal.toString() : '--'"
+        :disabled="props.isYearDisabled(cal)"
+        :aria-disabled="props.isYearDisabled(cal)"
+        :data-disabled="props.isYearDisabled(cal) || null"
+        :aria-selected="isInRange(cal)"
+        :data-selected="isInRange(cal) || null"
+        :data-highlighted="isWithinRangeOfHovered(cal) || null"
+        :data-currentCalendarDate="isSameYear(cal, currentCalendarDate.copy()) || null"
         color="neutral"
         variant="ghost"
         class="w-[4rem] rounded-full block
             data-selected:bg-primary data-selected:text-inverted
             data-disabled:text-dimmed/50
-            data-currentyear:font-bold data-currentyear:not-data-selected:text-primary
+            data-currentCalendarDate:font-bold data-currentCalendarDate:not-data-selected:text-primary
             data-highlighted:bg-primary/20
             hover:not-data-selected:bg-primary/20"
-        @mouseenter="onHoverYear(year)"
+        @mouseenter="onHoverYear(cal)"
         @mouseleave="hoverYear = null"
-        @click="handleYearClick(year)">
+        @click="handleYearClick(cal)">
       </UButton>
     </div>
 
@@ -70,30 +70,39 @@ disabling years (parent):
   range
   :is-year-disabled="disabledYear" />
 
-const disabledYear = (year: number) => {
-  if (year < 1990 || year > new Date().getFullYear()) return true;
-  if (year === 2020) return true;
+const disabledYear = (cal: CalendarDate) => {
+  if (cal.year === 2022) return true;
+  if (cal.year <= 1990) return true;
   return false;
 };
 -->
 
 <script setup lang="ts">
-import type { YearPickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~/types';
+import {
+  CalendarDate,
+  isSameYear,
+  today,
+  getLocalTimeZone,
+} from '@internationalized/date';
 
 const { t: $t } = useI18n();
 
 const counter = ref(0);
-const currentYear = ref(new Date().getFullYear());
-const hoverYear = ref<number | null>(null);
 
-const range = ref<YearPickerTypeRange>({
+const getCurrentCalendarDate = () => today(getLocalTimeZone());
+
+const currentCalendarDate = ref<CalendarDate>(getCurrentCalendarDate());
+const hoverYear = ref<CalendarDate | null>(null);
+
+const range = ref<PickerTypeRange>({
   start: null,
   end: null,
 });
 
 const label = computed(() => {
-  const yearStart = years.value[0]?.toString();
-  const yearEnd = years.value[years.value?.length - 1]?.toString();
+  const yearStart = years.value[0]?.year.toString();
+  const yearEnd = years.value[years.value?.length - 1]?.year.toString();
 
   if (yearStart && yearEnd) {
     return `${yearStart} - ${yearEnd}`;
@@ -102,12 +111,12 @@ const label = computed(() => {
 });
 
 const props = defineProps<{
-  val: YearPickerTypeRange
+  modelValue: PickerTypeRange
   yearsPerPage: number
   minYear: number
   maxYear: number
   hasLabel: boolean
-  isYearDisabled: (args: number | null) => boolean
+  isYearDisabled: (args: CalendarDate) => boolean
   variant: 'subtle' | 'outline' | 'solid' | 'soft'
   ui: {
     root?: string
@@ -118,101 +127,118 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: 'on-select', value: YearPickerTypeRange): void
+  (e: 'on-select', value: PickerTypeRange): void
 }>();
 
 onMounted(() => {
   // client-side date
-  currentYear.value = new Date().getFullYear();
-  range.value = toRaw(props.val);
+  currentCalendarDate.value = getCurrentCalendarDate();
+
+  if (props.modelValue && (props.modelValue.start || props.modelValue.end)) {
+    // renew CalendarDate instances from v-model value
+    range.value = {
+      start: props.modelValue.start ? new CalendarDate(props.modelValue.start.year, 1, 1) : null,
+      end: props.modelValue.end ? new CalendarDate(props.modelValue.end.year, 1, 1) : null,
+    };
+  }
 });
 
-const years = computed(() => {
-  const arr = Array.from(
-    { length: props.yearsPerPage },
-    (_, i) => {
-      const val = i + currentYear.value + (props.yearsPerPage * counter.value) - (props.yearsPerPage - 1);
-      if (val < props.minYear || val > props.maxYear)
-        return null;
-      else
-        return val;
-    },
-  );
-  return arr ?? [];
+const years = computed((): CalendarDate[] => {
+  const pageSize = props.yearsPerPage;
+  const currentYear = currentCalendarDate.value.year;
+
+  // Snap to decade start (1990, 2000, 2010, ...)
+  const decadeStart = Math.floor(currentYear / 10) * 10;
+
+  // Move by page offset (each page = one decade)
+  const startYear = decadeStart + counter.value * 10;
+
+  const arr = Array.from({ length: pageSize }, (_, i) => {
+    const yr = startYear + i;
+    if (yr < props.minYear || yr > props.maxYear) return null;
+    return new CalendarDate(yr, 1, 1);
+  });
+
+  return arr.filter(item => item !== null);
 });
 
 const selectionLabel = computed((): string => {
-  const from = range.value.start || $t('Start');
-  const to = range.value.end || $t('End');
+  const from = range.value.start?.year || $t('Start');
+  const to = range.value.end?.year || $t('End');
   return `${from} - ${to}`;
 });
 
-const hasDisabledYearWithinRange = (a: number, b: number): boolean => {
-  if (typeof a !== 'number' || typeof b !== 'number') return false;
+const hasDisabledYearWithinRange = (a: CalendarDate, b: CalendarDate): boolean => {
+  if (typeof a.year !== 'number' || typeof b.year !== 'number') return false;
 
-  const step = a <= b ? 1 : -1;
-  let year = a;
+  const isForward = a.year <= b.year;
+  let marker = a.copy();
 
   while (true) {
-    if (props.isYearDisabled(year)) return true;
-    if (year === b) break;
-    year += step;
+    if (props.isYearDisabled(marker)) return true;
+    if (isSameYear(marker, b)) break;
+    marker = isForward ? marker.add({ years: 1 }) : marker.subtract({ years: 1 });
   }
 
   return false;
 };
 
-const handleYearClick = (year: number | null) => {
+const handleYearClick = (cal: CalendarDate) => {
   if (!range.value.start || (range.value.start && range.value.end)) {
-    range.value.start = year;
+    range.value.start = cal.copy();
     range.value.end = null;
   }
   else {
-    if (year && year >= range.value.start) {
-      range.value.end = year;
+    if (cal && cal.year >= range.value.start.year) {
+      range.value.end = cal.copy();
     }
     else {
       range.value.end = range.value.start;
-      range.value.start = year;
+      range.value.start = cal.copy();
     }
 
     // updated start & end
     if (range.value.start && range.value.end) {
-      if (hasDisabledYearWithinRange(range.value.start, range.value.end)) {
-        range.value.start = year;
+      if (hasDisabledYearWithinRange(range.value.start.copy(), range.value.end.copy())) {
+        range.value.start = cal.copy();
         range.value.end = null;
       }
     }
   }
 
-  if (range.value.start && range.value.end)
-    emits('on-select', toRaw(range.value));
+  if (range.value.start && range.value.end) {
+    const renewedInstance = {
+      start: range.value.start.copy(),
+      end: range.value.end.copy(),
+    };
+    emits('on-select', renewedInstance);
+  }
 };
 
-const isInRange = (year: number | null) => {
+const isInRange = (cal: CalendarDate) => {
   if (!range.value.start) return false;
 
-  if (range.value.start && range.value.end && year) {
-    return year >= range.value.start && year <= range.value.end;
+  if (range.value.start && range.value.end && cal.year) {
+    return cal.year >= range.value.start.year && cal.year <= range.value.end.year;
   }
 
-  return year === range.value.start;
+  return cal.year === range.value.start.year;
 };
 
-const isWithinRangeOfHovered = (year: number | null) => {
-  if (range.value.start && !range.value.end && hoverYear.value && year) {
-    if (hasDisabledYearWithinRange(range.value.start, hoverYear.value))
+const isWithinRangeOfHovered = (cal: CalendarDate) => {
+  if (range.value.start && !range.value.end && hoverYear.value && cal.year) {
+    if (hasDisabledYearWithinRange(range.value.start.copy(), hoverYear.value.copy()))
       return false;
 
-    const min = Math.min(range.value.start, hoverYear.value);
-    const max = Math.max(range.value.start, hoverYear.value);
-    return year >= min && year <= max;
+    const min = Math.min(range.value.start.year, hoverYear.value.year);
+    const max = Math.max(range.value.start.year, hoverYear.value.year);
+    return cal.year >= min && cal.year <= max;
   }
 };
 
-const onHoverYear = (year: number | null) => {
+const onHoverYear = (cal: CalendarDate) => {
   if (range.value.start && !range.value.end) {
-    hoverYear.value = year;
+    hoverYear.value = cal.copy();
   }
 };
 </script>
