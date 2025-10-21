@@ -90,11 +90,12 @@
         <div class="sm:ml-auto flex gap-2 items-center">
           <div>
             <UPopover
-              :ui="{ content: 'overflow-clip' }"
+              :ui="{ content: 'overflow-clip ring-0' }"
+              :content="{ align: 'end' }"
               @update:open="onUpdateOpen">
               <UButton
-                :label="yearPickerLabel"
-                :aria-label="$t('SelectItem', { item: $t('year') })"
+                :label="pickerLabel"
+                :aria-label="$t('SelectItem', { item: tabIndex == '0' ? $t('year') : $t('month') })"
                 :loading="statusChart === 'pending'"
                 color="neutral"
                 variant="outline"
@@ -103,10 +104,24 @@
                 loading-icon="material-symbols:app-badging-outline" />
 
               <template #content>
-                <YearPicker
-                  v-model="picker"
-                  range
-                  :is-year-disabled="disabledYears" />
+                <UTabs
+                  v-model="tabIndex"
+                  class="p-2"
+                  :items="tabItems">
+                  <template #year>
+                    <YearPicker
+                      v-model="picker"
+                      range
+                      :is-year-disabled="disabledYears" />
+                  </template>
+
+                  <template #month>
+                    <MonthPicker
+                      v-model="picker"
+                      range
+                      :is-month-disabled="disabledMonths" />
+                  </template>
+                </UTabs>
               </template>
             </UPopover>
           </div>
@@ -133,26 +148,47 @@
 
 <script setup lang="ts">
 import type { TreasuryChartRowData, ProjectItemData } from '~/types';
-import type { BreadcrumbItem } from '@nuxt/ui';
-import { CalendarDate } from '@internationalized/date';
+import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
+import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 
 const { t: $t, locale, localeProperties } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 
-const EARLIEST_YEAR = 1990;
+const EARLIEST_RECORD = {
+  year: 1990,
+  month: 1,
+  day: 2,
+};
 
 const isSpread = ref(false);
 const termCheckboxes = ref(['3mth', '2yr', '10yr']);
 const spreadCheckboxes = ref(['2yr3mth', '10yr3mth', '10yr2yr']);
-const yearNow = ref(new Date().getUTCFullYear());
+
+const date = new Date();
+const currentDate = ref(new CalendarDate(
+  date.getUTCFullYear(),
+  date.getUTCMonth() + 1, // adheres to CalendarDate format .i.e, Jan=1
+  date.getUTCDate()),
+);
 
 const picker = shallowRef({
-  start: new CalendarDate(yearNow.value, 1, 1),
-  end: new CalendarDate(yearNow.value, 1, 1),
+  start: currentDate.value.copy(),
+  end: currentDate.value.copy(),
 });
 
+const tabIndex = ref('0'); // default to 'Year', string by default
+const tabItems = computed<TabsItem[]>(() => [
+  {
+    label: $t('Year'),
+    slot: 'year',
+  },
+  {
+    label: $t('Month'),
+    slot: 'month',
+  },
+]);
 const crumbItems = computed<BreadcrumbItem[]>(() => [
   {
     to: localePath('/projects'),
@@ -173,20 +209,37 @@ const {
   '/api/treasury-yield-scraper',
   {
     method: 'POST',
-    body: computed(() => ({
-      from: {
-        year: picker.value.start.year,
-        month: picker.value.start.month,
-        day: picker.value.start.day,
-      },
-      to: {
-        year: picker.value.end.year,
-        month: picker.value.end.month,
-        day: picker.value.end.day,
-      },
-      dateLocale: localeProperties.value.dateLocale,
-    })),
+    key: locale,
     watch: false,
+    onRequest({ options }) {
+      // client-side
+      if (picker.value.start && picker.value.end) {
+        options.body = {
+          searchBy: Number(tabIndex.value),
+          from: {
+            year: picker.value.start.year,
+            month: picker.value.start.month,
+            day: picker.value.start.day,
+          },
+          to: {
+            year: picker.value.end.year,
+            month: picker.value.end.month,
+            day: picker.value.end.day,
+          },
+        };
+      }
+    },
+    onResponse({ response }) {
+      // client-side
+      if (Array.isArray(response._data)) {
+        response._data = response._data.map((item) => {
+          return {
+            ...item,
+            date: getLocalisedDate(item.date),
+          };
+        });
+      }
+    },
   },
 );
 
@@ -341,47 +394,69 @@ const spreadDataComputed = computed(() => {
   }));
 });
 
-const yearPickerLabel = computed((): string => {
-  const from = picker.value.start?.year || $t('Start');
-  const to = picker.value.end?.year || $t('End');
-  return `${from} - ${to}`;
+const pickerLabel = computed((): string => {
+  let from = '';
+  let to = '';
+
+  switch (tabIndex.value) {
+    case '0': {
+      from = picker.value.start ? picker.value.start.year.toString() : '';
+      to = picker.value.end ? picker.value.end.year.toString() : '';
+      break;
+    }
+    case '1': {
+      const dateLocale = localeProperties.value.dateLocale as string;
+
+      if (picker.value.start) {
+        const jsDateStart = picker.value.start.toDate(getLocalTimeZone());
+        const mmm = jsDateStart.toLocaleString(dateLocale, { month: 'short' });
+        from = `${mmm} ${picker.value.start.year}`;
+      }
+      if (picker.value.end) {
+        const jsDateEnd = picker.value.end.toDate(getLocalTimeZone());
+        const mmm = jsDateEnd.toLocaleString(dateLocale, { month: 'short' });
+        to = `${mmm} ${picker.value.end.year}`;
+      }
+      break;
+    }
+    default: break;
+  }
+
+  return `${from || $t('Start')} - ${to || $t('End')}`;
 });
 
 const disabledYears = (cal: CalendarDate) => {
-  if (cal.year < EARLIEST_YEAR || cal.year > yearNow.value) return true;
+  if (cal.year < EARLIEST_RECORD.year || cal.year > currentDate.value.year) return true;
+  return false;
+};
+const disabledMonths = (cal: CalendarDate) => {
+  if (cal.year < EARLIEST_RECORD.year || cal.year > currentDate.value.year) return true;
+  if (cal.year === currentDate.value.year && cal.month > currentDate.value.month) return true;
   return false;
 };
 
-let prev = toRaw(picker.value);
 const onUpdateOpen = (isOpen: boolean) => {
-  if (isOpen) {
-    prev = toRaw(picker.value);
-  }
-  else {
-    const curr = toRaw(picker.value);
-    if (curr.start.year === prev.start.year && curr.end.year === prev.end.year)
-      return;
-    else if (curr.start.year && curr.end.year) {
-      refresh();
-    }
-  }
+  // fetch on close popover
+  if (!isOpen && picker.value.start && picker.value.end)
+    refresh();
 };
 
 const xFormatter = (index: number): string => {
-  const data = chart.value;
+  const data = toRaw(chart.value);
+
   if (data && typeof data[index]?.date === 'string') {
     return data[index].date;
   }
   return '--';
 };
 
+const getLocalisedDate = (iso: string) => new Date(iso).toLocaleDateString((localeProperties.value.dateLocale || 'en-GB') as string, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
 onMounted(() => {
-  // updated client-side
-  yearNow.value = new Date().getFullYear();
-  picker.value = {
-    start: new CalendarDate(yearNow.value, 1, 1),
-    end: new CalendarDate(yearNow.value, 1, 1),
-  };
-  refresh(); // ensures an updated chart
+  refresh(); // ensures an updated chart on page land
 });
 </script>

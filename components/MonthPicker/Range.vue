@@ -89,28 +89,28 @@ import {
   parseDate,
 } from '@internationalized/date';
 
-import type { MonthPickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~/types';
 
 const { t: $t, localeProperties } = useI18n();
 
 const hoverMonth = ref<CalendarDate | null>(null);
 
 const getCurrentCalendarDate = (): CalendarDate => {
-  const temp = today(getLocalTimeZone());
-  return new CalendarDate(temp.year, temp.month, 1);
+  return today(getLocalTimeZone());
+  // return new CalendarDate(temp.year, temp.month, temp.day);
 };
 
 const currentCalendarDate = ref<CalendarDate>(getCurrentCalendarDate());
 const counterYear = ref<number>(currentCalendarDate.value.year);
 
-const range = ref<MonthPickerTypeRange>({
+const range = ref<PickerTypeRange>({
   start: null,
   end: null,
 });
 
 const props = withDefaults(
   defineProps<{
-    modelValue: MonthPickerTypeRange
+    modelValue: PickerTypeRange
     minYear: number
     maxYear: number
     hasLabel?: boolean
@@ -129,7 +129,7 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<{
-  (e: 'on-select', value: MonthPickerTypeRange): void
+  (e: 'on-select', value: PickerTypeRange): void
 }>();
 
 onMounted(() => {
@@ -244,13 +244,11 @@ const handleMonthClick = (selected: CalendarDate) => {
     }
   }
 
-  if (start.value && end.value) {
-    const renewed = {
-      start: start.value.calendarDate,
-      end: end.value.calendarDate,
-    };
-    emits('on-select', renewed); // always emit with new instances
-  }
+  const renewed = {
+    start: start.value?.calendarDate ? start.value.calendarDate : null,
+    end: end.value?.calendarDate ? end.value?.calendarDate : null,
+  };
+  emits('on-select', renewed); // always emit with new instances
 };
 
 const isInRange = (selected: CalendarDate) => {

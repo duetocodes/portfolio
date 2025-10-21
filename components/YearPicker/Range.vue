@@ -206,13 +206,11 @@ const handleYearClick = (cal: CalendarDate) => {
     }
   }
 
-  if (range.value.start && range.value.end) {
-    const renewedInstance = {
-      start: range.value.start.copy(),
-      end: range.value.end.copy(),
-    };
-    emits('on-select', renewedInstance);
-  }
+  const renewedInstance = {
+    start: range.value.start ? range.value.start.copy() : null,
+    end: range.value.end ? range.value.end.copy() : null,
+  };
+  emits('on-select', renewedInstance);
 };
 
 const isInRange = (cal: CalendarDate) => {
