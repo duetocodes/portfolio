@@ -20,13 +20,13 @@ next planned feature:
 
 <script setup lang="ts">
 import type { CalendarDate } from '@internationalized/date';
-import type { MonthPickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~/types';
 
 // iso friendly
 const MIN_YEAR = 1;
 const MAX_YEAR = 9999;
 
-const modelValue = defineModel<MonthPickerTypeRange>({
+const modelValue = defineModel<PickerTypeRange>({
   default: () => ({
     start: null,
     end: null,
