@@ -164,6 +164,17 @@ export type RatesItem = {
   time: string
 };
 
+export type dateType = {
+  year: number
+  month: number
+  day: number
+};
+export type TreasuryYieldPayloadSchema = {
+  searchBy: number
+  from: dateType
+  to: dateType
+};
+
 export type Character = {
   char: string
   display: string

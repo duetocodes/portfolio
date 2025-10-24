@@ -147,7 +147,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TreasuryChartRowData, ProjectItemData, PickerTypeRange } from '~/types';
+import type { TreasuryChartRowData, TreasuryYieldPayloadSchema, ProjectItemData, PickerTypeRange } from '~/types';
 import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 
@@ -226,7 +226,7 @@ const {
             month: picker.value.end.month,
             day: picker.value.end.day,
           },
-        };
+        } satisfies TreasuryYieldPayloadSchema;
       }
     },
     onResponse({ response }) {
@@ -278,11 +278,11 @@ useSeoMeta({
   ogTitle: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
-    url: overview.value?.data?.[0].preview?.image?.url,
-    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
-    width: overview.value?.data?.[0].preview?.image?.width,
-    height: overview.value?.data?.[0].preview?.image?.height,
-    type: overview.value?.data?.[0].preview?.image?.mime,
+    url: overview.value?.data?.[0]?.preview?.image?.url,
+    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
+    width: overview.value?.data?.[0]?.preview?.image?.width,
+    height: overview.value?.data?.[0]?.preview?.image?.height,
+    type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
@@ -290,11 +290,11 @@ useSeoMeta({
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
-    url: overview.value?.data?.[0].preview?.image?.url,
-    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
-    width: overview.value?.data?.[0].preview?.image?.width,
-    height: overview.value?.data?.[0].preview?.image?.height,
-    type: overview.value?.data?.[0].preview?.image?.mime,
+    url: overview.value?.data?.[0]?.preview?.image?.url,
+    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
+    width: overview.value?.data?.[0]?.preview?.image?.width,
+    height: overview.value?.data?.[0]?.preview?.image?.height,
+    type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
 });
 

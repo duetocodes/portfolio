@@ -1,6 +1,7 @@
 import type { FetchError } from 'ofetch';
 import type { TreasuryChartRowData } from '~/types';
-import { z } from 'zod';
+import { type dateSchema, TreasuryYieldPayloadSchema } from '~/schema';
+import type { z } from 'zod';
 import {
   CalendarDate,
   parseDate,
@@ -10,20 +11,9 @@ import {
   endOfMonth,
 } from '@internationalized/date';
 
-const dateSchema = z.object({
-  year: z.coerce.number().int().min(1).max(9999),
-  month: z.coerce.number().int().min(1).max(12),
-  day: z.coerce.number().int().min(1).max(31),
-});
-
 export default defineEventHandler(async (event) => {
-  const querySchema = z.object({
-    from: dateSchema,
-    to: dateSchema,
-    searchBy: z.number().min(0).max(2),
-  });
-
-  const query = await readValidatedBody(event, querySchema.parse);
+  // explicitly throw error with .parse (validation failed)
+  const query = await readValidatedBody(event, TreasuryYieldPayloadSchema.parse);
 
   try {
     if (query.from.year > 2022) {
