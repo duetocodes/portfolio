@@ -50,6 +50,8 @@
   "Year": "Yıl",
   "month": "ay",
   "Month": "Ay",
+  "Light": "Açık",
+  "Dark": "Koyu",
   "PreviousItem": "Önceki {item}",
   "NextItem": "Sonraki {item}",
   "SelfDevelopedApplications": "Kendi geliştirdiğiniz uygulamalar",

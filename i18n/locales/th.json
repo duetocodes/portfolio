@@ -50,6 +50,8 @@
   "Year": "ปี",
   "month": "เดือน",
   "Month": "เดือน",
+  "Light": "สว่าง",
+  "Dark": "มืด",
   "PreviousItem": "{item} ก่อนหน้า",
   "NextItem": "{item} ถัดไป",
   "SelfDevelopedApplications": "แอปพลิเคชันที่พัฒนาด้วยตนเอง",
