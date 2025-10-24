@@ -164,6 +164,17 @@ export type RatesItem = {
   time: string
 };
 
+export type dateType = {
+  year: number
+  month: number
+  day: number
+};
+export type TreasuryYieldPayloadSchema = {
+  searchBy: number
+  from: dateType
+  to: dateType
+};
+
 export type Character = {
   char: string
   display: string
@@ -173,7 +184,18 @@ export type Character = {
   numberOfTry: number
   firstTryAt: number | undefined
 };
-
+export type TypingGame = {
+  hasFocus: boolean
+  timerId: number
+  timeLeft: number
+  status: 'standby' | 'playing' | 'gameover'
+};
+export type TypingGameStats = {
+  rawWpm: number
+  rawAccuracy: number
+  finalWpm: number
+  finalAccuracy: number
+};
 export type TypingGameFeedbackRequestCharacter = {
   expectedKey: string
   lastTypedKey: string | undefined

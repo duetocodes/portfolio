@@ -50,6 +50,8 @@
   "Year": "Year",
   "month": "month",
   "Month": "Month",
+  "Light": "Light",
+  "Dark": "Dark",
   "PreviousItem": "Previous {item}",
   "NextItem": "Next {item}",
   "SelfDevelopedApplications": "Self developed application | Self developed applications",

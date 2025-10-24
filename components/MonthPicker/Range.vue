@@ -132,16 +132,40 @@ const emits = defineEmits<{
   (e: 'on-select', value: PickerTypeRange): void
 }>();
 
-onMounted(() => {
-  // client-side date
-  currentCalendarDate.value = getCurrentCalendarDate();
-  counterYear.value = currentCalendarDate.value.year;
+// onMounted(() => {
+//   // client-side date
+//   currentCalendarDate.value = getCurrentCalendarDate();
+//   counterYear.value = currentCalendarDate.value.year;
 
+//   if (props.modelValue && (props.modelValue.start || props.modelValue.end)) {
+//     // renew CalendarDate instances from v-model value
+//     range.value = {
+//       start: props.modelValue.start ? new CalendarDate(props.modelValue.start.year, props.modelValue.start.month, 1) : null,
+//       end: props.modelValue.end ? new CalendarDate(props.modelValue.end.year, props.modelValue.end.month, 1) : null,
+//     };
+//   }
+// });
+onMounted(() => {
+  // Always update to the user's local current date
+  currentCalendarDate.value = getCurrentCalendarDate();
+
+  // Determine which year to display when opening
+  const selectedYear =
+    props.modelValue?.start?.year ||
+    props.modelValue?.end?.year ||
+    currentCalendarDate.value.year;
+
+  counterYear.value = selectedYear;
+
+  // Recreate CalendarDate instances for local state
   if (props.modelValue && (props.modelValue.start || props.modelValue.end)) {
-    // renew CalendarDate instances from v-model value
     range.value = {
-      start: props.modelValue.start ? new CalendarDate(props.modelValue.start.year, props.modelValue.start.month, 1) : null,
-      end: props.modelValue.end ? new CalendarDate(props.modelValue.end.year, props.modelValue.end.month, 1) : null,
+      start: props.modelValue.start
+        ? new CalendarDate(props.modelValue.start.year, props.modelValue.start.month, 1)
+        : null,
+      end: props.modelValue.end
+        ? new CalendarDate(props.modelValue.end.year, props.modelValue.end.month, 1)
+        : null,
     };
   }
 });
@@ -178,7 +202,6 @@ const end = computed(() => {
     shortName: jsDate.toLocaleString(localeProperties.value.dateLocale as string, { month: 'short' }),
     timestamp: jsDate.getTime(),
     calendarDate: range.value.end.copy(),
-    // calendarDate: new CalendarDate(range.value.end.year, range.value.end.month, 1),
   };
 });
 

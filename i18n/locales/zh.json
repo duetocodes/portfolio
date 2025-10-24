@@ -50,6 +50,8 @@
   "Year": "年份",
   "month": "月",
   "Month": "月份",
+  "Light": "浅色",
+  "Dark": "深色",
   "PreviousItem": "上一个{item}",
   "NextItem": "下一个{item}",
   "SelfDevelopedApplications": "自研应用程序",
