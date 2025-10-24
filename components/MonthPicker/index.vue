@@ -3,7 +3,7 @@
     <MonthPickerRange
       v-if="props.range"
       v-bind="childProps"
-      @on-select="data => modelValue = data" />
+      @on-select="(data: PickerTypeRange) => modelValue = data" />
   </div>
 </template>
 
