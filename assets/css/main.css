@@ -31,6 +31,16 @@ https://github.com/tailwindlabs/tailwindcss-typography
       /* color=neutral, variant=solid */
       @apply bg-inverted/90;
     }
+
+    button[class~="hover:bg-error/10"]:hover {
+      /* color=error, variant=ghost */
+      @apply bg-error/10;
+    }
+
+    button[class~="hover:bg-info/10"]:hover {
+      /* color=info, variant=ghost */
+      @apply bg-info/10;
+    }
   }
 }
 

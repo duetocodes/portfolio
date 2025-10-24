@@ -48,7 +48,7 @@
                 :label="$t('GoBack')"
                 :aria-label="$t('GoBack')"
                 size="lg"
-                color="neutral"
+                color="info"
                 variant="ghost"
                 icon="material-symbols:u-turn-right-rounded"
                 @click="navigateTo(localePath('/projects'))" />
@@ -56,7 +56,7 @@
                 :label="$t('Continue')"
                 :aria-label="$t('Continue')"
                 size="lg"
-                color="neutral"
+                color="info"
                 variant="ghost"
                 icon="material-symbols:play-arrow"
                 @click="isPrompt = false" />
