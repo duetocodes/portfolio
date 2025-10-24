@@ -184,7 +184,18 @@ export type Character = {
   numberOfTry: number
   firstTryAt: number | undefined
 };
-
+export type TypingGame = {
+  hasFocus: boolean
+  timerId: number
+  timeLeft: number
+  status: 'standby' | 'playing' | 'gameover'
+};
+export type TypingGameStats = {
+  rawWpm: number
+  rawAccuracy: number
+  finalWpm: number
+  finalAccuracy: number
+};
 export type TypingGameFeedbackRequestCharacter = {
   expectedKey: string
   lastTypedKey: string | undefined

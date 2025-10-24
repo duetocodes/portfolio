@@ -329,25 +329,14 @@
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { BreadcrumbItem } from '@nuxt/ui';
 import type {
+  TypingGame,
+  TypingGameStats,
   TypingGameFeedbackRequestCharacter,
   TypingGameGptFeedbackPayload,
   TypingGameUpdatedData,
   ProjectItemData,
   Character,
 } from '~/types';
-
-type Game = {
-  hasFocus: boolean
-  timerId: number
-  timeLeft: number
-  status: 'standby' | 'playing' | 'gameover'
-};
-type TypingGameStats = {
-  rawWpm: number
-  rawAccuracy: number
-  finalWpm: number
-  finalAccuracy: number
-};
 
 const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
 // true or false compared to ssrWidth. Go mobile-first approach, and aimed for true onMounted
@@ -371,7 +360,7 @@ const GAME_DURATION = 60; // seconds
 const CHARACTERS_PER_WORD = 5;
 const passageContainer = ref<HTMLElement | null>(null);
 
-const game = reactive<Game>({
+const game = reactive<TypingGame>({
   hasFocus: false,
   timerId: 0,
   timeLeft: GAME_DURATION,
