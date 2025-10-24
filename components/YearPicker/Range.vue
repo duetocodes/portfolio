@@ -141,6 +141,14 @@ onMounted(() => {
       end: props.modelValue.end ? new CalendarDate(props.modelValue.end.year, 1, 1) : null,
     };
   }
+  // show landing decade based on start year
+  if (props.modelValue.start) {
+    const startYear = props.modelValue.start.year;
+    const currentYear = new Date().getFullYear();
+    const currentDecadeStart = Math.floor(currentYear / 10) * 10;
+    const targetDecadeStart = Math.floor(startYear / 10) * 10;
+    counter.value = (targetDecadeStart - currentDecadeStart) / 10;
+  }
 });
 
 const years = computed((): CalendarDate[] => {

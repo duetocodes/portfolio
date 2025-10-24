@@ -3,7 +3,7 @@
     <YearPickerRange
       v-if="props.range"
       v-bind="childProps"
-      @on-select="data => modelRange = data" />
+      @on-select="(data: PickerTypeRange) => modelRange = data" />
   </div>
 </template>
 
