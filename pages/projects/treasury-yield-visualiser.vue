@@ -147,7 +147,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TreasuryChartRowData, ProjectItemData } from '~/types';
+import type { TreasuryChartRowData, ProjectItemData, PickerTypeRange } from '~/types';
 import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 
@@ -435,10 +435,27 @@ const disabledMonths = (cal: CalendarDate) => {
   return false;
 };
 
+const previousPicker = ref<PickerTypeRange | null>(null);
+
 const onUpdateOpen = (isOpen: boolean) => {
-  // fetch on close popover
-  if (!isOpen && picker.value.start && picker.value.end)
-    refresh();
+  if (!isOpen && picker.value.start && picker.value.end) {
+    // Only refresh if picker actually changed
+    const changed =
+      !previousPicker.value ||
+      picker.value.start.year !== previousPicker.value.start?.year ||
+      picker.value.start.month !== previousPicker.value.start?.month ||
+      picker.value.end.year !== previousPicker.value.end?.year ||
+      picker.value.end.month !== previousPicker.value.end?.month;
+
+    if (changed)
+      refresh();
+
+    // Update previousPicker snapshot
+    previousPicker.value = {
+      start: picker.value.start,
+      end: picker.value.end,
+    };
+  }
 };
 
 const xFormatter = (index: number): string => {
