@@ -1,3 +1,5 @@
+// .refine() at client side to add custom error message
+
 import { z } from 'zod';
 
 export const TypingGameFeedbackRequestCharacterSchema = z.object({
@@ -23,5 +25,23 @@ export const dateSchema = z.object({
 export const TreasuryYieldPayloadSchema = z.object({
   from: dateSchema,
   to: dateSchema,
-  searchBy: z.number().min(0).max(2),
+  searchBy: z.number().min(0).max(1),
 });
+
+export const AmountSchema = z.string().trim();
+
+export const CurrencySelectSchema = z.object(
+  {
+    label: z.string(),
+    value: z.string(),
+    avatar: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }),
+    code: z.string(),
+    symbol: z.string(),
+    name: z.string(),
+    countryKeywords: z.array(z.string()),
+    supportsDecimals: z.boolean(),
+  },
+);

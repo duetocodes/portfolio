@@ -18,8 +18,9 @@
     </p>
 
     <UForm
+      ref="form"
       class="mt-8"
-      :schema="schema"
+      :schema="CurrencyFormSchema"
       :state="state">
       <UCard
         :ui="{ body: 'space-y-8' }">
@@ -54,9 +55,9 @@
             <template
               #leading>
               <span
-                v-if="(state.source as any)?.symbol"
+                v-if="state.source?.symbol"
                 class="text-3xl text-muted">
-                {{ (state.source as any)?.symbol }}
+                {{ state.source.symbol }}
               </span>
               <span
                 v-else
@@ -85,7 +86,7 @@
               selected-icon="material-symbols:check"
               trailing-icon="material-symbols:keyboard-arrow-down"
               :placeholder="$t('From')"
-              :items="currenciesList.filter(item => item.code !== state.target?.code)"
+              :items="currenciesList.filter(item => item?.code !== state.target?.code)"
               :ui="{
                 trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
               }"
@@ -100,7 +101,7 @@
                 #leading>
                 <UAvatar
                   size="xs"
-                  :src="(state.source as any)?.avatar?.src || undefined" />
+                  :src="state.source?.avatar?.src || undefined" />
               </template>
             </USelectMenu>
           </UFormField>
@@ -116,7 +117,11 @@
             variant="soft"
             loading-icon="material-symbols:app-badging-outline"
             :loading="statusCurrencies === 'pending' || statusRates === 'pending'"
-            @click="onClickButton" />
+            @click="() => {
+              onClickButton();
+              form?.clear('source');
+              form?.clear('target');
+            }" />
 
           <UFormField
             name="target"
@@ -132,7 +137,7 @@
               selected-icon="material-symbols:check"
               trailing-icon="material-symbols:keyboard-arrow-down"
               :placeholder="$t('To')"
-              :items="currenciesList.filter(item => item.code !== state.source?.code)"
+              :items="currenciesList.filter(item => item?.code !== state.source?.code)"
               :ui="{
                 trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
               }"
@@ -146,7 +151,7 @@
                 #leading>
                 <UAvatar
                   size="xs"
-                  :src="(state.target as any)?.avatar?.src || undefined" />
+                  :src="state.target?.avatar?.src || undefined" />
               </template>
             </USelectMenu>
           </UFormField>
@@ -214,14 +219,62 @@
 
 <script setup lang="ts">
 import { z } from 'zod';
-import type { CurrencyItem, CurrenciesListComputed, RatesItem, ProjectItemData } from '~/types';
 import type { BreadcrumbItem } from '@nuxt/ui';
+import {
+  AmountSchema,
+  CurrencySelectSchema,
+} from '~/schema';
+import type {
+  CurrencyItem,
+  RatesItem,
+  ProjectItemData,
+} from '~/types';
+
+const form = useTemplateRef('form');
 
 const { t: $t, locale } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const toast = useToast();
 const localePath = useLocalePath();
+
+const LocalizedAmountSchema = AmountSchema
+  .refine(val => val.trim().length > 0,
+    { message: $t('Required') },
+  )
+  .refine((val) => {
+    const num = parseFloat(val);
+    return !isNaN(num) && num > 0;
+  },
+  {
+    message: $t('MustBeOperatorLimit', { operator: $t('greaterthan'), limit: '0' }),
+  },
+  );
+
+const _localisedCurrencySelectSchema = CurrencySelectSchema
+  .required()
+  .nullable()
+  .refine(
+    Boolean,
+    {
+      message: $t('Required'), // overwrites built-in message,
+    },
+  );
+
+const CurrencyFormSchema = z.object({
+  amount: LocalizedAmountSchema,
+  source: _localisedCurrencySelectSchema,
+  target: _localisedCurrencySelectSchema,
+});
+
+type FormSchema = z.output<typeof CurrencyFormSchema>;
+type CurrencySelect = z.output<typeof _localisedCurrencySelectSchema>;
+
+const state = reactive<FormSchema>({
+  amount: '',
+  source: null,
+  target: null,
+});
 
 const crumbItems = computed<BreadcrumbItem[]>(() => [
   {
@@ -274,11 +327,11 @@ useSeoMeta({
   ogTitle: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
-    url: overview.value?.data?.[0].preview?.image?.url,
-    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
-    width: overview.value?.data?.[0].preview?.image?.width,
-    height: overview.value?.data?.[0].preview?.image?.height,
-    type: overview.value?.data?.[0].preview?.image?.mime,
+    url: overview.value?.data?.[0]?.preview?.image?.url,
+    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
+    width: overview.value?.data?.[0]?.preview?.image?.width,
+    height: overview.value?.data?.[0]?.preview?.image?.height,
+    type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
@@ -286,47 +339,12 @@ useSeoMeta({
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
-    url: overview.value?.data?.[0].preview?.image?.url,
-    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
-    width: overview.value?.data?.[0].preview?.image?.width,
-    height: overview.value?.data?.[0].preview?.image?.height,
-    type: overview.value?.data?.[0].preview?.image?.mime,
+    url: overview.value?.data?.[0]?.preview?.image?.url,
+    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
+    width: overview.value?.data?.[0]?.preview?.image?.width,
+    height: overview.value?.data?.[0]?.preview?.image?.height,
+    type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
-});
-
-const currencySelect = z.object({
-  label: z.string(),
-  value: z.string(),
-  avatar: z.object({
-    src: z.string(),
-    alt: z.string(),
-  }),
-  code: z.string(),
-  symbol: z.string(),
-  name: z.string(),
-  countryKeywords: z.array(z.string()),
-  supportsDecimals: z.boolean(),
-}, { message: $t('Required') }); // overwrites built-in message
-
-const schema = z.object({
-  amount: z
-    .string()
-    .min(1, { message: $t('Required') })
-    .refine((val) => {
-      const num = parseFloat(val);
-      return !isNaN(num) && num > 0;
-    }, {
-      message: $t('MustBeOperatorLimit', { operator: $t('greaterthan'), limit: '0' }),
-    }),
-  source: currencySelect,
-  target: currencySelect,
-});
-type Schema = z.output<typeof schema>;
-
-const state = reactive<Partial<Schema>>({
-  amount: '',
-  source: undefined,
-  target: undefined,
 });
 
 const {
@@ -387,7 +405,7 @@ watch(
   },
 );
 
-const conversionResult = computed(() => {
+const conversionResult = computed((): string => {
   if (rates.value && state.amount && state.source && state.target) {
     const calculated = (Number(state.amount) * Number(rates.value[0].rate));
 
@@ -399,14 +417,14 @@ const conversionResult = computed(() => {
   else return '';
 });
 
-const exchangeRate = computed(() => {
+const exchangeRate = computed((): string => {
   if (rates.value && state.source && state.target) {
     return `${state.source.symbol} 1 = ${rates.value[0].rate} ${state.target.code}`;
   }
   else return '';
 });
 
-const currenciesList = computed(() => {
+const currenciesList = computed((): CurrencySelect[] | [] => {
   if (currencies.value?.length) {
     return currencies.value.map((item) => {
       const countryCode = item?.code?.toLowerCase() || 'wise';
@@ -440,8 +458,8 @@ const onOpenSelect = async () => {
   }
 };
 
-const onChangeSource = (selected: CurrenciesListComputed) => {
-  if (!selected.supportsDecimals) {
+const onChangeSource = (selected: CurrencySelect | null) => {
+  if (!selected?.supportsDecimals) {
     const truncated = state.amount?.split('.')[0];
     nextTick(() => {
       if (truncated) state.amount = truncated;
@@ -481,7 +499,12 @@ const onClickRecentPairs = async (pair: string) => {
     await fetchCurrencies();
 
   const arrayed = pair.split('-');
-  state.source = currenciesList.value.find(item => item.code === arrayed[0]);
-  state.target = currenciesList.value.find(item => item.code === arrayed[1]);
+
+  const source = currenciesList.value.find(item => item?.code === arrayed[0]);
+  const target = currenciesList.value.find(item => item?.code === arrayed[1]);
+  if (source)
+    state.source = source;
+  if (target)
+    state.target = target;
 };
 </script>

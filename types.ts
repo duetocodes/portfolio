@@ -137,6 +137,7 @@ export type ProjectItemData = {
     description: string | undefined
   } & { preview: { image: AvatarImage } }>
 };
+
 export type CurrencyItem = {
   code: string
   symbol: string
@@ -144,19 +145,6 @@ export type CurrencyItem = {
   countryKeywords: Array<string>
   supportsDecimals: boolean
 };
-export type CurrenciesListComputed = {
-  label: string
-  value: string
-  avatar: {
-    src: string
-    alt: string
-  }
-  code: string
-  symbol: string
-  name: string
-  countryKeywords: Array<string>
-  supportsDecimals: boolean
-}
 export type RatesItem = {
   rate: number
   source: string
