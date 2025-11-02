@@ -147,9 +147,19 @@
 </template>
 
 <script setup lang="ts">
-import type { TreasuryChartRowData, TreasuryYieldPayloadSchema, ProjectItemData, PickerTypeRange } from '~/types';
-import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
+import type { z } from 'zod';
+import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
+import type { PickerTypeRange } from '~/types';
+import type { ProjectItemDataSchema } from '~/schemas';
+import type {
+  TreasuryChartRowDataSchema,
+  TreasuryYieldPayloadSchema,
+} from '~/schemas/treasury-yield-visualiser';
+
+type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
+type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
+type TreasuryYieldPayload = z.infer<typeof TreasuryYieldPayloadSchema>;
 
 const { t: $t, locale, localeProperties } = useI18n();
 const nuxtApp = useNuxtApp();
@@ -226,7 +236,7 @@ const {
             month: picker.value.end.month,
             day: picker.value.end.day,
           },
-        } satisfies TreasuryYieldPayloadSchema;
+        } satisfies TreasuryYieldPayload;
       }
     },
     onResponse({ response }) {
@@ -246,7 +256,7 @@ const {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<ProjectItemData>(
+} = useFetch<{ data: ProjectItemDataObj[] }>(
   '/api/projects',
   {
     method: 'GET',

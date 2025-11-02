@@ -70,7 +70,10 @@
 </template>
 
 <script setup lang="ts">
-import type { AboutMeResponse } from '@/types';
+import type { z } from 'zod';
+import type { AboutMeResponseSchema } from '~/schemas';
+
+type AboutMeResponse = z.infer<typeof AboutMeResponseSchema>;
 
 const { t: $t, locale } = useI18n();
 const route = useRoute();

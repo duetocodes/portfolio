@@ -1,6 +1,7 @@
 import type { FetchError } from 'ofetch';
-import type { TreasuryChartRowData } from '~/types';
-import { type dateSchema, TreasuryYieldPayloadSchema } from '~/schema';
+import type { TreasuryChartRowDataSchema } from '~/schemas/treasury-yield-visualiser';
+import { TreasuryYieldPayloadSchema } from '~/schemas/treasury-yield-visualiser';
+import type { dateSchema } from '~/schemas';
 import type { z } from 'zod';
 import {
   CalendarDate,
@@ -10,6 +11,8 @@ import {
   startOfMonth,
   endOfMonth,
 } from '@internationalized/date';
+
+type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
 
 export default defineEventHandler(async (event) => {
   // explicitly throw error with .parse (validation failed)

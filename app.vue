@@ -85,8 +85,11 @@
 
 <script setup lang="ts">
 import { Analytics } from '@vercel/analytics/nuxt';
+import type { z } from 'zod';
 import type { NavigationMenuItem } from '@nuxt/ui';
-import type { TechStackResponse } from '@/types';
+import type { TechStackResponseSchema } from '~/schemas';
+
+type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
 const route = useRoute();
 const nuxtApp = useNuxtApp();

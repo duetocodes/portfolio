@@ -1,5 +1,4 @@
 import type { FetchError } from 'ofetch';
-import type { TurnstileResponse } from '@@/types';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ token: string }>(event);
@@ -29,7 +28,7 @@ export default defineEventHandler(async (event) => {
     );
 
     if (response.success) {
-      return { success: true } as TurnstileResponse;
+      return { success: true };
     }
     else {
       throw createError({

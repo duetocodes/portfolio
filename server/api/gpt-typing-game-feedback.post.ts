@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import type { FetchError } from 'ofetch';
-import { TypingGameGptFeedbackPayloadSchema } from '~/schema';
+import { TypingGameGptFeedbackPayloadSchema } from '~/schemas/typing-game';
 
 const config = useRuntimeConfig();
 
