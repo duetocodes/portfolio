@@ -65,7 +65,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TechStackResponse } from '@/types';
+import type { z } from 'zod';
+import type { TechStackResponseSchema } from '@/schema';
+
+type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
 const { t: $t, locale } = useI18n();
 const route = useRoute();
@@ -98,7 +101,7 @@ const {
   refresh,
   data: stacks,
   error,
-} = useFetch<{ data: TechStackResponse[] | null }>(
+} = useFetch<{ data: TechStackResponse[] }>(
   `/api/tech-stacks`,
   {
     method: 'GET',

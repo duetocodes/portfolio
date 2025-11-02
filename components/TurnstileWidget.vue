@@ -38,7 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import type { TurnstileResponse } from '~/types';
+type TurnstileResponse = {
+  success: boolean
+};
 
 const config = useRuntimeConfig();
 const { t: $t, locale } = useI18n();

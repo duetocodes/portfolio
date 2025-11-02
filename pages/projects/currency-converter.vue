@@ -221,14 +221,16 @@
 import { z } from 'zod';
 import type { BreadcrumbItem } from '@nuxt/ui';
 import {
+  type ProjectItemDataSchema,
+  type CurrencyItemSchema,
+  type RatesItemSchema,
   AmountSchema,
   CurrencySelectSchema,
 } from '~/schema';
-import type {
-  CurrencyItem,
-  RatesItem,
-  ProjectItemData,
-} from '~/types';
+
+type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
+type CurrencyItem = z.infer<typeof CurrencyItemSchema>;
+type RatesItem = z.infer<typeof RatesItemSchema>;
 
 const form = useTemplateRef('form');
 
@@ -267,8 +269,8 @@ const CurrencyFormSchema = z.object({
   target: _localisedCurrencySelectSchema,
 });
 
-type FormSchema = z.output<typeof CurrencyFormSchema>;
-type CurrencySelect = z.output<typeof _localisedCurrencySelectSchema>;
+type FormSchema = z.input<typeof CurrencyFormSchema>;
+type CurrencySelect = z.infer<typeof _localisedCurrencySelectSchema>;
 
 const state = reactive<FormSchema>({
   amount: '',
@@ -290,7 +292,7 @@ const crumbItems = computed<BreadcrumbItem[]>(() => [
 const {
   // non-crucial data
   data: overview,
-} = useFetch<ProjectItemData>(
+} = useFetch<{ data: ProjectItemData[] }>(
   '/api/projects',
   {
     method: 'GET',
@@ -375,12 +377,14 @@ const {
   '/api/wise-rates',
   {
     method: 'GET',
-    query: computed(() => ({
-      source: state.source?.code,
-      target: state.target?.code,
-    })),
     immediate: false,
     watch: false,
+    onRequest({ options }) {
+      options.query = {
+        source: state.source?.code,
+        target: state.target?.code,
+      };
+    },
     onResponse() {
       if (state.source?.code && state.target?.code) {
         const pair = `${state.source.code}-${state.target.code}`;

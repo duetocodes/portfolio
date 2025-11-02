@@ -62,7 +62,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '@/types';
+import type { z } from 'zod';
+import type { ProjectSchema } from '@/schema';
+
+type Project = z.infer<typeof ProjectSchema>;
 
 const { t: $t, locale } = useI18n();
 const route = useRoute();

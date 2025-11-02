@@ -328,15 +328,24 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { BreadcrumbItem } from '@nuxt/ui';
+import type { z } from 'zod';
 import type {
-  TypingGame,
-  TypingGameStats,
-  TypingGameFeedbackRequestCharacter,
-  TypingGameGptFeedbackPayload,
-  TypingGameUpdatedData,
-  ProjectItemData,
-  Character,
-} from '~/types';
+  ProjectItemDataSchema,
+  CharacterSchema,
+  TypingGameSchema,
+  TypingGameStatsSchema,
+  TypingGameFeedbackRequestCharacterSchema,
+  TypingGameGptFeedbackPayloadSchema,
+  TypingGameUpdatedDataSchema,
+} from '~/schema';
+
+type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
+type Character = z.infer<typeof CharacterSchema>;
+type TypingGame = z.infer<typeof TypingGameSchema>;
+type TypingGameStats = z.infer<typeof TypingGameStatsSchema>;
+type TypingGameFeedbackRequestCharacter = z.infer<typeof TypingGameFeedbackRequestCharacterSchema>;
+type TypingGameGptFeedbackPayload = z.input<typeof TypingGameGptFeedbackPayloadSchema>;
+type TypingGameUpdatedData = z.infer<typeof TypingGameUpdatedDataSchema>;
 
 const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
 // true or false compared to ssrWidth. Go mobile-first approach, and aimed for true onMounted
@@ -439,7 +448,7 @@ onUnmounted(() => {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<ProjectItemData>(
+} = useFetch<{ data: ProjectItemData[] }>(
   '/api/projects',
   {
     method: 'GET',
@@ -471,11 +480,11 @@ useSeoMeta({
   ogTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
-    url: overview.value?.data?.[0].preview?.image?.url,
-    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
-    width: overview.value?.data?.[0].preview?.image?.width,
-    height: overview.value?.data?.[0].preview?.image?.height,
-    type: overview.value?.data?.[0].preview?.image?.mime,
+    url: overview.value?.data?.[0]?.preview?.image?.url,
+    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
+    width: overview.value?.data?.[0]?.preview?.image?.width,
+    height: overview.value?.data?.[0]?.preview?.image?.height,
+    type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
   ogUrl: () => `https://duetocodes.com${route.fullPath}`,
   ogType: 'website',
@@ -483,11 +492,11 @@ useSeoMeta({
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
-    url: overview.value?.data?.[0].preview?.image?.url,
-    alt: overview.value?.data?.[0].preview?.image?.alternativeText,
-    width: overview.value?.data?.[0].preview?.image?.width,
-    height: overview.value?.data?.[0].preview?.image?.height,
-    type: overview.value?.data?.[0].preview?.image?.mime,
+    url: overview.value?.data?.[0]?.preview?.image?.url,
+    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
+    width: overview.value?.data?.[0]?.preview?.image?.width,
+    height: overview.value?.data?.[0]?.preview?.image?.height,
+    type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
 });
 
