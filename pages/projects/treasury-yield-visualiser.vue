@@ -151,11 +151,11 @@ import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import type { z } from 'zod';
 import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
 import type { PickerTypeRange } from '~/types';
+import type { ProjectItemDataSchema } from '~/schemas';
 import type {
-  ProjectItemDataSchema,
   TreasuryChartRowDataSchema,
   TreasuryYieldPayloadSchema,
-} from '~/schema';
+} from '~/schemas/treasury-yield-visualiser';
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;

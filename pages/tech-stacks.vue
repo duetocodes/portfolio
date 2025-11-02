@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import type { z } from 'zod';
-import type { TechStackResponseSchema } from '@/schema';
+import type { TechStackResponseSchema } from '~/schemas';
 
 type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 

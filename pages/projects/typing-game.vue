@@ -329,15 +329,15 @@
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { BreadcrumbItem } from '@nuxt/ui';
 import type { z } from 'zod';
+import type { ProjectItemDataSchema } from '~/schemas';
 import type {
-  ProjectItemDataSchema,
   CharacterSchema,
   TypingGameSchema,
   TypingGameStatsSchema,
   TypingGameFeedbackRequestCharacterSchema,
   TypingGameGptFeedbackPayloadSchema,
   TypingGameUpdatedDataSchema,
-} from '~/schema';
+} from '~/schemas/typing-game';
 
 type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 type Character = z.infer<typeof CharacterSchema>;

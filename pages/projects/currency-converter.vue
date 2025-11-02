@@ -220,13 +220,13 @@
 <script setup lang="ts">
 import { z } from 'zod';
 import type { BreadcrumbItem } from '@nuxt/ui';
+import type { ProjectItemDataSchema } from '~/schemas';
 import {
-  type ProjectItemDataSchema,
   type CurrencyItemSchema,
   type RatesItemSchema,
   AmountSchema,
   CurrencySelectSchema,
-} from '~/schema';
+} from '~/schemas/currency-converter';
 
 type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 type CurrencyItem = z.infer<typeof CurrencyItemSchema>;

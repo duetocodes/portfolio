@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import type { z } from 'zod';
-import type { ProjectSchema } from '@/schema';
+import type { ProjectSchema } from '~/schemas';
 
 type Project = z.infer<typeof ProjectSchema>;
 
