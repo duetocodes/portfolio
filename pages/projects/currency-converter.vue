@@ -303,7 +303,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[identifier][$eq]': 'currency-converter',
+      'filters[slugId][$eq]': 'currency-converter',
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },

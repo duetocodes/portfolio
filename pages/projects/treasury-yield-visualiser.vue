@@ -267,7 +267,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[identifier][$eq]': 'treasury-yield-visualiser',
+      'filters[slugId][$eq]': 'treasury-yield-visualiser',
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },

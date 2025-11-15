@@ -44,14 +44,17 @@
                   class="self-center text-muted transition group-hover:text-primary group-hover:-translate-y-1 group-hover:translate-x-1" />
               </template>
             </UButton>
-            <div>
+            <div
+              v-if="item?.tech_stack_tags?.length"
+              class="flex gap-2 flex-wrap">
               <UBadge
-                v-if="item.purpose"
-                :key="item.id"
-                class="truncate font-light ml-auto"
-                variant="soft"
+                v-for="tag in item.tech_stack_tags"
+                :key="tag.id"
+                size="sm"
+                class="text-dimmed"
+                variant="outline"
                 color="neutral"
-                :label="item.purpose" />
+                :label="tag.tag" />
             </div>
             <MDC
               :value="stripMarkdownLinks(item.description)"
