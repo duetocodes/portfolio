@@ -22,6 +22,12 @@ export const ImageDataSchema = z.object({
   alternativeText: z.string(),
 });
 
+const TagItem = z.object({
+  id: z.number(),
+  tag: z.string(),
+  description: z.string().optional(),
+});
+
 export const TechStackResponseSchema = z.object({
   id: z.number(),
   documentId: z.string(),
@@ -32,7 +38,7 @@ export const TechStackResponseSchema = z.object({
   publishedAt: z.string(),
   locale: z.string(),
   website: z.string().url(),
-  purpose: z.string(),
+  tech_stack_tags: z.array(TagItem),
   logo: ImageDataSchema,
 });
 
@@ -96,5 +102,5 @@ export const ProjectSchema = z.object({
   updatedAt: z.string(),
   publishedAt: z.string(),
   locale: z.string(),
-  identifier: z.string(),
+  slugId: z.string(),
 });

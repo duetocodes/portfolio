@@ -459,7 +459,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[identifier][$eq]': 'typing-game',
+      'filters[slugId][$eq]': 'typing-game',
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },

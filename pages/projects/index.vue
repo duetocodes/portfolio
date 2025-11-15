@@ -18,7 +18,7 @@
       <ULink
         v-for="item in projects.data"
         :key="item.id"
-        :to="localePath(`/projects/${item.identifier}`)"
+        :to="localePath(`/projects/${item.slugId}`)"
         :ui="{ base: 'h-full' }"
         rel="noopener noreferrer">
         <UCard
@@ -85,7 +85,7 @@ const {
     query: {
       'locale': locale.value,
       'sort[0]': 'sortIndex:asc',
-      'fields': ['title', 'description', 'tag', 'sortIndex', 'identifier'],
+      'fields': ['title', 'description', 'tag', 'sortIndex', 'slugId'],
     },
     getCachedData(key) {
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
