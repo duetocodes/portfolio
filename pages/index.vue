@@ -92,6 +92,7 @@ const {
     query: {
       locale: locale.value,
     },
+    lazy: true,
     getCachedData(key) {
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
       return data;
