@@ -39,7 +39,8 @@ export const TechStackResponseSchema = z.object({
   locale: z.string(),
   website: z.string().url(),
   tech_stack_tags: z.array(TagItem),
-  logo: ImageDataSchema,
+  icon_default: ImageDataSchema,
+  icon_dark: ImageDataSchema,
 });
 
 export const AvatarImageSchema = z.object({

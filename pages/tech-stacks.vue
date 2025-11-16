@@ -32,9 +32,13 @@
               class="p-0 text-md"
               variant="link">
               <img
-                class="mr-2 h-8 max-w-[100px] object-contain select-none"
-                :src="item.logo?.url"
-                :alt="item.logo?.alternativeText || item.name" />
+                class="dark:hidden mr-2 h-8 max-w-[100px] object-contain select-none"
+                :src="item.icon_default?.url"
+                :alt="item.icon_default.alternativeText || item.name" />
+              <img
+                class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none"
+                :src="item.icon_dark?.url ?? item.icon_default?.url"
+                :alt="item.icon_default.alternativeText || item.name" />
               <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
                 {{ item.name }}
               </h4>
