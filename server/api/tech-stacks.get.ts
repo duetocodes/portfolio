@@ -17,7 +17,8 @@ export default defineEventHandler(async (event) => {
           // all fields here are top-level
           'sort': 'sortIndex:asc',
           'fields': ['name', 'description', 'website'],
-          'populate[logo][fields]': ['url', 'alternativeText'],
+          'populate[icon_default][fields]': ['url', 'alternativeText'],
+          'populate[icon_dark][fields]': ['url', 'alternativeText'],
           'populate[tech_stack_tags]populate[fields]': ['tag', 'description'],
         },
         timeout: 7000,
