@@ -28,16 +28,10 @@
   "AboutMe": "About Me",
   "Contact": "Contact",
   "Image": "Image",
-  "WelcomeText": "May this space\n offers you a glimpse\n into my coding \n journey",
   "TryAgain": "Try Again",
   "Retrying": "Retrying...",
   "MyTechStacks": "My Tech Stacks",
   "TechStackHelpText": "I've worked with these tech stacks at my job and on personal projects, and while I'm confident with some, I'm always looking to level up with new ones.",
-  "LetsTalk": "Let's Talk",
-  "SendMeAMessage": "Send me a message",
-  "NoContentFound": "No content found",
-  "NoContentFoundText": "I haven't added anything here just yet",
-  "CommunicationChannels": "Communication channels",
   "SelectItem": "Select {item}",
   "work": "work",
   "From": "From",
@@ -78,5 +72,6 @@
   "VerificationFailed": "Verification failed",
   "Expired": "Expired",
   "TypingGameText1": "For the best experience, please switch to a desktop computer.",
-  "PhysicalKeyboardRequired": "Physical keyboard required"
+  "PhysicalKeyboardRequired": "Physical keyboard required",
+  "ItemCurrentlyNotAvailable": "{item} currently not available"
 }

@@ -44,8 +44,9 @@
             <UBadge
               v-if="item.tag"
               :key="item.id"
-              class="truncate font-light ml-auto"
-              variant="soft"
+              size="sm"
+              class="text-dimmed"
+              variant="outline"
               color="neutral"
               :label="item.tag" />
           </div>

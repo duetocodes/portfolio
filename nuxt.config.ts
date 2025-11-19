@@ -1,5 +1,36 @@
 /* eslint-disable nuxt/nuxt-config-keys-order */
 
+import { $fetch } from 'ofetch';
+import { STRAPI_ENDPOINTS } from './server/utils/api';
+import type { LocaleObject } from '@nuxtjs/i18n';
+import type { ProjectSchema } from './schemas';
+import type { z } from 'zod';
+
+type Project = z.infer<typeof ProjectSchema>;
+type ProjectSlug = Pick<Project, 'id' | 'documentId' | 'slugId'>;
+
+const localeList: LocaleObject[] = [
+  { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
+  { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
+  { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
+  { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
+];
+
+const fetchPublishedProjectSlugs = async () => {
+  return $fetch(
+    process.env.NUXT_STRAPI_API_BASE + STRAPI_ENDPOINTS.Projects,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.NUXT_STRAPI_READ_ONLY_TOKEN}`,
+      },
+      query: {
+        locale: 'en',
+        fields: 'slugId',
+      },
+    },
+  ).then((res: { data: ProjectSlug[] }) => res.data);
+};
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
@@ -57,13 +88,21 @@ export default defineNuxtConfig({
   },
   i18n: {
     defaultLocale: 'en',
-    locales: [
-      { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
-      { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
-      { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
-      { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
-    ],
+    locales: localeList,
     lazy: true,
     strategy: 'prefix_except_default',
+  },
+  hooks: {
+    // https://nuxt.com/docs/3.x/getting-started/prerendering#prerenderroutes-nuxt-hook
+    async 'prerender:routes'(ctx) {
+      const prefixes = localeList.map((loc: LocaleObject) => (loc.code === 'en' ? '' : `/${loc.code}`));
+
+      const response = await fetchPublishedProjectSlugs();
+
+      // pre-render published item route for each locale prefix
+      prefixes.forEach((prefix) => {
+        response.forEach((slug: ProjectSlug) => ctx.routes.add(`${prefix}/projects/${slug.slugId}`));
+      });
+    },
   },
 });
