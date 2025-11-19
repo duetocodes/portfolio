@@ -41,6 +41,11 @@ https://github.com/tailwindlabs/tailwindcss-typography
       /* color=info, variant=ghost */
       @apply bg-info/10;
     }
+
+    button[class~="hover:bg-warning/10"]:hover {
+      /* color=warning, variant=ghost */
+      @apply bg-warning/10;
+    }
   }
 }
 

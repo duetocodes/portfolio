@@ -28,16 +28,10 @@
   "AboutMe": "关于我",
   "Contact": "联系",
   "Image": "图片",
-  "WelcomeText": "愿这个空间\n 能为你呈现\n 我的编程\n 旅程的一瞥",
   "TryAgain": "再试一次",
   "Retrying": "正在重试...",
   "MyTechStacks": "我的技术栈",
   "TechStackHelpText": "我在工作和个人项目中都使用过这些技术栈，虽然对其中一些很有信心，但我始终在寻求机会掌握新的技术。",
-  "LetsTalk": "让我们聊聊",
-  "SendMeAMessage": "给我发消息",
-  "NoContentFound": "未找到内容",
-  "NoContentFoundText": "我还没有在这里添加任何内容",
-  "CommunicationChannels": "通信渠道",
   "SelectItem": "选择{item}",
   "work": "工作",
   "From": "从",
@@ -78,5 +72,6 @@
   "VerificationFailed": "验证失败",
   "Expired": "已过期",
   "TypingGameText1": "为了获得最佳体验，请切换到台式电脑。",
-  "PhysicalKeyboardRequired": "需要物理键盘"
+  "PhysicalKeyboardRequired": "需要物理键盘",
+  "ItemCurrentlyNotAvailable": "{item} 当前不可用"
 }

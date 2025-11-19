@@ -28,16 +28,10 @@
   "AboutMe": "Hakkımda",
   "Contact": "İletişim",
   "Image": "Görsel",
-  "WelcomeText": "Bu alanın\nkodlama yolculuğuma dair\nbir pencere\nsunmasını dilerim",
   "TryAgain": "Tekrar Dene",
   "Retrying": "Tekrar deniyor...",
   "MyTechStacks": "Teknoloji Yığınlarım",
   "TechStackHelpText": "Bu teknoloji yığınlarıyla hem işimde hem de kişisel projelerimde çalıştım. Bazılarında kendime güveniyorum, ancak her zaman yeni teknolojilerle kendimi geliştirmeye çalışıyorum.",
-  "LetsTalk": "Hadi Konuşalım",
-  "SendMeAMessage": "Bana bir mesaj gönder",
-  "NoContentFound": "İçerik bulunamadı",
-  "NoContentFoundText": "Henüz burada hiçbir şey eklemedim",
-  "CommunicationChannels": "İletişim kanalları",
   "SelectItem": "{item} seç",
   "work": "İş",
   "From": "Başlangıç",
@@ -78,5 +72,6 @@
   "VerificationFailed": "Doğrulama başarısız oldu",
   "Expired": "Süresi doldu",
   "TypingGameText1": "En iyi deneyim için lütfen masaüstü bilgisayara geçin.",
-  "PhysicalKeyboardRequired": "Fiziksel klavye gerekli"
+  "PhysicalKeyboardRequired": "Fiziksel klavye gerekli",
+  "ItemCurrentlyNotAvailable": "{item} şu anda mevcut değil"
 }
