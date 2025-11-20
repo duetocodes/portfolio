@@ -35,21 +35,22 @@ import type { z } from 'zod';
 import type { ProjectSchema } from '~/schemas';
 
 type Project = z.infer<typeof ProjectSchema>;
-type ProjectSlug = Pick<Project, 'id' | 'documentId' | 'slugId'>;
+type ProjectSlug = Pick<Project, 'id' | 'documentId' | 'slugId' | 'locale'>;
 
 const activeSlug = ref(null);
 const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
 const route = useRoute();
+const { t: $t, locale } = useI18n();
 
 const { data: slugs } = await useFetch<{ data: ProjectSlug[] }>(
   `/api/projects`,
   {
     method: 'GET',
-    key: 'project-slugs',
+    key: 'projects-published-slugs-all-locales',
     query: {
-      locale: 'en', // fixed in this context
-      fields: ['slugId'],
+      locale: '*',
+      fields: ['slugId', 'locale'],
     },
     getCachedData(key) {
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
@@ -58,9 +59,24 @@ const { data: slugs } = await useFetch<{ data: ProjectSlug[] }>(
   },
 );
 
-const isPublished = slugs.value?.data.find(item => item.slugId === route.params.slugId);
+const isPublishedInCurrentLocale = slugs.value?.data.find((item) => {
+  return item.slugId === route.params.slugId && item.locale === locale.value;
+});
 
-if (isPublished) {
-  activeSlug.value = defineAsyncComponent(() => import(`~/components/Projects/${isPublished.slugId}.vue`));
+if (isPublishedInCurrentLocale) {
+  activeSlug.value = defineAsyncComponent(() => import(`~/components/Projects/${isPublishedInCurrentLocale.slugId}.vue`));
+}
+else {
+  const isPublishedInAtLeastOneLocale = slugs.value?.data.find((item) => {
+    return item.slugId === route.params.slugId;
+  });
+
+  if (!isPublishedInAtLeastOneLocale) {
+    // unknown slug
+    throw createError({
+      statusCode: 404,
+      statusMessage: $t('error.404'),
+    });
+  }
 }
 </script>

@@ -22,23 +22,12 @@
       class="mt-8"
       :schema="CurrencyFormSchema"
       :state="state">
-      <UCard
-        :ui="{ body: 'space-y-8' }">
-        <div class="flex justify-between">
+      <UCard :ui="{ body: 'space-y-8' }">
+        <div>
           <UBadge
-            class="self-start"
             color="warning"
             variant="soft"
             :label="$t('Simulation')" />
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="link"
-            icon="material-symbols:format-list-bulleted"
-            :label="$t('GoToTarget', { target: $t('List') })"
-            :aria-label="$t('GoToTarget', { target: $t('List') })"
-            :disabled="statusCurrencies === 'pending' || statusRates === 'pending'"
-            :to="localePath('/projects')" />
         </div>
 
         <UFormField

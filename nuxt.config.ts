@@ -7,7 +7,7 @@ import type { ProjectSchema } from './schemas';
 import type { z } from 'zod';
 
 type Project = z.infer<typeof ProjectSchema>;
-type ProjectSlug = Pick<Project, 'id' | 'documentId' | 'slugId'>;
+type ProjectSlug = Pick<Project, 'id' | 'documentId' | 'slugId' | 'locale'>;
 
 const localeList: LocaleObject[] = [
   { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
@@ -16,7 +16,7 @@ const localeList: LocaleObject[] = [
   { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
 ];
 
-const fetchPublishedProjectSlugs = async () => {
+const fetchPublishedProjectSlugs = async (locale: string) => {
   return $fetch(
     process.env.NUXT_STRAPI_API_BASE + STRAPI_ENDPOINTS.Projects,
     {
@@ -24,8 +24,8 @@ const fetchPublishedProjectSlugs = async () => {
         Authorization: `Bearer ${process.env.NUXT_STRAPI_READ_ONLY_TOKEN}`,
       },
       query: {
-        locale: 'en',
-        fields: 'slugId',
+        locale: locale,
+        fields: ['slugId', 'locale'],
       },
     },
   ).then((res: { data: ProjectSlug[] }) => res.data);
@@ -95,13 +95,16 @@ export default defineNuxtConfig({
   hooks: {
     // https://nuxt.com/docs/3.x/getting-started/prerendering#prerenderroutes-nuxt-hook
     async 'prerender:routes'(ctx) {
-      const prefixes = localeList.map((loc: LocaleObject) => (loc.code === 'en' ? '' : `/${loc.code}`));
+      const locales = localeList.map((loc: LocaleObject) => loc.code);
 
-      const response = await fetchPublishedProjectSlugs();
+      locales.forEach(async (loc) => {
+        // to accomodate [slugId].vue, published/draft status is set for each locale individually
+        const response = await fetchPublishedProjectSlugs(loc);
 
-      // pre-render published item route for each locale prefix
-      prefixes.forEach((prefix) => {
-        response.forEach((slug: ProjectSlug) => ctx.routes.add(`${prefix}/projects/${slug.slugId}`));
+        response.forEach((slug: ProjectSlug) => {
+          const prefix = loc === 'en' ? '' : `/${loc}`;
+          ctx.routes.add(`${prefix}/projects/${slug.slugId}`);
+        });
       });
     },
   },
