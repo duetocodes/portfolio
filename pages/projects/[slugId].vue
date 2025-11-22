@@ -47,7 +47,28 @@ const { data: cached } = useNuxtData<{ data: ProjectSlug[] }>('projects-publishe
 
 const isPublishedInAtLeastOneLocale = ref<ProjectSlug>();
 
-onBeforeMount(() => {
+// onBeforeMount(() => {
+//   isPublishedInAtLeastOneLocale.value = cached.value?.data.find((item) => {
+//     return item.slugId === route.params.slugId;
+//   });
+
+//   if (!cached.value) {
+//     throw createError({
+//       statusCode: 500,
+//       statusMessage: $t('UnexpectedErrorOccurred'),
+//     });
+//   }
+
+//   if (!isPublishedInAtLeastOneLocale.value) {
+//     // unknown slug
+//     throw createError({
+//       statusCode: 404,
+//       statusMessage: $t('error.404') + `: /${route.params.slugId}`,
+//     });
+//   }
+// });
+
+if (import.meta.client) {
   isPublishedInAtLeastOneLocale.value = cached.value?.data.find((item) => {
     return item.slugId === route.params.slugId;
   });
@@ -66,7 +87,7 @@ onBeforeMount(() => {
       statusMessage: $t('error.404') + `: /${route.params.slugId}`,
     });
   }
-});
+}
 
 const slugLabel = computed(() => {
   switch (route.params.slugId) {
@@ -90,6 +111,7 @@ const { data: renderedSlugs } = await useFetch<{ data: ProjectSlug[] }>(
       locale: '*',
       fields: ['slugId', 'locale'],
     },
+    server: true,
     getCachedData(key) {
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
       return data;
