@@ -222,7 +222,6 @@ const {
     key: locale,
     watch: false,
     onRequest({ options }) {
-      // client-side
       if (picker.value.start && picker.value.end) {
         options.body = {
           searchBy: Number(tabIndex.value),
@@ -240,7 +239,6 @@ const {
       }
     },
     onResponse({ response }) {
-      // client-side
       if (Array.isArray(response._data)) {
         response._data = response._data.map((item) => {
           return {

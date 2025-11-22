@@ -97,7 +97,6 @@ const hoverMonth = ref<CalendarDate | null>(null);
 
 const getCurrentCalendarDate = (): CalendarDate => {
   return today(getLocalTimeZone());
-  // return new CalendarDate(temp.year, temp.month, temp.day);
 };
 
 const currentCalendarDate = ref<CalendarDate>(getCurrentCalendarDate());
@@ -132,19 +131,6 @@ const emits = defineEmits<{
   (e: 'on-select', value: PickerTypeRange): void
 }>();
 
-// onMounted(() => {
-//   // client-side date
-//   currentCalendarDate.value = getCurrentCalendarDate();
-//   counterYear.value = currentCalendarDate.value.year;
-
-//   if (props.modelValue && (props.modelValue.start || props.modelValue.end)) {
-//     // renew CalendarDate instances from v-model value
-//     range.value = {
-//       start: props.modelValue.start ? new CalendarDate(props.modelValue.start.year, props.modelValue.start.month, 1) : null,
-//       end: props.modelValue.end ? new CalendarDate(props.modelValue.end.year, props.modelValue.end.month, 1) : null,
-//     };
-//   }
-// });
 onMounted(() => {
   // Always update to the user's local current date
   currentCalendarDate.value = getCurrentCalendarDate();
@@ -288,7 +274,6 @@ const isInRange = (selected: CalendarDate) => {
 
 const isWithinRangeOfHovered = (hovered: CalendarDate) => {
   if (start.value && !end.value && hoverMonth.value) {
-    // const newHover = new CalendarDate(hovered.year, hovered.month, 1); // renew instance
     const newHover = hovered.copy(); // renew instance
     if (hasDisabledMonthWithinRange(start.value.calendarDate, newHover))
       return false;
@@ -305,7 +290,6 @@ const isWithinRangeOfHovered = (hovered: CalendarDate) => {
 
 const onHoverMonth = (hovered: CalendarDate) => {
   if (start.value && !end.value) {
-    // hoverMonth.value = new CalendarDate(hovered.year, hovered.month, 1); // renew instance
     hoverMonth.value = hovered.copy(); // renew instance
   }
 };
