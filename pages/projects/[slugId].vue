@@ -47,38 +47,17 @@ const { data: cached } = useNuxtData<{ data: ProjectSlug[] }>('projects-publishe
 
 const isPublishedInAtLeastOneLocale = ref<ProjectSlug>();
 
-// onBeforeMount(() => {
-//   isPublishedInAtLeastOneLocale.value = cached.value?.data.find((item) => {
-//     return item.slugId === route.params.slugId;
-//   });
-
-//   if (!cached.value) {
-//     throw createError({
-//       statusCode: 500,
-//       statusMessage: $t('UnexpectedErrorOccurred'),
-//     });
-//   }
-
-//   if (!isPublishedInAtLeastOneLocale.value) {
-//     // unknown slug
-//     throw createError({
-//       statusCode: 404,
-//       statusMessage: $t('error.404') + `: /${route.params.slugId}`,
-//     });
-//   }
-// });
-
-if (import.meta.client) {
-  isPublishedInAtLeastOneLocale.value = cached.value?.data.find((item) => {
-    return item.slugId === route.params.slugId;
-  });
-
+onBeforeMount(() => {
   if (!cached.value) {
     throw createError({
       statusCode: 500,
       statusMessage: $t('UnexpectedErrorOccurred'),
     });
   }
+
+  isPublishedInAtLeastOneLocale.value = cached.value?.data.find((item) => {
+    return item.slugId === route.params.slugId;
+  });
 
   if (!isPublishedInAtLeastOneLocale.value) {
     // unknown slug
@@ -87,7 +66,7 @@ if (import.meta.client) {
       statusMessage: $t('error.404') + `: /${route.params.slugId}`,
     });
   }
-}
+});
 
 const slugLabel = computed(() => {
   switch (route.params.slugId) {
