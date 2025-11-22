@@ -27,10 +27,7 @@ const fetchPublishedProjectSlugs = async () => {
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
-  app: {
-    pageTransition: { name: 'page', mode: 'out-in' },
-    // layoutTransition: { name: 'layout', mode: 'out-in' }, // un-comment when additional layouts are being used
-  },
+
   runtimeConfig: {
     strapiReadOnlyToken: process.env.NUXT_STRAPI_READ_ONLY_TOKEN,
     strapiApiBase: process.env.NUXT_STRAPI_API_BASE,
@@ -89,6 +86,7 @@ export default defineNuxtConfig({
     ],
     lazy: true,
     strategy: 'prefix_except_default',
+    skipSettingLocaleOnNavigate: true,
   },
   hooks: {
     // https://nuxt.com/docs/3.x/getting-started/prerendering#prerenderroutes-nuxt-hook

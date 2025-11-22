@@ -42,7 +42,12 @@
       </h2>
 
       <NuxtLayout>
-        <NuxtPage />
+        <NuxtPage
+          :transition="{
+            name: 'page',
+            mode: 'out-in',
+            onBeforeEnter,
+          }" />
       </NuxtLayout>
     </main>
 
@@ -95,7 +100,12 @@ const route = useRoute();
 const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
 
-const { t: $t, locale, locales } = useI18n();
+const {
+  t: $t,
+  locale,
+  locales,
+  finalizePendingLocaleChange,
+} = useI18n();
 
 const lang = computed(() => locale.value);
 
@@ -230,6 +240,10 @@ const menuItems = computed<NavigationMenuItem[]>(() => [
     to: localePath('/tech-stacks'),
   },
 ]);
+
+const onBeforeEnter = async () => {
+  await finalizePendingLocaleChange();
+};
 </script>
 
 <style>
