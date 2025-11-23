@@ -1,29 +1,5 @@
 /* eslint-disable nuxt/nuxt-config-keys-order */
 
-import { $fetch } from 'ofetch';
-import { STRAPI_ENDPOINTS } from './server/utils/api';
-import type { ProjectSchema } from './schemas';
-import type { z } from 'zod';
-
-type Project = z.infer<typeof ProjectSchema>;
-type ProjectSlug = Pick<Project, 'id' | 'documentId' | 'slugId' | 'locale'>;
-
-const fetchPublishedProjectSlugs = async () => {
-  return $fetch(
-    process.env.NUXT_STRAPI_API_BASE + STRAPI_ENDPOINTS.Projects,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.NUXT_STRAPI_READ_ONLY_TOKEN}`,
-      },
-      query: {
-        locale: '*',
-        fields: ['slugId', 'locale'],
-      },
-    },
-  )
-    .then((res: { data: ProjectSlug[] }) => res.data);
-};
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
@@ -87,16 +63,5 @@ export default defineNuxtConfig({
     lazy: true,
     strategy: 'prefix_except_default',
     skipSettingLocaleOnNavigate: true,
-  },
-  hooks: {
-    // https://nuxt.com/docs/3.x/getting-started/prerendering#prerenderroutes-nuxt-hook
-    async 'prerender:routes'(ctx) {
-      const published = await fetchPublishedProjectSlugs();
-
-      published.forEach((slug: ProjectSlug) => {
-        const prefix = slug.locale === 'en' ? '' : `/${slug.locale}`;
-        ctx.routes.add(`${prefix}/projects/${slug.slugId}`);
-      });
-    },
   },
 });
