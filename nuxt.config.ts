@@ -63,5 +63,8 @@ export default defineNuxtConfig({
     lazy: true,
     strategy: 'prefix_except_default',
     skipSettingLocaleOnNavigate: true,
+    detectBrowserLanguage: {
+      cookieKey: 'dtc-pref-locale',
+    },
   },
 });

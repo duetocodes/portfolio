@@ -29,10 +29,17 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
 
-const open = ref(false);
-
-const { locale, locales } = useI18n();
+const nuxtApp = useNuxtApp();
 const switchLocalePath = useSwitchLocalePath();
+const {
+  locale,
+  locales,
+  setLocaleCookie,
+  waitForPendingLocaleChange,
+  finalizePendingLocaleChange,
+} = useI18n();
+
+const open = ref(false);
 
 const dropDownLabel = computed(() => locales.value.find(lang => lang.code === locale.value)?.name || locale.value);
 
@@ -44,5 +51,15 @@ const localeItems = computed<DropdownMenuItem[]>(() => {
     label: lang.name,
     to: switchLocalePath(lang.code),
   }));
+});
+
+// global client-side hook
+nuxtApp.hook('page:loading:start', async () => {
+  waitForPendingLocaleChange();
+});
+
+nuxtApp.hook('page:loading:end', () => {
+  finalizePendingLocaleChange();
+  setLocaleCookie(locale.value);
 });
 </script>
