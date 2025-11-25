@@ -34,8 +34,6 @@ const switchLocalePath = useSwitchLocalePath();
 const {
   locale,
   locales,
-  setLocaleCookie,
-  waitForPendingLocaleChange,
   finalizePendingLocaleChange,
 } = useI18n();
 
@@ -53,13 +51,17 @@ const localeItems = computed<DropdownMenuItem[]>(() => {
   }));
 });
 
-// global client-side hook
-nuxtApp.hook('page:loading:start', async () => {
-  waitForPendingLocaleChange();
-});
+const localeCookie = useCookie(
+  nuxtApp.$config.public.i18n.detectBrowserLanguage.cookieKey,
+  {
+    maxAge: 60 * 60 * 24 * 14, // 14 days in seconds
+    sameSite: 'lax',
+    path: '/', // all routes
+  },
+);
 
-nuxtApp.hook('page:loading:end', () => {
+nuxtApp.hook('page:loading:end', async () => {
   finalizePendingLocaleChange();
-  setLocaleCookie(locale.value);
+  localeCookie.value = locale.value;
 });
 </script>

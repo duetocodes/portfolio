@@ -65,6 +65,7 @@ export default defineNuxtConfig({
     skipSettingLocaleOnNavigate: true,
     detectBrowserLanguage: {
       cookieKey: 'dtc-pref-locale',
+      useCookie: false, // to be manually set, with cookieKey as target
     },
   },
 });
