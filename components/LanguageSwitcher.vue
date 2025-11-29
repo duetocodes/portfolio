@@ -29,10 +29,13 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
 
-const open = ref(false);
-
-const { locale, locales } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
+const {
+  locale,
+  locales,
+} = useI18n();
+
+const open = ref(false);
 
 const dropDownLabel = computed(() => locales.value.find(lang => lang.code === locale.value)?.name || locale.value);
 

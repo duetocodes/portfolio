@@ -46,7 +46,6 @@
           :transition="{
             name: 'page',
             mode: 'out-in',
-            onBeforeEnter,
           }" />
       </NuxtLayout>
     </main>
@@ -78,7 +77,7 @@
           :ui="{
             label: 'max-w-24 truncate leading-none',
             base: [
-              'gap-0.5 flex flex-col text-center text-sm transition-color font-semibold',
+              'gap-0.5 flex flex-col text-center text-sm transition-colors font-semibold',
               item.active ? 'text-primary' : 'text-muted',
             ],
           }" />
@@ -104,7 +103,6 @@ const {
   t: $t,
   locale,
   locales,
-  finalizePendingLocaleChange,
 } = useI18n();
 
 const lang = computed(() => locale.value);
@@ -125,11 +123,11 @@ const {
       locale: 'en',
     },
     onResponse({ response }) {
-      const raw = response._data?.data || [];
-      response._data = raw.map((item: TechStackResponse) => item.name);
+      const payload = ((response._data as { data?: TechStackResponse[] } | undefined)?.data) ?? [];
+      response._data = payload.map((item: TechStackResponse) => item.name);
     },
     getCachedData(key) {
-      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      const data = nuxtApp.payload.data[key] || nuxtApp.static?.data?.[key];
       return data;
     },
   },
@@ -240,10 +238,6 @@ const menuItems = computed<NavigationMenuItem[]>(() => [
     to: localePath('/tech-stacks'),
   },
 ]);
-
-const onBeforeEnter = async () => {
-  await finalizePendingLocaleChange();
-};
 </script>
 
 <style>

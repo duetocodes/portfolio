@@ -1,21 +1,10 @@
 <template>
   <div class="w-full min-h-[inherit]">
-    <UBreadcrumb
-      class="mt-8"
-      separator-icon="material-symbols:chevron-right"
-      :items="crumbItems"
-      :ui="{ link: 'text-lg' }" />
-
     <MDC
       v-if="overview?.data?.[0]?.description"
       :value="overview.data[0].description"
       class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
       tag="article" />
-    <p
-      v-else
-      class="text-md prose text-muted">
-      {{ $t('SelfDevelopedApplications', 1) }}
-    </p>
 
     <AppLoadingIndicator
       :is-loading="status === 'pending' && !error"
@@ -327,7 +316,6 @@
 
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
-import type { BreadcrumbItem } from '@nuxt/ui';
 import type { z } from 'zod';
 import type { ProjectItemDataSchema } from '~/schemas';
 import type {
@@ -338,6 +326,10 @@ import type {
   TypingGameGptFeedbackPayloadSchema,
   TypingGameUpdatedDataSchema,
 } from '~/schemas/typing-game';
+
+definePageMeta({
+  layout: 'project-item',
+});
 
 type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 type Character = z.infer<typeof CharacterSchema>;
@@ -381,17 +373,6 @@ const { t: $t, locale } = useI18n();
 const localePath = useLocalePath();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
-
-const crumbItems = computed<BreadcrumbItem[]>(() => [
-  {
-    to: localePath('/projects'),
-    label: $t('Projects'),
-  },
-  {
-    to: route.fullPath,
-    label: $t('TypingGame'),
-  },
-]);
 
 const gameStats = computed((): TypingGameStats => {
   const pressed = (data.value?.mappedPassage || []).filter(char => char.status !== 'pending');
