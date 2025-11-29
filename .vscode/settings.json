@@ -5,6 +5,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.formatOnSave": false,
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
   "eslint.validate": [
     "javascript",
     "vue",
