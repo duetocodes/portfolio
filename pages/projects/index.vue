@@ -8,10 +8,6 @@
       :status="status"
       @try-again="refresh" />
 
-    <PageHeading
-      :heading="$t('Projects')"
-      :description="$t('SelfDevelopedApplications', projects?.data?.length ?? 1)" />
-
     <div
       v-if="projects?.data"
       class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">

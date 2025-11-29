@@ -5,15 +5,15 @@ export default defineNuxtConfig({
   ssr: true,
 
   runtimeConfig: {
-    strapiReadOnlyToken: process.env.NUXT_STRAPI_READ_ONLY_TOKEN,
-    strapiApiBase: process.env.NUXT_STRAPI_API_BASE,
-    wiseReadOnlyToken: process.env.NUXT_WISE_READ_ONLY_TOKEN,
-    wiseApiBase: process.env.NUXT_WISE_API_BASE,
-    turnstileSecretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
-    openAiSecretKey: process.env.NUXT_OPENAI_API_KEY,
+    strapiReadOnlyToken: import.meta.env.NUXT_STRAPI_READ_ONLY_TOKEN,
+    strapiApiBase: import.meta.env.NUXT_STRAPI_API_BASE,
+    wiseReadOnlyToken: import.meta.env.NUXT_WISE_READ_ONLY_TOKEN,
+    wiseApiBase: import.meta.env.NUXT_WISE_API_BASE,
+    turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
+    openAiSecretKey: import.meta.env.NUXT_OPENAI_API_KEY,
 
     public: {
-      turnstileSiteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
+      turnstileSiteKey: import.meta.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
     },
   },
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@nuxtjs/mdc', 'nuxt-charts', '@nuxt/image', '@vueuse/nuxt'],
@@ -62,10 +62,8 @@ export default defineNuxtConfig({
     ],
     lazy: true,
     strategy: 'prefix_except_default',
-    skipSettingLocaleOnNavigate: true,
     detectBrowserLanguage: {
       cookieKey: 'dtc-pref-locale',
-      useCookie: false, // to be manually set, with cookieKey as target
     },
   },
 });

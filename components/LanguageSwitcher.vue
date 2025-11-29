@@ -29,12 +29,10 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
 
-const nuxtApp = useNuxtApp();
 const switchLocalePath = useSwitchLocalePath();
 const {
   locale,
   locales,
-  finalizePendingLocaleChange,
 } = useI18n();
 
 const open = ref(false);
@@ -49,19 +47,5 @@ const localeItems = computed<DropdownMenuItem[]>(() => {
     label: lang.name,
     to: switchLocalePath(lang.code),
   }));
-});
-
-const localeCookie = useCookie(
-  nuxtApp.$config.public.i18n.detectBrowserLanguage.cookieKey,
-  {
-    maxAge: 60 * 60 * 24 * 14, // 14 days in seconds
-    sameSite: 'lax',
-    path: '/', // all routes
-  },
-);
-
-nuxtApp.hook('page:loading:end', async () => {
-  finalizePendingLocaleChange();
-  localeCookie.value = locale.value;
 });
 </script>

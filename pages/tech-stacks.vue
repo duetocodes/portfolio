@@ -8,10 +8,6 @@
       :status="status"
       @try-again="refresh" />
 
-    <PageHeading
-      :heading="$t('MyTechStacks')"
-      :description="$t('TechStackHelpText')" />
-
     <template v-if="stacks?.data">
       <div class="pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
         <ULink

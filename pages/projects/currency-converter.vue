@@ -1,21 +1,10 @@
 <template>
   <div>
-    <UBreadcrumb
-      class="mt-8"
-      separator-icon="material-symbols:chevron-right"
-      :items="crumbItems"
-      :ui="{ link: 'text-lg' }" />
-
     <MDC
       v-if="overview?.data?.[0]?.description"
       :value="overview.data[0].description"
       class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
       tag="article" />
-    <p
-      v-else
-      class="text-md prose text-muted">
-      {{ $t('SelfDevelopedApplications', 1) }}
-    </p>
 
     <UForm
       ref="form"
@@ -208,7 +197,6 @@
 
 <script setup lang="ts">
 import { z } from 'zod';
-import type { BreadcrumbItem } from '@nuxt/ui';
 import type { ProjectItemDataSchema } from '~/schemas';
 import {
   type CurrencyItemSchema,
@@ -216,6 +204,10 @@ import {
   AmountSchema,
   CurrencySelectSchema,
 } from '~/schemas/currency-converter';
+
+definePageMeta({
+  layout: 'project-item',
+});
 
 type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 type CurrencyItem = z.infer<typeof CurrencyItemSchema>;
@@ -227,7 +219,6 @@ const { t: $t, locale } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const toast = useToast();
-const localePath = useLocalePath();
 
 const LocalizedAmountSchema = AmountSchema
   .refine(val => val.trim().length > 0,
@@ -266,17 +257,6 @@ const state = reactive<FormSchema>({
   source: null,
   target: null,
 });
-
-const crumbItems = computed<BreadcrumbItem[]>(() => [
-  {
-    to: localePath('/projects'),
-    label: $t('Projects'),
-  },
-  {
-    to: route.fullPath,
-    label: $t('CurrencyConverter'),
-  },
-]);
 
 const {
   // non-crucial data

@@ -9,22 +9,11 @@
       @try-again="refresh" />
 
     <template v-if="chart">
-      <UBreadcrumb
-        class="mt-8"
-        separator-icon="material-symbols:chevron-right"
-        :items="crumbItems"
-        :ui="{ link: 'text-lg' }" />
-
       <MDC
         v-if="overview?.data?.[0]?.description"
         :value="overview?.data[0].description"
         class="text-md line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
         tag="article" />
-      <p
-        v-else
-        class="text-md prose text-muted">
-        {{ $t('SelfDevelopedApplications', 1) }}
-      </p>
 
       <div class="mt-8 flex flex-wrap [&>*]:py-2 [&>*]:px-2 md:[&>*]:px-4 sm:divide-x-1 sm:divide-dotted sm:divide-[var(--ui-border-muted)] border-y-1 border-dotted border-muted">
         <UFormField :label="$t('Mode')">
@@ -149,13 +138,17 @@
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import type { z } from 'zod';
-import type { BreadcrumbItem, TabsItem } from '@nuxt/ui';
+import type { TabsItem } from '@nuxt/ui';
 import type { PickerTypeRange } from '~/types';
 import type { ProjectItemDataSchema } from '~/schemas';
 import type {
   TreasuryChartRowDataSchema,
   TreasuryYieldPayloadSchema,
 } from '~/schemas/treasury-yield-visualiser';
+
+definePageMeta({
+  layout: 'project-item',
+});
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
@@ -164,7 +157,6 @@ type TreasuryYieldPayload = z.infer<typeof TreasuryYieldPayloadSchema>;
 const { t: $t, locale, localeProperties } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
-const localePath = useLocalePath();
 
 const EARLIEST_RECORD = {
   year: 1990,
@@ -197,16 +189,6 @@ const tabItems = computed<TabsItem[]>(() => [
   {
     label: $t('Month'),
     slot: 'month',
-  },
-]);
-const crumbItems = computed<BreadcrumbItem[]>(() => [
-  {
-    to: localePath('/projects'),
-    label: $t('Projects'),
-  },
-  {
-    to: route.fullPath,
-    label: $t('TreasuryYieldVisualiser'),
   },
 ]);
 
