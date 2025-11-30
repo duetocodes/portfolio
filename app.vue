@@ -42,11 +42,7 @@
       </h2>
 
       <NuxtLayout>
-        <NuxtPage
-          :transition="{
-            name: 'page',
-            mode: 'out-in',
-          }" />
+        <NuxtPage />
       </NuxtLayout>
     </main>
 
@@ -162,7 +158,7 @@ useHead({
         'url': 'https://duetocodes.com',
         'jobTitle': $t('FrontendDeveloper'),
         'description': $t('meta.description'),
-        'knowsAbout': stacks.value,
+        'knowsAbout': stacks.value ?? [],
         'sameAs': [
           'https://github.com/duetocodes',
         ],
@@ -227,13 +223,13 @@ const menuItems = computed<NavigationMenuItem[]>(() => [
   },
   {
     label: $t('Projects'),
-    active: route.fullPath.includes('/projects'),
+    active: route.path.startsWith(localePath('/projects')),
     icon: 'material-symbols:rocket-launch-outline-rounded',
     to: localePath('/projects'),
   },
   {
     label: $t('TechStacks'),
-    active: route.fullPath.includes('/tech-stacks'),
+    active: route.fullPath.startsWith(localePath('/tech-stacks')),
     icon: 'material-symbols:layers-outline-rounded',
     to: localePath('/tech-stacks'),
   },
