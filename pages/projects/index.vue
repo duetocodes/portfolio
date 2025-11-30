@@ -78,7 +78,7 @@ const {
   `/api/projects`,
   {
     method: 'GET',
-    key: route.fullPath,
+    key: route.path,
     query: {
       'locale': locale.value,
       'sort[0]': 'sortIndex:asc',
@@ -94,7 +94,7 @@ const {
 useHead({
   link: [{
     rel: 'canonical',
-    href: `https://duetocodes.com${route.fullPath}`, // equals <loc>
+    href: `https://duetocodes.com${route.path}`, // equals <loc>
   }],
 });
 
@@ -105,7 +105,7 @@ useSeoMeta({
   ogTitle: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   ogImage: '/og_banner.png',
-  ogUrl: `https://duetocodes.com${route.fullPath}`,
+  ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterCard: 'summary_large_image',

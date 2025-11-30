@@ -229,7 +229,7 @@ const menuItems = computed<NavigationMenuItem[]>(() => [
   },
   {
     label: $t('TechStacks'),
-    active: route.fullPath.startsWith(localePath('/tech-stacks')),
+    active: route.path.startsWith(localePath('/tech-stacks')),
     icon: 'material-symbols:layers-outline-rounded',
     to: localePath('/tech-stacks'),
   },

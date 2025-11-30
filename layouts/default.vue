@@ -22,7 +22,7 @@ const { t: $t } = useI18n();
 const route = useRoute();
 
 const head = computed(() => {
-  const path = route.fullPath;
+  const path = route.path;
 
   if (path.endsWith('/projects')) {
     return {

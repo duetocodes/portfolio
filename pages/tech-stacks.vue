@@ -80,7 +80,7 @@ const nuxtApp = useNuxtApp();
 useHead({
   link: [{
     rel: 'canonical',
-    href: `https://duetocodes.com${route.fullPath}`,
+    href: `https://duetocodes.com${route.path}`,
   }],
 });
 
@@ -91,7 +91,7 @@ useSeoMeta({
   ogTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogDescription: () => $t('TechStackHelpText'),
   ogImage: '/og_banner.png',
-  ogUrl: `https://duetocodes.com${route.fullPath}`,
+  ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterDescription: () => $t('TechStackHelpText'),
@@ -108,7 +108,7 @@ const {
   `/api/tech-stacks`,
   {
     method: 'GET',
-    key: route.fullPath,
+    key: route.path,
     query: {
       locale: locale.value,
     },

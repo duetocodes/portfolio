@@ -265,7 +265,7 @@ const {
   '/api/projects',
   {
     method: 'GET',
-    key: route.fullPath,
+    key: route.path,
     getCachedData(key) {
       const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
       return data;
@@ -287,7 +287,7 @@ const recentPairs = useCookie<string[]>('dtc-recent-curr-pairs', {
 useHead({
   link: [{
     rel: 'canonical',
-    href: `https://duetocodes.com${route.fullPath}`,
+    href: `https://duetocodes.com${route.path}`,
   }],
 });
 
@@ -304,7 +304,7 @@ useSeoMeta({
     height: overview.value?.data?.[0]?.preview?.image?.height,
     type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
-  ogUrl: () => `https://duetocodes.com${route.fullPath}`,
+  ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),

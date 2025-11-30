@@ -88,7 +88,7 @@ const {
   '/api/about-me',
   {
     method: 'GET',
-    key: route.fullPath,
+    key: route.path,
     query: {
       locale: locale.value,
     },
@@ -102,7 +102,7 @@ const {
 useHead({
   link: [{
     rel: 'canonical',
-    href: `https://duetocodes.com${route.fullPath}`,
+    href: `https://duetocodes.com${route.path}`,
   }],
 });
 
@@ -119,7 +119,7 @@ useSeoMeta({
     height: about.value?.data?.og_banner?.image?.height,
     type: about.value?.data?.og_banner?.image?.mime,
   }),
-  ogUrl: `https://duetocodes.com${route.fullPath}`,
+  ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   twitterDescription: () => $t('meta.description'),

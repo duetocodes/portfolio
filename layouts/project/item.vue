@@ -39,7 +39,7 @@ const crumbItems = computed<BreadcrumbItem[]>(() => {
     label: $t('TypingGame'),
   };
 
-  const path = route.fullPath;
+  const path = route.path;
   let crumb2 = { to: '', label: '' };
 
   if (path.endsWith('/projects/treasury-yield-visualiser')) {
