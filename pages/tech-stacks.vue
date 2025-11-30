@@ -113,7 +113,7 @@ const {
       locale: locale.value,
     },
     getCachedData(key) {
-      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
       return data;
     },
   },

@@ -405,11 +405,6 @@ const gameStats = computed((): TypingGameStats => {
   }
 });
 
-whenever(
-  () => !isPrompt.value,
-  () => nextTick(() => passageContainer.value?.focus()),
-);
-
 onMounted(() => {
   nextTick(() => {
     if (!isSmallerBreakpoint.value) {
@@ -419,6 +414,11 @@ onMounted(() => {
   })
     .then(() => {
       passageContainer.value?.focus();
+
+      whenever(
+        () => !isPrompt.value,
+        () => nextTick(() => passageContainer.value?.focus()),
+      );
     });
 });
 
@@ -435,7 +435,7 @@ const {
     method: 'GET',
     key: route.fullPath,
     getCachedData(key) {
-      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
       return data;
     },
     query: {

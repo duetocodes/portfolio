@@ -85,7 +85,7 @@ const {
       'fields': ['title', 'description', 'tag', 'sortIndex', 'slugId'],
     },
     getCachedData(key) {
-      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
       return data;
     },
   },
