@@ -198,11 +198,10 @@ const {
   refresh,
   data: chart,
   error: errorChart,
-} = useFetch<TreasuryChartRowData[]>(
+} = useLazyFetch<TreasuryChartRowData[]>(
   '/api/treasury-yield-scraper',
   {
     method: 'POST',
-    key: `${locale.value}-tyv-chart-data`,
     watch: false,
     server: false,
     immediate: false,
