@@ -6,6 +6,7 @@
       overflow-auto">
     <Transition
       name="fade-main"
+      :duration="230"
       mode="out-in">
       <div :key="head.title">
         <h2 class="mt-8 font-medium text-default max-sm:hidden text-lg">
