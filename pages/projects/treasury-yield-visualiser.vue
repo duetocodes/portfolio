@@ -118,6 +118,7 @@
       </div>
 
       <LineChart
+        v-if="chartDataComputed?.length"
         class="mt-4"
         :data="chartDataComputed"
         :categories="categories"
@@ -201,8 +202,10 @@ const {
   '/api/treasury-yield-scraper',
   {
     method: 'POST',
-    key: locale,
+    key: `${locale.value}-tyv-chart-data`,
     watch: false,
+    server: false,
+    immediate: false,
     onRequest({ options }) {
       if (picker.value.start && picker.value.end) {
         options.body = {
