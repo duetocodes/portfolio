@@ -42,11 +42,7 @@
       </h2>
 
       <NuxtLayout>
-        <NuxtPage
-          :transition="{
-            name: 'page',
-            mode: 'out-in',
-          }" />
+        <NuxtPage />
       </NuxtLayout>
     </main>
 
@@ -239,23 +235,3 @@ const menuItems = computed<NavigationMenuItem[]>(() => [
   },
 ]);
 </script>
-
-<style>
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.2s ease;
-}
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-}
-
-.layout-enter-active,
-.layout-leave-active {
-  transition: opacity 0.2s ease;
-}
-.layout-enter-from,
-.layout-leave-to {
-  opacity: 0;
-}
-</style>

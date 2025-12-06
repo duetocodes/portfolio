@@ -4,14 +4,18 @@
       mx-auto px-4 sm:px-6 pb-96 sm:pb-48 md:pb-16
       max-w-5xl w-full min-w-0 min-h-[100svh]
       overflow-auto">
-    <div>
-      <h2 class="mt-8 font-medium text-default max-sm:hidden text-lg">
-        {{ head.title }}
-      </h2>
-      <p class="prose text-md text-muted">
-        {{ head.description }}
-      </p>
-    </div>
+    <Transition
+      name="fade-main"
+      mode="out-in">
+      <div :key="head.title">
+        <h2 class="mt-8 font-medium text-default max-sm:hidden text-lg">
+          {{ head.title }}
+        </h2>
+        <p class="prose text-md text-muted">
+          {{ head.description }}
+        </p>
+      </div>
+    </Transition>
 
     <slot />
   </div>
