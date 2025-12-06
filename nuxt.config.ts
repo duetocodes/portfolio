@@ -3,7 +3,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
-
+  app: {
+    pageTransition: {
+      name: 'fade-main',
+      mode: 'out-in',
+    },
+    layoutTransition: {
+      name: 'fade-main',
+      mode: 'out-in',
+    },
+  },
   runtimeConfig: {
     strapiReadOnlyToken: import.meta.env.NUXT_STRAPI_READ_ONLY_TOKEN,
     strapiApiBase: import.meta.env.NUXT_STRAPI_API_BASE,

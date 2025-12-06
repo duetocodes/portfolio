@@ -118,6 +118,7 @@
       </div>
 
       <LineChart
+        v-if="chartDataComputed?.length"
         class="mt-4"
         :data="chartDataComputed"
         :categories="categories"
@@ -197,12 +198,13 @@ const {
   refresh,
   data: chart,
   error: errorChart,
-} = useFetch<TreasuryChartRowData[]>(
+} = useLazyFetch<TreasuryChartRowData[]>(
   '/api/treasury-yield-scraper',
   {
     method: 'POST',
-    key: locale,
     watch: false,
+    server: false,
+    immediate: false,
     onRequest({ options }) {
       if (picker.value.start && picker.value.end) {
         options.body = {
