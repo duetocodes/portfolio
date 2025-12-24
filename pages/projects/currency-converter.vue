@@ -204,21 +204,25 @@ import {
   AmountSchema,
   CurrencySelectSchema,
 } from '~/schemas/currency-converter';
-
-definePageMeta({
-  layout: 'project-item',
-});
-
-type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
-type CurrencyItem = z.infer<typeof CurrencyItemSchema>;
-type RatesItem = z.infer<typeof RatesItemSchema>;
-
-const form = useTemplateRef('form');
+import type { ProjectItemPageMeta } from '~/types';
 
 const { t: $t, locale } = useI18n();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const toast = useToast();
+const form = useTemplateRef('form');
+
+const SLUG_ID = 'currency-converter';
+
+definePageMeta({
+  layout: 'project-item',
+  slugId: SLUG_ID,
+  slugLabel: 'CurrencyConverter',
+} satisfies ProjectItemPageMeta);
+
+type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
+type CurrencyItem = z.infer<typeof CurrencyItemSchema>;
+type RatesItem = z.infer<typeof RatesItemSchema>;
 
 const LocalizedAmountSchema = AmountSchema
   .refine(val => val.trim().length > 0,
@@ -272,7 +276,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[slugId][$eq]': 'currency-converter',
+      'filters[slugId][$eq]': SLUG_ID,
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },

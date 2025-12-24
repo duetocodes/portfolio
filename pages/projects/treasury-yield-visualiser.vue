@@ -140,16 +140,20 @@
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import type { z } from 'zod';
 import type { TabsItem } from '@nuxt/ui';
-import type { PickerTypeRange } from '~/types';
+import type { PickerTypeRange, ProjectItemPageMeta } from '~/types';
 import type { ProjectItemDataSchema } from '~/schemas';
 import type {
   TreasuryChartRowDataSchema,
   TreasuryYieldPayloadSchema,
 } from '~/schemas/treasury-yield-visualiser';
 
+const SLUG_ID = 'treasury-yield-visualiser';
+
 definePageMeta({
   layout: 'project-item',
-});
+  slugId: SLUG_ID,
+  slugLabel: 'TreasuryYieldVisualiser',
+} satisfies ProjectItemPageMeta);
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
@@ -249,7 +253,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[slugId][$eq]': 'treasury-yield-visualiser',
+      'filters[slugId][$eq]': SLUG_ID,
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },

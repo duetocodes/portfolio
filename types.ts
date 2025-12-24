@@ -20,3 +20,9 @@ export type PickerTypeRange = {
   start: CalendarDate | null
   end: CalendarDate | null
 }
+
+export type ProjectItemPageMeta = {
+  layout: 'project-item' // layouts/project/item.vue
+  slugId: string
+  slugLabel: string
+}
