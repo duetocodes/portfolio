@@ -26,3 +26,6 @@ export type ProjectItemPageMeta = {
   slugId: string
   slugLabel: string
 }
+
+export type DeviceType = 'Phone' | 'Tablet' | 'Desktop';
+export type DeviceOrientation = 'portrait' | 'landscape'; // based on window.innerWidth/innerHeight
