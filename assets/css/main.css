@@ -46,6 +46,11 @@ https://github.com/tailwindlabs/tailwindcss-typography
       /* color=warning, variant=ghost */
       @apply bg-warning/10;
     }
+
+    button[class~="hover:bg-primary/15"]:hover {
+      /* color=primary, variant=soft */
+      @apply bg-primary/15;
+    }
   }
 }
 

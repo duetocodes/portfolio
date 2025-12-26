@@ -184,7 +184,7 @@
                 target="_blank">
                 {{ $t('MidMarketExchangeRate') }}
                 <UIcon
-                  name="material-symbols:info-outline-rounded"
+                  name="material-symbols:arrow-outward-rounded"
                   class=" text-muted" />
               </UButton>
             </li>
