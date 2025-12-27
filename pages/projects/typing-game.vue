@@ -326,10 +326,15 @@ import type {
   TypingGameGptFeedbackPayloadSchema,
   TypingGameUpdatedDataSchema,
 } from '~/schemas/typing-game';
+import type { ProjectItemPageMeta } from '~/types';
+
+const SLUG_ID = 'typing-game';
 
 definePageMeta({
   layout: 'project-item',
-});
+  slugId: SLUG_ID,
+  slugLabel: 'TypingGame',
+} satisfies ProjectItemPageMeta);
 
 type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 type Character = z.infer<typeof CharacterSchema>;
@@ -440,7 +445,7 @@ const {
     },
     query: {
       'locale': locale.value,
-      'filters[slugId][$eq]': 'typing-game',
+      'filters[slugId][$eq]': SLUG_ID,
       'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
       'fields': 'description',
     },

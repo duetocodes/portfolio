@@ -20,3 +20,13 @@ export type PickerTypeRange = {
   start: CalendarDate | null
   end: CalendarDate | null
 }
+
+export type ProjectItemPageMeta = {
+  layout: 'project-item' // layouts/project/item.vue
+  slugId: string
+  slugLabel: string
+}
+
+export type DeviceType = 'Phone' | 'Tablet' | 'Desktop';
+export type DeviceOrientation = 'portrait' | 'landscape'; // based on window.innerWidth/innerHeight
+export type DeviceOrientationDetail = 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary';

@@ -16,44 +16,23 @@
 
 <script setup lang="ts">
 import type { BreadcrumbItem } from '@nuxt/ui';
+import type { ProjectItemPageMeta } from '~/types';
 
 const route = useRoute();
+const pageMeta = route.meta as ProjectItemPageMeta;
 const localePath = useLocalePath();
 const { t: $t } = useI18n();
 
 const crumbItems = computed<BreadcrumbItem[]>(() => {
-  const CRUMB_1 = {
-    to: localePath('/projects'),
-    label: $t('Projects'),
-  };
-  const tyv = {
-    to: localePath('/projects/treasury-yield-visualiser'),
-    label: $t('TreasuryYieldVisualiser'),
-  };
-  const cc = {
-    to: localePath('/projects/currency-converter'),
-    label: $t('CurrencyConverter'),
-  };
-  const tg = {
-    to: localePath('/projects/typing-game'),
-    label: $t('TypingGame'),
-  };
-
-  const path = route.path;
-  let crumb2 = { to: '', label: '' };
-
-  if (path.endsWith('/projects/treasury-yield-visualiser')) {
-    crumb2 = tyv;
-  }
-  else if (path.endsWith('/projects/currency-converter')) {
-    crumb2 = cc;
-  }
-  else if (path.endsWith('/projects/typing-game')) {
-    crumb2 = tg;
-  }
   return [
-    CRUMB_1,
-    crumb2,
+    {
+      to: localePath('/projects'),
+      label: $t('Projects'),
+    },
+    {
+      to: localePath(`/projects/${pageMeta.slugId}`),
+      label: $t(pageMeta.slugLabel),
+    },
   ];
 });
 </script>

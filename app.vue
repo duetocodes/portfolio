@@ -203,6 +203,13 @@ const activePage = computed(() => {
         h2: `${$t('Projects')}`,
       };
 
+    case path.endsWith(localePath('/projects/know-your-viewport')):
+      return {
+        mobileHeading: $t('Projects'),
+        h1: `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+        h2: `${$t('Projects')}`,
+      };
+
     case path.endsWith(localePath('/tech-stacks')):
       return {
         mobileHeading: $t('TechStacks'),
