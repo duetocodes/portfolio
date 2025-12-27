@@ -12,9 +12,9 @@
           {{ $t('Viewport') }}
         </span>
         <UIcon
-          :name="deviceIcon.icon"
           class="size-8 text-muted"
-          :class="[deviceIcon.class]" />
+          :name="indicatorIcon"
+          :class="[indicatorClass]" />
       </template>
 
       <UFormField
@@ -23,81 +23,99 @@
           label: 'text-base',
           container: 'text-base text-muted space-y-1',
         }">
-        <div class="pl-2 grid grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('Dimension') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.screen.width }} W × {{ device.screen.height }} H
-          </span>
-        </div>
-
-        <div class="pl-2 grid grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('Orientation') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.orientation.type }}
-          </span>
-        </div>
-
-        <div class="pl-2 grid grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('Colour') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.screen.colorDepth }} bit
-          </span>
-        </div>
-
-        <div class="pl-2 grid grid-cols-12">
-          <section class="flex gap-x-4 items-center col-span-4">
-            <span>
-              DPR
+        <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Dimension') }}
             </span>
-            <UTooltip
-              v-model:open="isTooltip"
-              :delay-duration="0"
-              :ui="{
-                content: 'p-4 flex-col items-start h-auto',
-              }">
-              <template #content>
-                Device Pixel Ratio
-                <ul class="relative text-base p-2 ml-2 list-disc space-y-2">
-                  <li>{{ $t('Tip1DPR') }}</li>
-                  <li>{{ $t('Tip2DPR') }}</li>
-                  <li>{{ $t('Tip3DPR') }}</li>
-                </ul>
-              </template>
-              <UButton
-                v-if="device.form === 'Phone'"
-                class="text-muted"
-                icon="material-symbols:info-outline-rounded"
-                size="xs"
-                color="neutral"
-                variant="ghost"
-                @click="isTooltip = true" />
-              <UIcon
-                v-else
-                name="material-symbols:info-outline-rounded"
-                class="shrink-0 text-muted" />
-            </UTooltip>
-          </section>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.screen.devicePixelRatio }}
-          </span>
+            <span class="text-center col-span-15">
+              {{ device.screen.width }} W × {{ device.screen.height }} H
+            </span>
+          </div>
+
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Form') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ $t(device.form || '--') }}
+              <span class="italic text-sm"> ({{ $t('estimated') }})</span>
+            </span>
+          </div>
+
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Orientation') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ device.orientation.type }}
+            </span>
+          </div>
+
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Rotation') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ device.orientation.angle }} °
+            </span>
+          </div>
+
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('TouchScreen') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ device.media.hasTouch ? $t('Yes') : $t('No') }}
+            </span>
+          </div>
+
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Colour') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ device.screen.colorDepth }} bit
+            </span>
+          </div>
+
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <section class="flex gap-x-4 items-center col-span-9">
+              <span>
+                DPR
+              </span>
+              <UTooltip
+                v-model:open="isTooltip"
+                :delay-duration="0"
+                :ui="{
+                  content: 'p-4 text-base flex-col items-start h-auto',
+                }">
+                <template #content>
+                  Device Pixel Ratio
+                  <ul class="relative p-2 ml-2 list-disc space-y-2">
+                    <li>{{ $t('Tip1DPR') }}</li>
+                    <li>{{ $t('Tip2DPR') }}</li>
+                    <li>{{ $t('Tip3DPR') }}</li>
+                  </ul>
+                </template>
+                <UButton
+                  v-if="device.form === 'Phone'"
+                  class="text-muted"
+                  icon="material-symbols:info-outline-rounded"
+                  size="xs"
+                  color="neutral"
+                  variant="ghost"
+                  @click="isTooltip = true" />
+                <UIcon
+                  v-else
+                  name="material-symbols:info-outline-rounded"
+                  class="shrink-0 text-muted" />
+              </UTooltip>
+            </section>
+            <span class="text-center col-span-15">
+              {{ device.screen.devicePixelRatio }}
+            </span>
+          </div>
         </div>
       </UFormField>
 
@@ -107,63 +125,46 @@
           label: 'text-base',
           container: 'text-base text-muted',
         }">
-        <div class="pl-2 grid items-center grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('Layout') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.clientWidth }} W × {{ device.clientHeight }} H
-          </span>
+        <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Layout') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ device.clientWidth }} W × {{ device.clientHeight }} H
+            </span>
+          </div>
         </div>
       </UFormField>
 
       <UFormField
-        v-if="device.ua.success"
         :label="$t('System')"
         :ui="{
           label: 'text-base',
           container: 'text-base text-muted',
         }">
-        <div
-          v-if="device.ua.platform"
-          class="pl-2 grid items-center grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('Platform') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.ua.platform }} {{ device.ua.platformVersion }}
-          </span>
-        </div>
+        <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
+          <template v-if="device.ua.success">
+            <div
+              v-if="device.ua.platform"
+              class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+              <span class="col-span-9">
+                {{ $t('Platform') }}
+              </span>
+              <span class="truncate text-center col-span-15">
+                {{ device.ua.platform }} {{ device.ua.platformVersion }}
+              </span>
+            </div>
+          </template>
 
-        <div class="pl-2 grid grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('Appearance') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ device.appearance ? $t('Dark') : $t('Light') }}
-          </span>
-        </div>
-
-        <div class="pl-2 grid items-center grid-cols-12">
-          <span class="col-span-4">
-            {{ $t('FormFactor') }}
-          </span>
-          <span class="col-span-1">
-            :
-          </span>
-          <span class="col-span-7">
-            {{ $t(device.form || '--') }}
-            <span class="italic text-sm"> ({{ $t('estimated') }})</span>
-          </span>
+          <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+            <span class="col-span-9">
+              {{ $t('Appearance') }}
+            </span>
+            <span class="text-center col-span-15">
+              {{ device.appearance ? $t('Dark') : $t('Light') }}
+            </span>
+          </div>
         </div>
       </UFormField>
     </UCard>
@@ -245,39 +246,36 @@ useSeoMeta({
   }),
 });
 
-const deviceIcon = computed(() => {
-  const temp = {
-    class: '',
-    icon: '',
-  };
-
-  switch (device.value.orientation.angle) {
-    case 90:
-      temp.class = 'rotate-90';
-      break;
-    case 180:
-      temp.class = 'rotate-180';
-      break;
-    case 270:
-      temp.class = 'rotate-270';
-      break;
-    default:
-      temp.class = '';
-      break;
-  }
-
+const indicatorIcon = computed(() => {
   switch (device.value.form) {
     case 'Phone':
-      temp.icon = 'material-symbols:phone-iphone-outline';
-      break;
+      return 'material-symbols:phone-iphone-outline';
     case 'Tablet':
-      temp.icon = 'material-symbols:tablet-mac-outline';
-      break;
-    default:
-      temp.icon = 'material-symbols:desktop-mac-outline';
-      break;
+      return 'material-symbols:tablet-mac-outline';
+    case 'Desktop':
+      return 'material-symbols:desktop-mac-outline';
+    default: {
+      if (device.value.simpleOrientation === 'portrait')
+        return 'material-symbols:stay-current-portrait-outline-sharp';
+      else
+        return 'material-symbols:stay-current-landscape-outline-sharp';
+    }
   }
+});
 
-  return temp;
+const indicatorClass = computed(() => {
+  if (device.value.form === 'Desktop')
+    return 'rotate-none';
+
+  switch (device.value.orientation.type) {
+    case 'portrait-secondary':
+      return 'rotate-180';
+    case 'landscape-primary':
+      return 'rotate-270';
+    case 'landscape-secondary':
+      return 'rotate-90';
+    default:
+      return 'rotate-none';
+  }
 });
 </script>

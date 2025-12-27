@@ -1,6 +1,7 @@
 import type {
   DeviceType,
   DeviceOrientation,
+  DeviceOrientationDetail,
 } from '~/types';
 
 // tailwind breakpoints
@@ -32,7 +33,7 @@ export default function () {
     clientHeight: number
     orientation: {
       angle: number
-      type: string | undefined
+      type: DeviceOrientationDetail | undefined
     }
     screen: {
       width: number
@@ -46,6 +47,9 @@ export default function () {
       model: string
       platform: string
       platformVersion: string
+    }
+    media: {
+      hasTouch: boolean
     }
   }>(
     'use-client-device',
@@ -72,6 +76,9 @@ export default function () {
         platform: '',
         platformVersion: '',
       },
+      media: {
+        hasTouch: false,
+      },
     }));
 
   if (import.meta.client) {
@@ -80,7 +87,7 @@ export default function () {
     let isPortrait = false;
 
     const updateDevice = () => {
-      device.value.orientation.angle = window.screen.orientation.angle;
+      device.value.orientation.angle = Math.floor(window.screen.orientation.angle ?? NaN);
       device.value.orientation.type = window.screen.orientation.type;
 
       width = window.innerWidth;
@@ -100,15 +107,15 @@ export default function () {
     };
 
     const updateScreen = () => {
-      device.value.screen.width = window.screen.width;
-      device.value.screen.height = window.screen.height;
-      device.value.screen.colorDepth = window.screen.colorDepth;
-      device.value.screen.devicePixelRatio = window.devicePixelRatio;
+      device.value.screen.width = Math.floor(window.screen.width ?? NaN);
+      device.value.screen.height = Math.floor(window.screen.height ?? NaN);
+      device.value.screen.colorDepth = Math.floor(window.screen.colorDepth ?? NaN);
+      device.value.screen.devicePixelRatio = Math.floor(window.devicePixelRatio ?? NaN);
     };
 
     const updateElement = () => {
-      device.value.clientWidth = document.documentElement.clientWidth;
-      device.value.clientHeight = document.documentElement.clientHeight;
+      device.value.clientWidth = Math.floor(document.documentElement.clientWidth ?? NaN);
+      device.value.clientHeight = Math.floor(document.documentElement.clientHeight ?? NaN);
     };
 
     const getUA = async () => {
@@ -134,8 +141,14 @@ export default function () {
       }
     };
 
+    const getMatchMediaItems = () => {
+      device.value.media.hasTouch = matchMedia('(any-pointer: coarse)').matches;
+    };
+
     getUA();
     updateScreen();
+    getMatchMediaItems();
+
     updateDevice();
     updateElement();
 
