@@ -58,7 +58,7 @@
     <div
       v-if="data?.mappedPassage.length"
       v-show="!isPrompt"
-      class="mt-8 flex gap-x-4">
+      class="pt-4 sm:pt-8 flex gap-x-4">
       <UAlert
         class="w-44"
         color="info"

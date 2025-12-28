@@ -8,10 +8,10 @@
       name="fade-main"
       mode="out-in">
       <div :key="head.title">
-        <h2 class="mt-8 font-medium text-default max-sm:hidden text-lg">
+        <h2 class="pt-8 font-medium text-default max-sm:hidden text-lg">
           {{ head.title }}
         </h2>
-        <p class="prose text-md text-muted">
+        <p class="prose text-md text-muted max-sm:pt-4">
           {{ head.description }}
         </p>
       </div>

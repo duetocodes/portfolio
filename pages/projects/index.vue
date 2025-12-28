@@ -10,7 +10,7 @@
 
     <div
       v-if="projects?.data"
-      class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+      class="pt-4 sm:pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <ULink
         v-for="item in projects.data"
         :key="item.id"

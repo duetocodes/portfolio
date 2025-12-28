@@ -163,7 +163,7 @@ export default function () {
         updateOrientation();
         updateElement();
 
-        if (import.meta.dev)
+        if (import.meta.dev) // only in dev environment
           updateFormFactor();
       },
     );

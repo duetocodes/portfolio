@@ -6,192 +6,193 @@
       class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
       tag="article" />
 
-    <UForm
-      ref="form"
-      class="mt-8"
-      :schema="CurrencyFormSchema"
-      :state="state">
-      <UCard :ui="{ body: 'space-y-8' }">
-        <div>
-          <UBadge
-            color="warning"
-            variant="soft"
-            :label="$t('Simulation')" />
-        </div>
-
-        <UFormField
-          name="amount"
-          :ui="{ root: 'h-[92px]' }">
-          <UInput
-            v-model="state.amount"
-            size="xl"
-            inputmode="decimal"
-            autocomplete="off"
-            :ui="{ root: 'w-full', base: 'ring-0 text-5xl ps-22', leading: 'text-3xl' }"
-            :placeholder="(state.source && !state.source?.supportsDecimals) ? '0' : '0.00'"
-            @update:model-value="handleNumberInput">
-            <template
-              #leading>
-              <span
-                v-if="state.source?.symbol"
-                class="text-3xl text-muted">
-                {{ state.source.symbol }}
-              </span>
-              <span
-                v-else
-                class="flex items-center">
-                <UIcon
-                  name="material-symbols:universal-currency-alt-outline-rounded"
-                  class="shrink-0 size-8 text-muted" />
-              </span>
-            </template>
-          </UInput>
-        </UFormField>
-
-        <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8 justify-center">
-          <UFormField
-            name="source"
-            class="w-full md:basis-11/24"
-            :help="state.source && !state.source?.supportsDecimals ? $t('DecimalsAreNotSupportedForCurrency', { currency: state.source.code }) : ''"
-            :ui="{ root: 'md:h-[92px]' }">
-            <USelectMenu
-              v-model="state.source"
-              size="xl"
-              class="w-full h-14"
-              variant="subtle"
-              color="neutral"
-              icon="material-symbols:flag-outline-rounded"
-              selected-icon="material-symbols:check"
-              trailing-icon="material-symbols:keyboard-arrow-down"
-              :placeholder="$t('From')"
-              :items="currenciesList.filter(item => item?.code !== state.target?.code)"
-              :ui="{
-                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
-              }"
-              @update:model-value="onChangeSource"
-              @update:open="onOpenSelect">
-              <template #empty>
-                {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}
-              </template>
-
-              <template
-                v-if="state.source"
-                #leading>
-                <UAvatar
-                  size="xs"
-                  :src="state.source?.avatar?.src || undefined" />
-              </template>
-            </USelectMenu>
-          </UFormField>
-
-          <UButton
-            class="rounded-full scale-110 transform md:-translate-y-1/2"
-            :class="{ 'max-md:rotate-90': !(errorCurrencies || errorRates) }"
-            :icon="(errorCurrencies || errorRates) ? undefined: 'material-symbols:compare-arrows-rounded'"
-            size="xl"
-            :label="(errorCurrencies || errorRates) ? $t('TryAgain') : undefined"
-            :aria-label="(errorCurrencies || errorRates) ? $t('TryAgain') : undefined"
-            :color="(errorCurrencies || errorRates) ? 'error' : 'primary'"
-            variant="soft"
-            loading-icon="material-symbols:app-badging-outline"
-            :loading="statusCurrencies === 'pending' || statusRates === 'pending'"
-            @click="() => {
-              onClickButton();
-              form?.clear('source');
-              form?.clear('target');
-            }" />
+    <div class="pt-4 sm:pt-8">
+      <UForm
+        ref="form"
+        :schema="CurrencyFormSchema"
+        :state="state">
+        <UCard :ui="{ body: 'space-y-8' }">
+          <div>
+            <UBadge
+              color="warning"
+              variant="soft"
+              :label="$t('Simulation')" />
+          </div>
 
           <UFormField
-            name="target"
-            class="w-full md:basis-11/24"
-            :ui="{ root: 'md:h-[92px]' }">
-            <USelectMenu
-              v-model="state.target"
+            name="amount"
+            :ui="{ root: 'h-[92px]' }">
+            <UInput
+              v-model="state.amount"
               size="xl"
-              class="w-full h-14"
-              variant="subtle"
-              color="neutral"
-              icon="material-symbols:flag-outline-rounded"
-              selected-icon="material-symbols:check"
-              trailing-icon="material-symbols:keyboard-arrow-down"
-              :placeholder="$t('To')"
-              :items="currenciesList.filter(item => item?.code !== state.source?.code)"
-              :ui="{
-                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
-              }"
-              @update:open="onOpenSelect">
-              <template #empty>
-                {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}
-              </template>
-
+              inputmode="decimal"
+              autocomplete="off"
+              :ui="{ root: 'w-full', base: 'ring-0 text-5xl ps-22', leading: 'text-3xl' }"
+              :placeholder="(state.source && !state.source?.supportsDecimals) ? '0' : '0.00'"
+              @update:model-value="handleNumberInput">
               <template
-                v-if="state.target"
                 #leading>
-                <UAvatar
-                  size="xs"
-                  :src="state.target?.avatar?.src || undefined" />
+                <span
+                  v-if="state.source?.symbol"
+                  class="text-3xl text-muted">
+                  {{ state.source.symbol }}
+                </span>
+                <span
+                  v-else
+                  class="flex items-center">
+                  <UIcon
+                    name="material-symbols:universal-currency-alt-outline-rounded"
+                    class="shrink-0 size-8 text-muted" />
+                </span>
               </template>
-            </USelectMenu>
+            </UInput>
           </UFormField>
-        </div>
 
-        <div class="space-y-4">
-          <div
-            class="break-all font-semibold tracking-wide text-center text-xl text-default">
-            {{ conversionResult }}
-          </div>
-          <div
-            class="whitespace-pre-line text-center text-sm text-default">
-            <p>
-              {{ exchangeRate }}
-            </p>
-            <NuxtTime
-              v-if="rates"
-              :datetime="rates[0].time"
-              :locale="locale"
-              year="numeric"
-              month="long"
-              day="numeric"
-              hour="2-digit"
-              minute="2-digit" />
-          </div>
-          <div
-            v-if="recentPairs.length"
-            class="flex justify-end gap-2">
-            <UButton
-              v-for="pair in recentPairs"
-              :key="pair"
-              size="xs"
-              :label="pair"
-              :aria-label="pair"
-              color="neutral"
-              variant="outline"
-              :ui="{ label: 'font-light text-muted' }"
-              @click="onClickRecentPairs(pair)" />
-          </div>
-        </div>
-
-        <template #footer>
-          <p class="prose text-muted">
-            {{ $t('References') }}
-          </p>
-          <ul class="text-sm list-disc list-inside text-muted">
-            <li>
-              <UButton
+          <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8 justify-center">
+            <UFormField
+              name="source"
+              class="w-full md:basis-11/24"
+              :help="state.source && !state.source?.supportsDecimals ? $t('DecimalsAreNotSupportedForCurrency', { currency: state.source.code }) : ''"
+              :ui="{ root: 'md:h-[92px]' }">
+              <USelectMenu
+                v-model="state.source"
+                size="xl"
+                class="w-full h-14"
+                variant="subtle"
                 color="neutral"
-                variant="link"
-                to="https://wise.com/gb/mid-market-rate"
-                target="_blank">
-                {{ $t('MidMarketExchangeRate') }}
-                <UIcon
-                  name="material-symbols:arrow-outward-rounded"
-                  class=" text-muted" />
-              </UButton>
-            </li>
-          </ul>
-        </template>
-      </UCard>
-    </UForm>
+                icon="material-symbols:flag-outline-rounded"
+                selected-icon="material-symbols:check"
+                trailing-icon="material-symbols:keyboard-arrow-down"
+                :placeholder="$t('From')"
+                :items="currenciesList.filter(item => item?.code !== state.target?.code)"
+                :ui="{
+                  trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+                }"
+                @update:model-value="onChangeSource"
+                @update:open="onOpenSelect">
+                <template #empty>
+                  {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}
+                </template>
+
+                <template
+                  v-if="state.source"
+                  #leading>
+                  <UAvatar
+                    size="xs"
+                    :src="state.source?.avatar?.src || undefined" />
+                </template>
+              </USelectMenu>
+            </UFormField>
+
+            <UButton
+              class="rounded-full scale-110 transform md:-translate-y-1/2"
+              :class="{ 'max-md:rotate-90': !(errorCurrencies || errorRates) }"
+              :icon="(errorCurrencies || errorRates) ? undefined: 'material-symbols:compare-arrows-rounded'"
+              size="xl"
+              :label="(errorCurrencies || errorRates) ? $t('TryAgain') : undefined"
+              :aria-label="(errorCurrencies || errorRates) ? $t('TryAgain') : undefined"
+              :color="(errorCurrencies || errorRates) ? 'error' : 'primary'"
+              variant="soft"
+              loading-icon="material-symbols:app-badging-outline"
+              :loading="statusCurrencies === 'pending' || statusRates === 'pending'"
+              @click="() => {
+                onClickButton();
+                form?.clear('source');
+                form?.clear('target');
+              }" />
+
+            <UFormField
+              name="target"
+              class="w-full md:basis-11/24"
+              :ui="{ root: 'md:h-[92px]' }">
+              <USelectMenu
+                v-model="state.target"
+                size="xl"
+                class="w-full h-14"
+                variant="subtle"
+                color="neutral"
+                icon="material-symbols:flag-outline-rounded"
+                selected-icon="material-symbols:check"
+                trailing-icon="material-symbols:keyboard-arrow-down"
+                :placeholder="$t('To')"
+                :items="currenciesList.filter(item => item?.code !== state.source?.code)"
+                :ui="{
+                  trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+                }"
+                @update:open="onOpenSelect">
+                <template #empty>
+                  {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}
+                </template>
+
+                <template
+                  v-if="state.target"
+                  #leading>
+                  <UAvatar
+                    size="xs"
+                    :src="state.target?.avatar?.src || undefined" />
+                </template>
+              </USelectMenu>
+            </UFormField>
+          </div>
+
+          <div class="space-y-4">
+            <div
+              class="break-all font-semibold tracking-wide text-center text-xl text-default">
+              {{ conversionResult }}
+            </div>
+            <div
+              class="whitespace-pre-line text-center text-sm text-default">
+              <p>
+                {{ exchangeRate }}
+              </p>
+              <NuxtTime
+                v-if="rates"
+                :datetime="rates[0].time"
+                :locale="locale"
+                year="numeric"
+                month="long"
+                day="numeric"
+                hour="2-digit"
+                minute="2-digit" />
+            </div>
+            <div
+              v-if="recentPairs.length"
+              class="flex justify-end gap-2">
+              <UButton
+                v-for="pair in recentPairs"
+                :key="pair"
+                size="xs"
+                :label="pair"
+                :aria-label="pair"
+                color="neutral"
+                variant="outline"
+                :ui="{ label: 'font-light text-muted' }"
+                @click="onClickRecentPairs(pair)" />
+            </div>
+          </div>
+
+          <template #footer>
+            <p class="prose text-muted">
+              {{ $t('References') }}
+            </p>
+            <ul class="text-sm list-disc list-inside text-muted">
+              <li>
+                <UButton
+                  color="neutral"
+                  variant="link"
+                  to="https://wise.com/gb/mid-market-rate"
+                  target="_blank">
+                  {{ $t('MidMarketExchangeRate') }}
+                  <UIcon
+                    name="material-symbols:arrow-outward-rounded"
+                    class=" text-muted" />
+                </UButton>
+              </li>
+            </ul>
+          </template>
+        </UCard>
+      </UForm>
+    </div>
   </div>
 </template>
 
