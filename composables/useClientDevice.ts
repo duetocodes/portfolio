@@ -56,7 +56,7 @@ export default function () {
     () => ({
       form: undefined,
       simpleOrientation: undefined,
-      appearance: usePreferredDark(),
+      appearance: usePreferredDark(), // tracks system colour mode
       clientWidth: NaN,
       clientHeight: NaN,
       orientation: {
@@ -86,7 +86,7 @@ export default function () {
     let height = NaN;
     let isPortrait = false;
 
-    const updateDevice = () => {
+    const updateOrientation = () => {
       device.value.orientation.angle = Math.floor(window.screen.orientation.angle ?? NaN);
       device.value.orientation.type = window.screen.orientation.type;
 
@@ -95,8 +95,15 @@ export default function () {
       isPortrait = height >= width;
 
       device.value.simpleOrientation = isPortrait ? 'portrait' : 'landscape';
+    };
 
-      const breakpoints = isPortrait ? PORTRAIT_BREAKPOINTS : LANDSCAPE_BREAKPOINTS;
+    const updateElement = () => {
+      device.value.clientWidth = Math.floor(document.documentElement.clientWidth ?? NaN);
+      device.value.clientHeight = Math.floor(document.documentElement.clientHeight ?? NaN);
+    };
+
+    const updateFormFactor = () => {
+      const breakpoints = device.value.simpleOrientation === 'portrait' ? PORTRAIT_BREAKPOINTS : LANDSCAPE_BREAKPOINTS;
 
       if (width >= breakpoints.tablet)
         device.value.form = 'Desktop';
@@ -111,11 +118,6 @@ export default function () {
       device.value.screen.height = Math.floor(window.screen.height ?? NaN);
       device.value.screen.colorDepth = Math.floor(window.screen.colorDepth ?? NaN);
       device.value.screen.devicePixelRatio = Math.floor(window.devicePixelRatio ?? NaN);
-    };
-
-    const updateElement = () => {
-      device.value.clientWidth = Math.floor(document.documentElement.clientWidth ?? NaN);
-      device.value.clientHeight = Math.floor(document.documentElement.clientHeight ?? NaN);
     };
 
     const getUA = async () => {
@@ -145,20 +147,24 @@ export default function () {
       device.value.media.hasTouch = matchMedia('(any-pointer: coarse)').matches;
     };
 
-    getUA();
-    updateScreen();
-    getMatchMediaItems();
-
-    updateDevice();
+    updateOrientation();
     updateElement();
+
+    updateFormFactor();
+    updateScreen();
+    getUA();
+    getMatchMediaItems();
 
     // auto removed when component using is unmounted
     useEventListener(
       window,
-      'resize',
+      ['resize', 'orientationchange'],
       () => {
-        updateDevice();
+        updateOrientation();
         updateElement();
+
+        if (import.meta.dev)
+          updateFormFactor();
       },
     );
   }
