@@ -33,7 +33,7 @@
           <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
             <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
               <span class="col-span-9">
-                {{ $t('Dimension') }}
+                {{ $t('Resolution') }}
               </span>
               <span class="text-center col-span-15">
                 {{ device.screen.width }} W × {{ device.screen.height }} H
