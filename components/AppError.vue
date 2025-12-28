@@ -9,7 +9,6 @@
         :title="`[${err.code}]`"
         class="max-w-sm md:max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         color="error"
-        variant="subtle"
         icon="material-symbols:chat-error-outline-rounded">
         <template #description>
           <p class="line-clamp-3">
@@ -21,7 +20,6 @@
               :aria-label="$t('TryAgain')"
               size="lg"
               color="error"
-              variant="ghost"
               icon="material-symbols:app-badging-outline"
               loading-icon="material-symbols:app-badging-outline"
               :loading="props.status === 'pending'"
