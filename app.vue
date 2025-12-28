@@ -3,7 +3,6 @@
     <header class="h-[var(--app-header-height)] grid px-4 sm:px-6 sticky z-50 w-full top-0 shadow backdrop-blur-lg">
       <div class="mx-auto w-full flex justify-between max-w-5xl">
         <p
-          v-if="activePage?.mobileHeading"
           class="sm:hidden flex items-center font-semibold text-md text-muted">
           {{ activePage.mobileHeading }}
         </p>
