@@ -10,8 +10,8 @@
 
     <div
       v-if="about"
-      class="pt-10">
-      <div class="max-sm:px-4 max-md:px-8 grid grid-cols-1 md:grid-flow-row md:grid-cols-6 max-md:gap-y-8 md:gap-2 md:px-12">
+      class="pt-4 sm:pt-8">
+      <div class="max-sm:px-4 max-md:px-8 grid grid-cols-1 md:grid-flow-row md:grid-cols-6 max-md:gap-y-4 md:gap-2 md:px-12">
         <div class="md:col-span-3">
           <MDC
             v-if="about.data?.aboutMe"

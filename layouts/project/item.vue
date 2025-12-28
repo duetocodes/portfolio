@@ -5,7 +5,7 @@
       max-w-5xl w-full min-w-0 min-h-[100svh]
       overflow-auto">
     <UBreadcrumb
-      class="mt-8"
+      class="pt-4 sm:pt-8"
       separator-icon="material-symbols:chevron-right"
       :items="crumbItems"
       :ui="{ link: 'text-lg' }" />

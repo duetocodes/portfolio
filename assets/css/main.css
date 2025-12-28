@@ -37,9 +37,19 @@ https://github.com/tailwindlabs/tailwindcss-typography
       @apply bg-error/10;
     }
 
+    button[class~="hover:bg-error/75"]:hover {
+      /* color=error, variant=primary */
+      @apply bg-error/75;
+    }
+
     button[class~="hover:bg-info/10"]:hover {
       /* color=info, variant=ghost */
       @apply bg-info/10;
+    }
+
+    button[class~="hover:bg-info/75"]:hover {
+      /* color=info, variant=primary */
+      @apply bg-info/75;
     }
 
     button[class~="hover:bg-warning/10"]:hover {

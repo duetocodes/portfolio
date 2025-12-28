@@ -4,7 +4,6 @@
       title="duetocodes.com"
       class="max-w-sm md:max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       color="error"
-      variant="subtle"
       icon="material-symbols:chat-error-outline-rounded">
       <template #description>
         <p class="line-clamp-5 break-normal">
@@ -16,7 +15,6 @@
             :aria-label="$t('BackToHome')"
             size="lg"
             color="error"
-            variant="ghost"
             icon="material-symbols:home-outline-rounded"
             @click="navigateTo(localePath('/'))" />
         </div>

@@ -8,62 +8,62 @@
       :status="status"
       @try-again="refresh" />
 
-    <template v-if="stacks?.data">
-      <div class="pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-        <ULink
-          v-for="item in stacks?.data"
-          :key="item.id"
-          :to="item.website"
-          :ui="{ base: 'h-full' }"
-          target="_blank"
-          rel="noopener noreferrer">
-          <UCard
-            as="article"
-            :ui="{
-              root: 'group h-full transition hover:shadow-lg hover:bg-elevated/50',
-              body: 'space-y-2',
-            }">
-            <UButton
-              as="div"
-              class="p-0 text-md"
-              variant="link">
-              <img
-                class="dark:hidden mr-2 h-8 max-w-[100px] object-contain select-none"
-                :src="item.icon_default?.url"
-                :alt="item.icon_default.alternativeText || item.name" />
-              <img
-                class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none"
-                :src="item.icon_dark?.url ?? item.icon_default?.url"
-                :alt="item.icon_default.alternativeText || item.name" />
-              <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
-                {{ item.name }}
-              </h4>
-              <template #trailing>
-                <UIcon
-                  name="material-symbols:arrow-outward-rounded"
-                  class="self-center text-muted transition group-hover:text-primary group-hover:-translate-y-1 group-hover:translate-x-1" />
-              </template>
-            </UButton>
-            <div
-              v-if="item?.tech_stack_tags?.length"
-              class="flex gap-2 flex-wrap">
-              <UBadge
-                v-for="tag in item.tech_stack_tags"
-                :key="tag.id"
-                size="sm"
-                class="text-dimmed"
-                variant="outline"
-                color="neutral"
-                :label="tag.tag" />
-            </div>
-            <MDC
-              :value="stripMarkdownLinks(item.description)"
-              class="line-clamp-5 text-md text-muted text-pretty whitespace-pre-line prose dark:prose-invert"
-              tag="article" />
-          </UCard>
-        </ULink>
-      </div>
-    </template>
+    <div
+      v-if="stacks?.data"
+      class="pt-4 sm:pt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <ULink
+        v-for="item in stacks?.data"
+        :key="item.id"
+        :to="item.website"
+        :ui="{ base: 'h-full' }"
+        target="_blank"
+        rel="noopener noreferrer">
+        <UCard
+          as="article"
+          :ui="{
+            root: 'group h-full transition hover:shadow-lg hover:bg-elevated/50',
+            body: 'space-y-2',
+          }">
+          <UButton
+            as="div"
+            class="p-0 text-md"
+            variant="link">
+            <img
+              class="dark:hidden mr-2 h-8 max-w-[100px] object-contain select-none"
+              :src="item.icon_default?.url"
+              :alt="item.icon_default.alternativeText || item.name" />
+            <img
+              class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none"
+              :src="item.icon_dark?.url ?? item.icon_default?.url"
+              :alt="item.icon_default.alternativeText || item.name" />
+            <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
+              {{ item.name }}
+            </h4>
+            <template #trailing>
+              <UIcon
+                name="material-symbols:arrow-outward-rounded"
+                class="self-center text-muted transition group-hover:text-primary group-hover:-translate-y-1 group-hover:translate-x-1" />
+            </template>
+          </UButton>
+          <div
+            v-if="item?.tech_stack_tags?.length"
+            class="flex gap-2 flex-wrap">
+            <UBadge
+              v-for="tag in item.tech_stack_tags"
+              :key="tag.id"
+              size="sm"
+              class="text-dimmed"
+              variant="outline"
+              color="neutral"
+              :label="tag.tag" />
+          </div>
+          <MDC
+            :value="stripMarkdownLinks(item.description)"
+            class="line-clamp-5 text-md text-muted text-pretty whitespace-pre-line prose dark:prose-invert"
+            tag="article" />
+        </UCard>
+      </ULink>
+    </div>
   </div>
 </template>
 

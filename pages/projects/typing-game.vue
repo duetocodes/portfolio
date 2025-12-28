@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full min-h-[inherit]">
+  <div class="w-full ">
     <MDC
       v-if="overview?.data?.[0]?.description"
       :value="overview.data[0].description"
@@ -25,8 +25,7 @@
           :title="$t('PhysicalKeyboardRequired')"
           icon="material-symbols:keyboard-external-input-outline"
           class="max-w-sm md:max-w-md"
-          color="info"
-          variant="subtle">
+          color="info">
           <template #description>
             <p>
               {{ $t('TypingGameText1') }}
@@ -38,7 +37,6 @@
                 :aria-label="$t('GoBack')"
                 size="lg"
                 color="info"
-                variant="ghost"
                 icon="material-symbols:u-turn-right-rounded"
                 @click="navigateTo(localePath('/projects'))" />
               <UButton
@@ -46,7 +44,6 @@
                 :aria-label="$t('Continue')"
                 size="lg"
                 color="info"
-                variant="ghost"
                 icon="material-symbols:play-arrow"
                 @click="isPrompt = false" />
             </div>
@@ -58,7 +55,7 @@
     <div
       v-if="data?.mappedPassage.length"
       v-show="!isPrompt"
-      class="mt-8 flex gap-x-4">
+      class="pt-4 sm:pt-8 flex gap-x-4">
       <UAlert
         class="w-44"
         color="info"
