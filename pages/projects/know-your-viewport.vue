@@ -32,9 +32,20 @@
               container: 'text-base text-muted space-y-1',
             }">
             <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
-              <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+              <div
+                v-if="device.screen.devicePixelRatio > 1"
+                class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
                 <span class="col-span-9">
                   {{ $t('Resolution') }}
+                </span>
+                <span class="text-center col-span-15">
+                  {{ device.screen.width * device.screen.devicePixelRatio }} W × {{ device.screen.height * device.screen.devicePixelRatio }} H
+                </span>
+              </div>
+
+              <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
+                <span class="col-span-9">
+                  {{ $t('Viewport') }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.screen.width }} W × {{ device.screen.height }} H
