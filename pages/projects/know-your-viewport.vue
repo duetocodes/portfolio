@@ -105,7 +105,7 @@
                   </span>
                   <UTooltip
                     v-model:open="isTooltip"
-                    :delay-duration="0"
+                    :delay-duration="200"
                     :ui="{
                       content: 'p-4 text-base flex-col items-start h-auto',
                     }">

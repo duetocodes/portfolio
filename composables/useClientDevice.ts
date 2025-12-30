@@ -158,13 +158,19 @@ export default function () {
     // auto removed when component using is unmounted
     useEventListener(
       window,
-      ['resize', 'orientationchange'],
+      [
+        'resize',
+        'orientationchange',
+        'visibilitychange',
+      ],
       () => {
-        updateOrientation();
-        updateElement();
+        if (window.document.visibilityState === 'visible') {
+          updateOrientation();
+          updateElement();
 
-        if (import.meta.dev) // only in dev environment
-          updateFormFactor();
+          if (import.meta.dev) // only in dev environment
+            updateFormFactor();
+        }
       },
     );
   }

@@ -67,7 +67,7 @@
             <UTooltip
               class="select-none"
               text="words per minute, where one word equals 5 typed characters (including spaces)."
-              :delay-duration="0"
+              :delay-duration="200"
               :ui="{
                 content: 'max-w-80 h-auto',
                 text: 'overflow-visible text-clip whitespace-normal',
@@ -104,7 +104,7 @@
             <span>Accuracy (%)</span>
             <UTooltip
               class="select-none"
-              :delay-duration="0"
+              :delay-duration="200"
               :ui="{
                 content: 'max-w-80 h-auto',
                 text: 'overflow-visible text-clip whitespace-normal',
@@ -165,7 +165,7 @@
             <UTooltip
               v-if="feedbackData?.feedback"
               text="AI-generated content"
-              :delay-duration="0">
+              :delay-duration="200">
               <UBadge
                 class="select-none"
                 label="AI"
@@ -227,7 +227,7 @@
         </span>
         <UTooltip
           text="AI-generated content"
-          :delay-duration="0">
+          :delay-duration="200">
           <UBadge
             class="select-none"
             label="AI"

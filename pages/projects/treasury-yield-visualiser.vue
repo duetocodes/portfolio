@@ -29,7 +29,7 @@
               :ui="{ base: 'data-[state=unchecked]:bg-slate-300 data-[state=checked]:bg-slate-300' }" />
             <UTooltip
               :text="$t('SeeYieldCurveInversion')"
-              :delay-duration="0">
+              :delay-duration="200">
               <span
                 class="flex items-center text-sm text-default transition-opacity"
                 :class="[{ 'opacity-40': !isSpread }]">
