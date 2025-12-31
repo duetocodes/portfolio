@@ -29,7 +29,7 @@
 
           <div class="absolute top-4 right-4 md:col-start-5 md:col-span-1">
             <p class="px-3 py-1.5 font-mono bottom-2 right-2 text-[var(--ui-color-neutral-800)] text-lg sm:text-xl rounded-lg bg-white/40 backdrop-blur-lg">
-              {{ $t('meta.title') }}
+              {{ $t('metaTitle') }}
             </p>
             <NuxtImg
               :src="about.data.avatar_light.image.url"
@@ -108,10 +108,10 @@ useHead({
 
 useSeoMeta({
   title: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  description: () => $t('meta.description'),
+  description: () => $t('metaDescription'),
   ogSiteName: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
   ogTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  ogDescription: () => $t('meta.description'),
+  ogDescription: () => $t('metaDescription'),
   ogImage: () => ({
     url: about.value?.data?.og_banner?.image?.url,
     alt: about.value?.data?.og_banner?.image?.alternativeText,
@@ -122,7 +122,7 @@ useSeoMeta({
   ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  twitterDescription: () => $t('meta.description'),
+  twitterDescription: () => $t('metaDescription'),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
     url: about.value?.data?.og_banner?.image?.url,

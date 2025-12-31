@@ -156,7 +156,7 @@ useHead({
         'email': 'duetocodes@outlook.com',
         'url': 'https://duetocodes.com',
         'jobTitle': $t('FrontendDeveloper'),
-        'description': $t('meta.description'),
+        'description': $t('metaDescription'),
         'knowsAbout': stacks.value ?? [],
         'sameAs': [
           'https://github.com/duetocodes',
@@ -174,7 +174,7 @@ const activePage = computed(() => {
       return {
         mobileHeading: $t('Home'),
         h1: `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-        h2: $t('meta.description'),
+        h2: $t('metaDescription'),
       };
 
     case path.endsWith(localePath('/projects')):

@@ -1,13 +1,6 @@
 {
-  "meta": {
-    "title": "Vue/Nuxt Developer",
-    "description": "duetocodes — a frontend developer portfolio showcasing modern web projects, clean interfaces, and creative coding built with the latest web technologies",
-    "website": "website"
-  },
-  "error": {
-    "404": "Page not found",
-    "500": "Internal server error"
-  },
+  "metaTitle": "Vue/Nuxt Developer",
+  "metaDescription": "duetocodes — a frontend developer portfolio showcasing modern web projects, clean interfaces, and creative coding built with the latest web technologies",
   "VueNuxtDeveloper": "Vue/Nuxt Developer",
   "FrontendDeveloper": "Frontend Developer",
   "TreasuryYieldVisualiser": "Treasury Yield Visualiser",
@@ -17,7 +10,6 @@
   "Continue": "Continue",
   "NotFound": "Not Found",
   "ServerError": "Server Error",
-  "Loading...": "Loading...",
   "Unsuccessful": "Unsuccessful 😅",
   "UnexpectedErrorOccurred": "Unexpected error occurred.",
   "AIGeneratedContent": "AI-generated content",

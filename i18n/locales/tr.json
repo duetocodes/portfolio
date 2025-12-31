@@ -1,13 +1,6 @@
 {
-  "meta": {
-    "title": "Vue/Nuxt Geliştirici",
-    "description": "duetocodes — modern web projelerini, sade arayüzleri ve en yeni web teknolojileriyle oluşturulmuş yaratıcı kodlamayı sergileyen bir frontend geliştirici portföyü",    
-    "website": "web sitesi"
-  },
-  "error": {
-    "404": "Sayfa bulunamadı",
-    "500": "Sunucu iç hatası"
-  },
+  "metaTitle": "Vue/Nuxt Geliştirici",
+  "metaDescription": "duetocodes — modern web projelerini, sade arayüzleri ve en yeni web teknolojileriyle oluşturulmuş yaratıcı kodlamayı sergileyen bir frontend geliştirici portföyü",    
   "VueNuxtDeveloper": "Vue/Nuxt Geliştirici",
   "FrontendDeveloper": "Frontend Geliştirici",
   "TreasuryYieldVisualiser": "Hazine Getiri Görselleştirici",
@@ -17,7 +10,6 @@
   "Continue": "Devam et",
   "NotFound": "Bulunamadı",
   "ServerError": "Sunucu Hatası",
-  "Loading...": "Yükleniyor...",
   "Unsuccessful": "Başarısız 😅",
   "UnexpectedErrorOccurred": "Beklenmeyen bir hata oluştu",
   "AIGeneratedContent": "AI tarafından oluşturulan içerik",
