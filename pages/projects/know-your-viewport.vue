@@ -17,10 +17,8 @@
             body: 'space-y-4',
           }">
           <template #header>
-            <span
-              v-once
-              class="font-semibold">
-              {{ $t('Viewport') }}
+            <span class="font-semibold">
+              {{ TEXTS.Viewport }}
             </span>
             <UIcon
               class="size-8 text-muted"
@@ -36,12 +34,11 @@
             }">
             <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
               <div
-                v-if="device.screen.devicePixelRatio == 1"
+                v-if="device.screen.devicePixelRatio > 1"
                 class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
                 <span
-                  v-once
                   class="col-span-9">
-                  {{ $t('Resolution') }}
+                  {{ TEXTS.Resolution }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.screen.width * device.screen.devicePixelRatio }} W × {{ device.screen.height * device.screen.devicePixelRatio }} H
@@ -50,9 +47,8 @@
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
                 <span
-                  v-once
                   class="col-span-9">
-                  {{ $t('Viewport') }}
+                  {{ TEXTS.Viewport }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.screen.width }} W × {{ device.screen.height }} H
@@ -61,25 +57,20 @@
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
                 <span
-                  v-once
                   class="col-span-9">
-                  {{ $t('Form') }}
+                  {{ TEXTS.Form }}
                 </span>
                 <span
                   v-if="device.form"
                   class="text-center col-span-15">
                   {{ TEXTS[device.form] || '--' }}
-                  <span
-                    v-once
-                    class="italic text-sm"> ({{ $t('estimated') }})</span>
+                  <span class="italic text-sm"> ({{ TEXTS.estimated }})</span>
                 </span>
               </div>
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                <span
-                  v-once
-                  class="col-span-9">
-                  {{ $t('Orientation') }}
+                <span class="col-span-9">
+                  {{ TEXTS.Orientation }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.orientation.type }}
@@ -87,10 +78,8 @@
               </div>
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                <span
-                  v-once
-                  class="col-span-9">
-                  {{ $t('Rotation') }}
+                <span class="col-span-9">
+                  {{ TEXTS.Rotation }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.orientation.angle }} °
@@ -98,10 +87,8 @@
               </div>
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                <span
-                  v-once
-                  class="col-span-9">
-                  {{ $t('TouchScreen') }}
+                <span class="col-span-9">
+                  {{ TEXTS.TouchScreen }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.media.hasTouch ? TEXTS.Yes : TEXTS.No }}
@@ -109,10 +96,8 @@
               </div>
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                <span
-                  v-once
-                  class="col-span-9">
-                  {{ $t('Colour') }}
+                <span class="col-span-9">
+                  {{ TEXTS.Colour }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.screen.colorDepth }} bit
@@ -132,12 +117,10 @@
                     }">
                     <template #content>
                       Device Pixel Ratio
-                      <ul
-                        v-once
-                        class="relative p-2 ml-2 list-disc space-y-2">
-                        <li>{{ $t('Tip1DPR') }}</li>
-                        <li>{{ $t('Tip2DPR') }}</li>
-                        <li>{{ $t('Tip3DPR') }}</li>
+                      <ul class="relative p-2 ml-2 list-disc space-y-2">
+                        <li>{{ TEXTS.Tip1DPR }}</li>
+                        <li>{{ TEXTS.Tip2DPR }}</li>
+                        <li>{{ TEXTS.Tip3DPR }}</li>
                       </ul>
                     </template>
                     <UButton
@@ -169,10 +152,8 @@
             }">
             <div class="border border-muted/50 divide-y divide-muted/50 rounded-sm">
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                <span
-                  v-once
-                  class="col-span-9">
-                  {{ $t('Layout') }}
+                <span class="col-span-9">
+                  {{ TEXTS.Layout }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.clientWidth }} W × {{ device.clientHeight }} H
@@ -192,10 +173,8 @@
                 <div
                   v-if="device.ua.platform"
                   class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                  <span
-                    v-once
-                    class="col-span-9">
-                    {{ $t('Platform') }}
+                  <span class="col-span-9">
+                    {{ TEXTS.Platform }}
                   </span>
                   <span class="truncate text-center col-span-15">
                     {{ device.ua.platform }} {{ device.ua.platformVersion }}
@@ -204,10 +183,8 @@
               </template>
 
               <div class="pl-2 grid items-center divide-x divide-muted/50 grid-cols-24">
-                <span
-                  v-once
-                  class="col-span-9">
-                  {{ $t('Appearance') }}
+                <span class="col-span-9">
+                  {{ TEXTS.Appearance }}
                 </span>
                 <span class="text-center col-span-15">
                   {{ device.appearance ? TEXTS.Dark : TEXTS.Light }}
@@ -229,22 +206,12 @@ import type { z } from 'zod';
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const { t: $t, locale } = useI18n();
+const { TEXTS } = useFolioI18n();
+
 const device = useClientDevice();
 const isTooltip = ref(false);
 
 const SLUG_ID = 'know-your-viewport';
-const TEXTS = {
-  Phone: $t('Phone'),
-  Tablet: $t('Tablet'),
-  Desktop: $t('Desktop'),
-  Display: $t('Display'),
-  Page: $t('Page'),
-  System: $t('System'),
-  Light: $t('Light'),
-  Dark: $t('Dark'),
-  Yes: $t('Yes'),
-  No: $t('No'),
-};
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 

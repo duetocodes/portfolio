@@ -24,7 +24,7 @@ const LANDSCAPE_BREAKPOINTS = {
   phone: BREAKPOINTS.lg,
 };
 
-export default function () {
+export default () => {
   const device = useState<{
     form: DeviceType | undefined
     simpleOrientation: DeviceOrientation | undefined
