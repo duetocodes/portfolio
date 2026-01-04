@@ -22,18 +22,18 @@
         <div class="relative max-md:order-first md:col-span-3">
           <NuxtImg
             :src="about.data.hero_light.image.url"
-            :alt="about.data.hero_light.image.alternativeText ?? $t('Image')"
+            :alt="about.data.hero_light.image.alternativeText ?? TEXTS.Image"
             class="rounded-xl w-full select-none"
             width="640"
             fit="contain" />
 
           <div class="absolute top-4 right-4 md:col-start-5 md:col-span-1">
             <p class="px-3 py-1.5 font-mono bottom-2 right-2 text-[var(--ui-color-neutral-800)] text-lg sm:text-xl rounded-lg bg-white/40 backdrop-blur-lg">
-              {{ $t('metaTitle') }}
+              {{ TEXTS.metaTitle }}
             </p>
             <NuxtImg
               :src="about.data.avatar_light.image.url"
-              :alt="about.data.avatar_light.image.alternativeText || $t('Image')"
+              :alt="about.data.avatar_light.image.alternativeText || TEXTS.Image"
               class="size-20 lg:size-24 z-1 -translate-x-4 -translate-y-2 ml-auto rounded-full border border-white/50 shadow-sm select-none"
               sizes="120px"
               fit="contain" />
@@ -45,7 +45,7 @@
             <UChip
               v-for="(item, index) in about.data.socialMedia"
               :key="index"
-              :text="$t('work')"
+              :text="TEXTS.work"
               :show="item.type === 'work'"
               size="xl"
               color="neutral"
@@ -75,7 +75,8 @@ import type { AboutMeResponseSchema } from '~/schemas';
 
 type AboutMeResponse = z.infer<typeof AboutMeResponseSchema>;
 
-const { t: $t, locale } = useI18n();
+const { locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
 
@@ -107,11 +108,11 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  description: () => $t('metaDescription'),
-  ogSiteName: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  ogTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  ogDescription: () => $t('metaDescription'),
+  title: () => `duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  description: () => TEXTS.metaDescription,
+  ogSiteName: () => `duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  ogTitle: () => `duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  ogDescription: () => TEXTS.metaDescription,
   ogImage: () => ({
     url: about.value?.data?.og_banner?.image?.url,
     alt: about.value?.data?.og_banner?.image?.alternativeText,
@@ -121,8 +122,8 @@ useSeoMeta({
   }),
   ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  twitterDescription: () => $t('metaDescription'),
+  twitterTitle: () => `duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  twitterDescription: () => TEXTS.metaDescription,
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
     url: about.value?.data?.og_banner?.image?.url,

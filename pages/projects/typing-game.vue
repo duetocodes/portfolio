@@ -22,26 +22,26 @@
         v-if="isPrompt"
         class="mt-44 w-full flex justify-center items-center">
         <UAlert
-          :title="$t('PhysicalKeyboardRequired')"
+          :title="TEXTS.PhysicalKeyboardRequired"
           icon="material-symbols:keyboard-external-input-outline"
           class="max-w-sm md:max-w-md"
           color="info">
           <template #description>
             <p>
-              {{ $t('TypingGameText1') }}
+              {{ TEXTS.TypingGameText1 }}
             </p>
 
             <div class="flex justify-end mt-8 gap-x-2">
               <UButton
-                :label="$t('GoBack')"
-                :aria-label="$t('GoBack')"
+                :label="TEXTS.GoBack"
+                :aria-label="TEXTS.GoBack"
                 size="lg"
                 color="info"
                 icon="material-symbols:u-turn-right-rounded"
                 @click="navigateTo(localePath('/projects'))" />
               <UButton
-                :label="$t('Continue')"
-                :aria-label="$t('Continue')"
+                :label="TEXTS.Continue"
+                :aria-label="TEXTS.Continue"
                 size="lg"
                 color="info"
                 icon="material-symbols:play-arrow"
@@ -371,7 +371,8 @@ const game = reactive<TypingGame>({
 });
 
 const currentIndex = ref(0); // where the cursor is now
-const { t: $t, locale } = useI18n();
+const { locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const localePath = useLocalePath();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
@@ -457,10 +458,10 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  title: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogSiteName: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
-  ogTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  ogSiteName: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
+  ogTitle: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0]?.preview?.image?.url,
@@ -471,7 +472,7 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('TypingGame')} - ${$t('Projects')} | duetocodes`,
+  twitterTitle: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({

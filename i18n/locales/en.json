@@ -91,6 +91,7 @@
   "Platform": "Platform",
   "Appearance": "Appearance",
   "Mobile": "Mobile",
+  "WhatIsDevicePixelRatio": "What is Device Pixel Ratio?",
   "Tip1DPR": "1 indicates standard displays",
   "Tip2DPR": "Higher values mean sharper displays",
   "Tip3DPR": "Physical pixels per CSS pixel"

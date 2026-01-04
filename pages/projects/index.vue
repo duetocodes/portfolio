@@ -65,6 +65,8 @@ import type { ProjectSchema } from '~/schemas';
 type Project = z.infer<typeof ProjectSchema>;
 
 const { t: $t, locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
+
 const route = useRoute();
 const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
@@ -99,15 +101,15 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  title: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   description: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
-  ogSiteName: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  ogTitle: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  ogSiteName: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  ogTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   ogImage: '/og_banner.png',
   ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('Projects')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
+  twitterTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterCard: 'summary_large_image',
   twitterDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   twitterImage: '/og_banner.png',

@@ -15,32 +15,32 @@
         class="text-md line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
         tag="article" />
 
-      <div class="pt-4 sm:pt-8 flex flex-wrap [&>*]:py-2 [&>*]:px-2 md:[&>*]:px-4 sm:divide-x-1 sm:divide-dotted sm:divide-[var(--ui-border-muted)] border-y-1 border-dotted border-muted">
-        <UFormField :label="$t('Mode')">
+      <div class="mt-4 sm:mt-8 flex flex-wrap [&>*]:py-2 [&>*]:px-2 md:[&>*]:px-4 sm:divide-x-1 sm:divide-dotted sm:divide-[var(--ui-border-muted)] border-y-1 border-dotted border-muted">
+        <UFormField :label="TEXTS.Mode">
           <div class="flex items-center gap-2">
             <span
               class="text-sm text-default transition-opacity"
               :class="[{ 'opacity-40': isSpread }]">
-              {{ $t('Standard') }}
+              {{ TEXTS.Standard }}
             </span>
             <USwitch
               v-model="isSpread"
               size="sm"
               :ui="{ base: 'data-[state=unchecked]:bg-slate-300 data-[state=checked]:bg-slate-300' }" />
             <UTooltip
-              :text="$t('SeeYieldCurveInversion')"
+              :text="TEXTS.SeeYieldCurveInversion"
               :delay-duration="200">
               <span
                 class="flex items-center text-sm text-default transition-opacity"
                 :class="[{ 'opacity-40': !isSpread }]">
-                {{ $t('Spread') }}
+                {{ TEXTS.Spread }}
               </span>
             </UTooltip>
           </div>
         </UFormField>
         <UFormField
           v-if="!isSpread"
-          :label="$t('Standard')"
+          :label="TEXTS.Standard"
           required>
           <UCheckboxGroup
             v-model="termCheckboxes"
@@ -59,7 +59,7 @@
         </UFormField>
         <UFormField
           v-else
-          :label="$t('Spread')"
+          :label="TEXTS.Spread"
           required>
           <UCheckboxGroup
             v-model="spreadCheckboxes"
@@ -160,6 +160,7 @@ type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
 type TreasuryYieldPayload = z.infer<typeof TreasuryYieldPayloadSchema>;
 
 const { t: $t, locale, localeProperties } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 
@@ -188,11 +189,11 @@ const picker = shallowRef({
 const tabIndex = ref('0'); // default to 'Year', string by default
 const tabItems = computed<TabsItem[]>(() => [
   {
-    label: $t('Year'),
+    label: TEXTS.Year,
     slot: 'year',
   },
   {
-    label: $t('Month'),
+    label: TEXTS.Month,
     slot: 'month',
   },
 ]);
@@ -268,10 +269,10 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  title: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogSiteName: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
-  ogTitle: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  ogSiteName: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
+  ogTitle: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0]?.preview?.image?.url,
@@ -282,7 +283,7 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('TreasuryYieldVisualiser')} - ${$t('Projects')} | duetocodes`,
+  twitterTitle: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
@@ -296,17 +297,17 @@ useSeoMeta({
 
 const termItems = computed(() => [
   {
-    label: `3${$t('month')}`,
+    label: `3${TEXTS.month}`,
     value: '3mth',
     disabled: termCheckboxes.value.find(item => item === '3mth') && termCheckboxes.value.length === 1,
   },
   {
-    label: `2${$t('year')}`,
+    label: `2${TEXTS.year}`,
     value: '2yr',
     disabled: termCheckboxes.value.find(item => item === '2yr') && termCheckboxes.value.length === 1,
   },
   {
-    label: `10${$t('year')}`,
+    label: `10${TEXTS.year}`,
     value: '10yr',
     disabled: termCheckboxes.value.find(item => item === '10yr') && termCheckboxes.value.length === 1,
   },
@@ -314,17 +315,17 @@ const termItems = computed(() => [
 
 const spreadItems = computed(() => [
   {
-    label: `2${$t('year')}-3${$t('month')}`,
+    label: `2${TEXTS.year}-3${TEXTS.month}`,
     value: '2yr3mth',
     disabled: spreadCheckboxes.value.find(item => item === '2yr3mth') && spreadCheckboxes.value.length === 1,
   },
   {
-    label: `10${$t('year')}-3${$t('month')}`,
+    label: `10${TEXTS.year}-3${TEXTS.month}`,
     value: '10yr3mth',
     disabled: spreadCheckboxes.value.find(item => item === '10yr3mth') && spreadCheckboxes.value.length === 1,
   },
   {
-    label: `10${$t('year')}-2${$t('year')}`,
+    label: `10${TEXTS.year}-2${TEXTS.year}`,
     value: '10yr2yr',
     disabled: spreadCheckboxes.value.find(item => item === '10yr2yr') && spreadCheckboxes.value.length === 1,
   },
@@ -336,19 +337,19 @@ const categories = computed(() => {
   if (isSpread.value) {
     if (spreadCheckboxes.value.includes('2yr3mth')) {
       obj['2yr3mth'] = {
-        name: `2${$t('year')}-3${$t('month')}`,
+        name: `2${TEXTS.year}-3${TEXTS.month}`,
         color: '#17becf',
       };
     }
     if (spreadCheckboxes.value.includes('10yr3mth')) {
       obj['10yr3mth'] = {
-        name: `10${$t('year')}-3${$t('month')}`,
+        name: `10${TEXTS.year}-3${TEXTS.month}`,
         color: '#bcbd22',
       };
     }
     if (spreadCheckboxes.value.includes('10yr2yr')) {
       obj['10yr2yr'] = {
-        name: `10${$t('year')}-2${$t('year')}`,
+        name: `10${TEXTS.year}-2${TEXTS.year}`,
         color: '#7f7f7f',
       };
     }
@@ -356,19 +357,19 @@ const categories = computed(() => {
   else {
     if (termCheckboxes.value.includes('3mth')) {
       obj['3mth'] = {
-        name: `3${$t('month')}`,
+        name: `3${TEXTS.month}`,
         color: '#1f77b4',
       };
     }
     if (termCheckboxes.value.includes('2yr')) {
       obj['2yr'] = {
-        name: `2${$t('year')}`,
+        name: `2${TEXTS.year}`,
         color: '#2ca02c',
       };
     }
     if (termCheckboxes.value.includes('10yr')) {
       obj['10yr'] = {
-        name: `10${$t('year')}`,
+        name: `10${TEXTS.year}`,
         color: '#ff7f0e',
       };
     }
@@ -418,7 +419,7 @@ const pickerLabel = computed((): string => {
     default: break;
   }
 
-  return `${from || $t('Start')} - ${to || $t('End')}`;
+  return `${from || TEXTS.Start} - ${to || TEXTS.End}`;
 });
 
 const disabledYears = (cal: CalendarDate) => {

@@ -73,7 +73,8 @@ import type { TechStackResponseSchema } from '~/schemas';
 
 type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
-const { t: $t, locale } = useI18n();
+const { locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
 
@@ -85,16 +86,16 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  description: () => $t('TechStackHelpText'),
-  ogSiteName: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  ogTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  ogDescription: () => $t('TechStackHelpText'),
+  title: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  description: () => TEXTS.TechStackHelpText,
+  ogSiteName: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  ogTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  ogDescription: () => TEXTS.TechStackHelpText,
   ogImage: '/og_banner.png',
   ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('TechStacks')} - duetocodes | ${$t('FrontendDeveloper')} (Vue & Nuxt)`,
-  twitterDescription: () => $t('TechStackHelpText'),
+  twitterTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
+  twitterDescription: () => TEXTS.TechStackHelpText,
   twitterCard: 'summary_large_image',
   twitterImage: '/og_banner.png',
 });

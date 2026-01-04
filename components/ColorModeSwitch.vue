@@ -6,7 +6,7 @@
         loading
         variant="ghost"
         color="neutral"
-        :aria-label="isDark ? $t('Dark') : $t('Light')"
+        :aria-label="isDark ? TEXTS.Dark : TEXTS.Light"
         loading-icon="material-symbols:app-badging-outline"
         :ui="{ leadingIcon: 'size-5 md:size-6' }" />
     </template>
@@ -15,7 +15,7 @@
       variant="ghost"
       color="neutral"
       class="text-muted"
-      :aria-label="isDark ? $t('Dark') : $t('Light')"
+      :aria-label="isDark ? TEXTS.Dark : TEXTS.Light"
       :icon="isDark ? 'material-symbols:moon-stars-outline-rounded' : 'material-symbols:sunny-outline-rounded'"
       :ui="{ leadingIcon: 'size-5 md:size-6' }"
       @click="toggle" />
@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 const colorMode = useColorMode();
+const { TEXTS } = useNonReactiveTranslation();
 
 const isDark = computed({
   get: () => colorMode.value === 'dark',

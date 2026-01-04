@@ -91,6 +91,7 @@
   "Platform": "平台",
   "Appearance": "外观",
   "Mobile": "移动设备",
+  "WhatIsDevicePixelRatio": "什么是 Device Pixel Ratio?",
   "Tip1DPR": "1 表示标准显示器",
   "Tip2DPR": "数值越高，显示越清晰",
   "Tip3DPR": "每个 CSS 像素对应的物理像素数"

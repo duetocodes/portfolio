@@ -123,18 +123,19 @@
                         <li>{{ TEXTS.Tip3DPR }}</li>
                       </ul>
                     </template>
+                    <UIcon
+                      v-if="device.form === 'Desktop'"
+                      name="material-symbols:info-outline-rounded"
+                      class="shrink-0 text-muted" />
                     <UButton
-                      v-if="device.form === 'Phone'"
+                      v-else
+                      :aria-label="TEXTS.WhatIsDevicePixelRatio"
                       class="text-muted"
                       icon="material-symbols:info-outline-rounded"
                       size="xs"
                       color="neutral"
                       variant="ghost"
                       @click="isTooltip = true" />
-                    <UIcon
-                      v-else
-                      name="material-symbols:info-outline-rounded"
-                      class="shrink-0 text-muted" />
                   </UTooltip>
                 </section>
                 <span class="text-center col-span-15">
@@ -205,8 +206,8 @@ import type { z } from 'zod';
 
 const nuxtApp = useNuxtApp();
 const route = useRoute();
-const { t: $t, locale } = useI18n();
-const { TEXTS } = useFolioI18n();
+const { locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 
 const device = useClientDevice();
 const isTooltip = ref(false);
@@ -250,10 +251,10 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+  title: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogSiteName: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
-  ogTitle: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+  ogSiteName: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
+  ogTitle: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0]?.preview?.image?.url,
@@ -264,7 +265,7 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+  twitterTitle: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
