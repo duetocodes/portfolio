@@ -87,6 +87,7 @@ import {
 } from '@internationalized/date';
 
 const { t: $t } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 
 const counter = ref(0);
 
@@ -171,8 +172,8 @@ const years = computed((): CalendarDate[] => {
 });
 
 const selectionLabel = computed((): string => {
-  const from = range.value.start?.year || $t('Start');
-  const to = range.value.end?.year || $t('End');
+  const from = range.value.start?.year || TEXTS.Start;
+  const to = range.value.end?.year || TEXTS.End;
   return `${from} - ${to}`;
 });
 

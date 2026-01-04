@@ -206,7 +206,7 @@ import type { z } from 'zod';
 
 const nuxtApp = useNuxtApp();
 const route = useRoute();
-const { t: $t, locale } = useI18n();
+const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
 const device = useClientDevice();
@@ -251,10 +251,10 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+  title: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogSiteName: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
-  ogTitle: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+  ogSiteName: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
+  ogTitle: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0]?.preview?.image?.url,
@@ -265,7 +265,7 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('KnowYourViewport')} - ${$t('Projects')} | duetocodes`,
+  twitterTitle: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({

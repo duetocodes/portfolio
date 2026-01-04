@@ -16,7 +16,7 @@
             <UBadge
               color="warning"
               variant="soft"
-              :label="$t('Simulation')" />
+              :label="TEXTS.Simulation" />
           </div>
 
           <UFormField
@@ -63,7 +63,7 @@
                 icon="material-symbols:flag-outline-rounded"
                 selected-icon="material-symbols:check"
                 trailing-icon="material-symbols:keyboard-arrow-down"
-                :placeholder="$t('From')"
+                :placeholder="TEXTS.From"
                 :items="currenciesList.filter(item => item?.code !== state.target?.code)"
                 :ui="{
                   trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
@@ -71,7 +71,7 @@
                 @update:model-value="onChangeSource"
                 @update:open="onOpenSelect">
                 <template #empty>
-                  {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}
+                  {{ statusCurrencies === 'pending' ? TEXTS.Loading : TEXTS.NoData }}
                 </template>
 
                 <template
@@ -89,8 +89,8 @@
               :class="{ 'max-md:rotate-90': !(errorCurrencies || errorRates) }"
               :icon="(errorCurrencies || errorRates) ? undefined: 'material-symbols:compare-arrows-rounded'"
               size="xl"
-              :label="(errorCurrencies || errorRates) ? $t('TryAgain') : undefined"
-              :aria-label="(errorCurrencies || errorRates) ? $t('TryAgain') : undefined"
+              :label="(errorCurrencies || errorRates) ? TEXTS.TryAgain : undefined"
+              :aria-label="(errorCurrencies || errorRates) ? TEXTS.TryAgain : undefined"
               :color="(errorCurrencies || errorRates) ? 'error' : 'primary'"
               variant="soft"
               loading-icon="material-symbols:app-badging-outline"
@@ -114,14 +114,14 @@
                 icon="material-symbols:flag-outline-rounded"
                 selected-icon="material-symbols:check"
                 trailing-icon="material-symbols:keyboard-arrow-down"
-                :placeholder="$t('To')"
+                :placeholder="TEXTS.To"
                 :items="currenciesList.filter(item => item?.code !== state.source?.code)"
                 :ui="{
                   trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
                 }"
                 @update:open="onOpenSelect">
                 <template #empty>
-                  {{ statusCurrencies === 'pending' ? $t('Loading') : $t('NoData') }}
+                  {{ statusCurrencies === 'pending' ? TEXTS.Loading : TEXTS.NoData }}
                 </template>
 
                 <template
@@ -173,7 +173,7 @@
 
           <template #footer>
             <p class="prose text-muted">
-              {{ $t('References') }}
+              {{ TEXTS.References }}
             </p>
             <ul class="text-sm list-disc list-inside text-muted">
               <li>
@@ -182,7 +182,7 @@
                   variant="link"
                   to="https://wise.com/gb/mid-market-rate"
                   target="_blank">
-                  {{ $t('MidMarketExchangeRate') }}
+                  {{ TEXTS.MidMarketExchangeRate }}
                   <UIcon
                     name="material-symbols:arrow-outward-rounded"
                     class="text-muted" />
@@ -208,6 +208,7 @@ import {
 import type { ProjectItemPageMeta } from '~/types';
 
 const { t: $t, locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const toast = useToast();
@@ -227,7 +228,7 @@ type RatesItem = z.infer<typeof RatesItemSchema>;
 
 const LocalizedAmountSchema = AmountSchema
   .refine(val => val.trim().length > 0,
-    { message: $t('Required') },
+    { message: TEXTS.Required },
   )
   .refine((val) => {
     const num = parseFloat(val);
@@ -244,7 +245,7 @@ const _localisedCurrencySelectSchema = CurrencySelectSchema
   .refine(
     Boolean,
     {
-      message: $t('Required'), // overwrites built-in message,
+      message: TEXTS.Required, // overwrites built-in message,
     },
   );
 
@@ -297,10 +298,10 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  title: () => `${TEXTS.CurrencyConverter} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogSiteName: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
-  ogTitle: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  ogSiteName: () => `${TEXTS.CurrencyConverter} - ${TEXTS.Projects} | duetocodes`,
+  ogTitle: () => `${TEXTS.CurrencyConverter} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   ogImage: () => ({
     url: overview.value?.data?.[0]?.preview?.image?.url,
@@ -311,7 +312,7 @@ useSeoMeta({
   }),
   ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
-  twitterTitle: () => `${$t('CurrencyConverter')} - ${$t('Projects')} | duetocodes`,
+  twitterTitle: () => `${TEXTS.CurrencyConverter} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
   twitterImage: () => ({

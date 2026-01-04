@@ -11,8 +11,8 @@
         </p>
         <div class="flex justify-end mt-8">
           <UButton
-            :label="$t('BackToHome')"
-            :aria-label="$t('BackToHome')"
+            :label="TEXTS.BackToHome"
+            :aria-label="TEXTS.BackToHome"
             size="lg"
             color="error"
             icon="material-symbols:home-outline-rounded"
@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app';
 
-const { t: $t } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const localePath = useLocalePath();
 
 const props = defineProps({
@@ -34,7 +34,7 @@ const props = defineProps({
 });
 
 const err = computed(() => ({
-  code: props.error?.statusCode ?? $t('Unknown'),
-  message: props.error?.message || props.error?.statusMessage || $t('UnexpectedErrorOccurred'),
+  code: props.error?.statusCode ?? TEXTS.Unknown,
+  message: props.error?.message || props.error?.statusMessage || TEXTS.UnexpectedErrorOccurred,
 }));
 </script>

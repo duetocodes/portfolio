@@ -16,8 +16,8 @@
           </p>
           <div class="flex justify-end mt-8">
             <UButton
-              :label="$t('TryAgain')"
-              :aria-label="$t('TryAgain')"
+              :label="TEXTS.TryAgain"
+              :aria-label="TEXTS.TryAgain"
               size="lg"
               color="error"
               icon="material-symbols:app-badging-outline"
@@ -35,7 +35,7 @@
 import type { FetchError } from 'ofetch';
 import type { AsyncDataRequestStatus } from '~/types';
 
-const { t: $t } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 
 const props = withDefaults(defineProps<{
   hasError?: boolean
@@ -50,8 +50,8 @@ const props = withDefaults(defineProps<{
 const emits = defineEmits(['try-again']);
 
 const err = computed(() => ({
-  code: props.error?.statusCode ?? props.error?.data.statusCode ?? $t('Unknown'),
-  message: props.error?.data.message || props.error?.statusMessage || props.error?.data.statusMessage || $t('UnexpectedErrorOccurred'),
+  code: props.error?.statusCode ?? props.error?.data.statusCode ?? TEXTS.Unknown,
+  message: props.error?.data.message || props.error?.statusMessage || props.error?.data.statusMessage || TEXTS.UnexpectedErrorOccurred,
 }));
 </script>
 
