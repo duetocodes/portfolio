@@ -182,7 +182,7 @@ const currentDate = ref(new CalendarDate(
 );
 
 const picker = shallowRef({
-  start: currentDate.value.copy(),
+  start: currentDate.value.copy().subtract({ years: 1 }),
   end: currentDate.value.copy(),
 });
 
@@ -207,6 +207,7 @@ const {
   '/api/treasury-yield-scraper',
   {
     method: 'POST',
+    key: locale,
     watch: false,
     server: false,
     immediate: false,
