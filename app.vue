@@ -99,7 +99,6 @@ const {
   locale,
   locales,
 } = useI18n();
-const { TEXTS } = useNonReactiveTranslation();
 
 const lang = computed(() => locale.value);
 
@@ -156,8 +155,8 @@ useHead({
         'name': 'Freddie',
         'email': 'duetocodes@outlook.com',
         'url': 'https://duetocodes.com',
-        'jobTitle': TEXTS.FrontendDeveloper,
-        'description': TEXTS.metaDescription,
+        'jobTitle': $t('FrontendDeveloper'),
+        'description': $t('metaDescription'),
         'knowsAbout': stacks.value ?? [],
         'sameAs': [
           'https://github.com/duetocodes',
