@@ -206,7 +206,7 @@ import type { z } from 'zod';
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const { t: $t, locale } = useI18n();
-const { TEXTS } = useFolioI18n();
+const { TEXTS } = useNonReactiveTranslation();
 
 const device = useClientDevice();
 const isTooltip = ref(false);
