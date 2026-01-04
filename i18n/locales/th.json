@@ -91,6 +91,7 @@
   "Platform": "แพลตฟอร์ม",
   "Appearance": "ลักษณะ",
   "Mobile": "มือถือ",
+  "WhatIsDevicePixelRatio": "Device Pixel Ratio คืออะไร?",
   "Tip1DPR": "1 หมายถึงหน้าจอมาตรฐาน",
   "Tip2DPR": "ค่ายิ่งสูง หน้าจอยิ่งคมชัด",
   "Tip3DPR": "พิกเซลจริงต่อพิกเซล CSS"

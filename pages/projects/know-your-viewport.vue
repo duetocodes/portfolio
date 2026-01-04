@@ -123,18 +123,19 @@
                         <li>{{ TEXTS.Tip3DPR }}</li>
                       </ul>
                     </template>
+                    <UIcon
+                      v-if="device.form === 'Desktop'"
+                      name="material-symbols:info-outline-rounded"
+                      class="shrink-0 text-muted" />
                     <UButton
-                      v-if="device.form === 'Phone'"
+                      v-else
+                      :aria-label="TEXTS.WhatIsDevicePixelRatio"
                       class="text-muted"
                       icon="material-symbols:info-outline-rounded"
                       size="xs"
                       color="neutral"
                       variant="ghost"
                       @click="isTooltip = true" />
-                    <UIcon
-                      v-else
-                      name="material-symbols:info-outline-rounded"
-                      class="shrink-0 text-muted" />
                   </UTooltip>
                 </section>
                 <span class="text-center col-span-15">

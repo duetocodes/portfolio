@@ -91,6 +91,7 @@
   "Platform": "Platform",
   "Appearance": "Görünüm",
   "Mobile": "Mobil",
+  "WhatIsDevicePixelRatio": "Device Pixel Ratio nedir?",
   "Tip1DPR": "1, standart ekranları gösterir",
   "Tip2DPR": "Daha yüksek değerler daha net ekranlar anlamına gelir",
   "Tip3DPR": "CSS pikseli başına fiziksel piksel sayısı"
