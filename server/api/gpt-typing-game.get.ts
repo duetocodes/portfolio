@@ -93,6 +93,7 @@ const passageMapper = (txt: string) => {
 
 const getRandomTopic = () => {
   const topics = [
+    'Artificial Intelligence',
     'Vue.js framework',
     'Nuxt.js framework',
     'Tailwind CSS',
