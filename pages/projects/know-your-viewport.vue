@@ -183,7 +183,7 @@
                   {{ TEXTS.Appearance }}
                 </span>
                 <span class="text-center col-span-15">
-                  {{ device.appearance ? TEXTS.Dark : TEXTS.Light }}
+                  {{ device.media.isDark ? TEXTS.Dark : TEXTS.Light }}
                 </span>
               </div>
             </div>

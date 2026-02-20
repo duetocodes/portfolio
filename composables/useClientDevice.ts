@@ -28,7 +28,6 @@ export default () => {
   const device = useState<{
     form: DeviceType | undefined
     simpleOrientation: DeviceOrientation | undefined
-    appearance: ComputedRef<boolean>
     clientWidth: number
     clientHeight: number
     orientation: {
@@ -50,13 +49,13 @@ export default () => {
     }
     media: {
       hasTouch: boolean
+      isDark: boolean
     }
   }>(
     'use-client-device',
     () => ({
       form: undefined,
       simpleOrientation: undefined,
-      appearance: usePreferredDark(), // tracks system colour mode
       clientWidth: NaN,
       clientHeight: NaN,
       orientation: {
@@ -78,6 +77,7 @@ export default () => {
       },
       media: {
         hasTouch: false,
+        isDark: false,
       },
     }));
 
@@ -145,6 +145,7 @@ export default () => {
 
     const getMatchMediaItems = () => {
       device.value.media.hasTouch = matchMedia('(any-pointer: coarse)').matches;
+      device.value.media.isDark = matchMedia('(prefers-color-scheme: dark)').matches;
     };
 
     updateOrientation();
@@ -167,6 +168,7 @@ export default () => {
         if (window.document.visibilityState === 'visible') {
           updateOrientation();
           updateElement();
+          getMatchMediaItems();
 
           if (import.meta.dev) // only in dev environment
             updateFormFactor();
