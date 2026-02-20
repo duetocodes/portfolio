@@ -123,12 +123,7 @@
                         <li>{{ TEXTS.Tip3DPR }}</li>
                       </ul>
                     </template>
-                    <UIcon
-                      v-if="device.form === 'Desktop'"
-                      name="material-symbols:info-outline-rounded"
-                      class="shrink-0 text-muted" />
                     <UButton
-                      v-else
                       :aria-label="TEXTS.WhatIsDevicePixelRatio"
                       class="text-muted"
                       icon="material-symbols:info-outline-rounded"
@@ -188,7 +183,7 @@
                   {{ TEXTS.Appearance }}
                 </span>
                 <span class="text-center col-span-15">
-                  {{ device.appearance ? TEXTS.Dark : TEXTS.Light }}
+                  {{ device.media.isDark ? TEXTS.Dark : TEXTS.Light }}
                 </span>
               </div>
             </div>
