@@ -5,8 +5,16 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 
 ## Setup
 
+Use Node 22:
+
 ```
-npm install
+nvm use
+```
+
+Install dependencies:
+
+```
+npm ci
 ```
 
 ## Development Server
