@@ -18,12 +18,7 @@ export default defineNuxtConfig({
     strapiApiBase: import.meta.env.NUXT_STRAPI_API_BASE,
     wiseReadOnlyToken: import.meta.env.NUXT_WISE_READ_ONLY_TOKEN,
     wiseApiBase: import.meta.env.NUXT_WISE_API_BASE,
-    turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
     openAiSecretKey: import.meta.env.NUXT_OPENAI_API_KEY,
-
-    public: {
-      turnstileSiteKey: import.meta.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
-    },
   },
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@nuxtjs/mdc', 'nuxt-charts', '@nuxt/image', '@vueuse/nuxt'],
   devtools: {
