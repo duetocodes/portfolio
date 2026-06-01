@@ -160,7 +160,7 @@ const getCleanData = (
   }
 
   if (startIndex >= 0 && endIndex >= 0) {
-    return data.slice(startIndex, endIndex);
+    return data.slice(startIndex, endIndex + 1); // includes final trading day
   }
   else return null;
 };
