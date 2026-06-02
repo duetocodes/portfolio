@@ -237,7 +237,7 @@
         </UTooltip>
       </span>
       <div class="space-x-4">
-        <UButtonGroup size="md">
+        <UFieldGroup size="md">
           <UButton
             color="neutral"
             variant="outline"
@@ -256,7 +256,7 @@
               passageStyleIndex++;
               passageContainer?.focus();
             }" />
-        </UButtonGroup>
+        </UFieldGroup>
         <UButton
           class="self-center order-last"
           size="md"
