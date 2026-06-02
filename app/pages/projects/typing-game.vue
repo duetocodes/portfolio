@@ -532,16 +532,17 @@ const {
 const onType = (event: KeyboardEvent) => {
   const accepted = ['Backspace', 'Enter'];
   const key = event.key;
+  const mappedPassage = data.value?.mappedPassage;
 
   const isKeyAccepted = accepted.includes(key) || key.length === 1;
 
-  if (!game.hasFocus || !isKeyAccepted) return;
+  if (!game.hasFocus || !isKeyAccepted || !mappedPassage) return;
 
   switch (game.status) {
     case 'gameover':
       return;
     case 'playing':
-      if (currentIndex.value >= (data.value?.mappedPassage || []).length) {
+      if (currentIndex.value >= mappedPassage.length) {
         // in case user finishes before time's up
         endGame();
         return;
@@ -558,18 +559,22 @@ const onType = (event: KeyboardEvent) => {
     case 'Backspace': {
       if (currentIndex.value > 0) {
         currentIndex.value--;
-        const prevChar = { ...(data.value?.mappedPassage || [])[currentIndex.value] };
+        const prevChar = mappedPassage[currentIndex.value];
+
+        if (!prevChar) return;
+
         prevChar.status = 'pending';
         prevChar.lastTypedKey = undefined;
-        (data.value?.mappedPassage || [])[currentIndex.value] = prevChar;
       }
       break;
     }
 
     default: {
-      const char = (data.value?.mappedPassage || [])[currentIndex.value];
+      const char = mappedPassage[currentIndex.value];
 
-      if (char && char.numberOfTry === 0) {
+      if (!char) return;
+
+      if (char.numberOfTry === 0) {
         char.firstTryAt = new Date().getTime();
       }
       char.numberOfTry++;
