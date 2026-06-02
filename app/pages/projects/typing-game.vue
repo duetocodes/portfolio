@@ -314,7 +314,7 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { z } from 'zod';
-import type { ProjectItemDataSchema } from '~/schemas';
+import type { ProjectItemDataSchema } from '~~/schemas';
 import type {
   CharacterSchema,
   TypingGameSchema,
@@ -322,8 +322,8 @@ import type {
   TypingGameFeedbackRequestCharacterSchema,
   TypingGameGptFeedbackPayloadSchema,
   TypingGameUpdatedDataSchema,
-} from '~/schemas/typing-game';
-import type { ProjectItemPageMeta } from '~/types';
+} from '~~/schemas/typing-game';
+import type { ProjectItemPageMeta } from '~~/types';
 
 const SLUG_ID = 'typing-game';
 

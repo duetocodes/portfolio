@@ -2,10 +2,10 @@
 // https://router.vuejs.org/api/interfaces/RouterOptions.html#scrollBehavior-
 // https://v9.i18n.nuxtjs.org/docs/guide/lang-switcher/#wait-for-page-transition
 
-import type { RouterOptions } from '@nuxt/schema';
+import type { RouterConfig } from '@nuxt/schema';
 
-export default <RouterOptions>{
+export default {
   async scrollBehavior(to, from, savedPosition) {
     return savedPosition || { top: 0 };
   },
-};
+} satisfies RouterConfig;

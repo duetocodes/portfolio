@@ -2,7 +2,7 @@ import type {
   DeviceType,
   DeviceOrientation,
   DeviceOrientationDetail,
-} from '~/types';
+} from '~~/types';
 
 // tailwind breakpoints
 const BREAKPOINTS = {

@@ -5,7 +5,7 @@
 // current limitation: lost of reactivity
 // use the default t() instead for plurality & named translation .i.e, { item: qty.value }
 
-import EN from '~/i18n/locales/en.json';
+import EN from '~~/i18n/locales/en.json';
 
 type LocaleKeys = keyof typeof EN;
 

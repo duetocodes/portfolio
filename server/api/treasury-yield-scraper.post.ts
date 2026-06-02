@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch';
-import type { TreasuryChartRowDataSchema } from '~/schemas/treasury-yield-visualiser';
-import { TreasuryYieldPayloadSchema } from '~/schemas/treasury-yield-visualiser';
-import type { dateSchema } from '~/schemas';
+import type { TreasuryChartRowDataSchema } from '~~/schemas/treasury-yield-visualiser';
+import { TreasuryYieldPayloadSchema } from '~~/schemas/treasury-yield-visualiser';
+import type { dateSchema } from '~~/schemas';
 import type { z } from 'zod';
 import {
   CalendarDate,
