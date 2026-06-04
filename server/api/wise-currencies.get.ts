@@ -1,6 +1,6 @@
 // https://docs.wise.com/api-docs/api-reference/currencies
 import type { FetchError } from 'ofetch';
-import { WISE_ENDPOINTS } from '~/server/utils/api';
+import { WISE_ENDPOINTS } from '~~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);

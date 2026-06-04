@@ -164,7 +164,7 @@
             </span>
             <UTooltip
               v-if="feedbackData?.feedback"
-              :text="$t(TEXTS.AIGeneratedContent)"
+              :text="TEXTS.AIGeneratedContent"
               :delay-duration="200">
               <UBadge
                 class="select-none"
@@ -226,7 +226,7 @@
           {{ data.topic }}
         </span>
         <UTooltip
-          :text="$t(TEXTS.AIGeneratedContent)"
+          :text="TEXTS.AIGeneratedContent"
           :delay-duration="200">
           <UBadge
             class="select-none"
@@ -237,7 +237,7 @@
         </UTooltip>
       </span>
       <div class="space-x-4">
-        <UButtonGroup size="md">
+        <UFieldGroup size="md">
           <UButton
             color="neutral"
             variant="outline"
@@ -256,7 +256,7 @@
               passageStyleIndex++;
               passageContainer?.focus();
             }" />
-        </UButtonGroup>
+        </UFieldGroup>
         <UButton
           class="self-center order-last"
           size="md"
@@ -314,7 +314,7 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { z } from 'zod';
-import type { ProjectItemDataSchema } from '~/schemas';
+import type { ProjectItemDataSchema } from '~~/schemas';
 import type {
   CharacterSchema,
   TypingGameSchema,
@@ -322,8 +322,8 @@ import type {
   TypingGameFeedbackRequestCharacterSchema,
   TypingGameGptFeedbackPayloadSchema,
   TypingGameUpdatedDataSchema,
-} from '~/schemas/typing-game';
-import type { ProjectItemPageMeta } from '~/types';
+} from '~~/schemas/typing-game';
+import type { ProjectItemPageMeta } from '~~/types';
 
 const SLUG_ID = 'typing-game';
 
@@ -532,16 +532,17 @@ const {
 const onType = (event: KeyboardEvent) => {
   const accepted = ['Backspace', 'Enter'];
   const key = event.key;
+  const mappedPassage = data.value?.mappedPassage;
 
   const isKeyAccepted = accepted.includes(key) || key.length === 1;
 
-  if (!game.hasFocus || !isKeyAccepted) return;
+  if (!game.hasFocus || !isKeyAccepted || !mappedPassage) return;
 
   switch (game.status) {
     case 'gameover':
       return;
     case 'playing':
-      if (currentIndex.value >= (data.value?.mappedPassage || []).length) {
+      if (currentIndex.value >= mappedPassage.length) {
         // in case user finishes before time's up
         endGame();
         return;
@@ -558,18 +559,22 @@ const onType = (event: KeyboardEvent) => {
     case 'Backspace': {
       if (currentIndex.value > 0) {
         currentIndex.value--;
-        const prevChar = { ...(data.value?.mappedPassage || [])[currentIndex.value] };
+        const prevChar = mappedPassage[currentIndex.value];
+
+        if (!prevChar) return;
+
         prevChar.status = 'pending';
         prevChar.lastTypedKey = undefined;
-        (data.value?.mappedPassage || [])[currentIndex.value] = prevChar;
       }
       break;
     }
 
     default: {
-      const char = (data.value?.mappedPassage || [])[currentIndex.value];
+      const char = mappedPassage[currentIndex.value];
 
-      if (char && char.numberOfTry === 0) {
+      if (!char) return;
+
+      if (char.numberOfTry === 0) {
         char.firstTryAt = new Date().getTime();
       }
       char.numberOfTry++;

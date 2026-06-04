@@ -1,6 +1,35 @@
 /* eslint-disable nuxt/nuxt-config-keys-order */
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+const i18nDefaultLocale = 'en';
+
+const i18nLocales = [
+  { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
+  { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
+  { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
+  { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
+] as const;
+
+const basePrerenderRoutes = [
+  '/',
+  '/projects',
+  '/projects/typing-game',
+  '/projects/currency-converter',
+  '/projects/treasury-yield-visualiser',
+  '/projects/know-your-viewport',
+  '/tech-stacks',
+] as const;
+
+const prerenderRoutes = i18nLocales.flatMap(({ code }) => {
+  if (code === i18nDefaultLocale) {
+    return [...basePrerenderRoutes];
+  }
+
+  return basePrerenderRoutes.map((route) => {
+    return route === '/' ? `/${code}` : `/${code}${route}`;
+  });
+});
+
 export default defineNuxtConfig({
   ssr: true,
   app: {
@@ -24,9 +53,9 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
-  routeRules: {
-    '/**': {
-      prerender: true,
+  nitro: {
+    prerender: {
+      routes: prerenderRoutes,
     },
   },
   css: ['~/assets/css/main.css'],
@@ -57,13 +86,8 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
-    defaultLocale: 'en',
-    locales: [
-      { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
-      { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
-      { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
-      { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
-    ],
+    defaultLocale: i18nDefaultLocale,
+    locales: i18nLocales,
     lazy: true,
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {

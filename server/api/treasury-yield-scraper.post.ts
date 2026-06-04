@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch';
-import type { TreasuryChartRowDataSchema } from '~/schemas/treasury-yield-visualiser';
-import { TreasuryYieldPayloadSchema } from '~/schemas/treasury-yield-visualiser';
-import type { dateSchema } from '~/schemas';
+import type { TreasuryChartRowDataSchema } from '~~/schemas/treasury-yield-visualiser';
+import { TreasuryYieldPayloadSchema } from '~~/schemas/treasury-yield-visualiser';
+import type { dateSchema } from '~~/schemas';
 import type { z } from 'zod';
 import {
   CalendarDate,
@@ -62,7 +62,7 @@ const fetchCsv = async () => {
 };
 const parseCsvToStructuredData = (csvText: string) => {
   const lines = (csvText).trim().split('\n');
-  const headers = lines[0].split(',');
+  const headers = (lines[0] || '').split(',');
 
   // map headers to indices for quick lookup
   const idx = {
@@ -82,10 +82,10 @@ const parseCsvToStructuredData = (csvText: string) => {
     // });
 
     return {
-      'date': toIsoString(cells[idx.date]),
-      '3mth': toNumber(cells[idx['3mth']]),
-      '2yr': toNumber(cells[idx['2yr']]),
-      '10yr': toNumber(cells[idx['10yr']]),
+      'date': toIsoString(cells[idx.date] ?? ''),
+      '3mth': toNumber(cells[idx['3mth']] ?? ''),
+      '2yr': toNumber(cells[idx['2yr']] ?? ''),
+      '10yr': toNumber(cells[idx['10yr']] ?? ''),
     };
   });
   return result;
@@ -111,14 +111,15 @@ const getPerYearChartData = async (year: string) => {
   return $fetch<string>(BASE_URL + year)
     .then((html) => {
       const match = html.match(/<tbody>(.*?)<\/tbody>/s); // extract string between tbody
-      const content = match ? match[1].trim() : '';
+      const content = match?.[1]?.trim() ?? '';
       const cleaned = content.replace(/\s+/g, ''); // remove all white spaces
 
       const chartData: TreasuryChartRowData[] = [...cleaned.matchAll(/<tr>(.*?)<\/tr>/g)].map((rowItem) => {
-        const date = rowItem[1].match(/<timedatetime="([^"]+)"/g)?.[0]?.match(/datetime="(.*?)"/)?.[1];
-        const cell3mth = rowItem[1].match(/<tdclass="bc3monthviews-fieldviews-field-field-bc-3month"headers="view-field-bc-3month-table-column">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
-        const cell2yr = rowItem[1].match(/<tdheaders="view-field-bc-2year-table-column"class="views-fieldviews-field-field-bc-2year">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
-        const cell10yr = rowItem[1].match(/<tdheaders="view-field-bc-10year-table-column"class="views-fieldviews-field-field-bc-10year">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
+        const rowHtml = rowItem[1] ?? '';
+        const date = rowHtml.match(/<timedatetime="([^"]+)"/g)?.[0]?.match(/datetime="(.*?)"/)?.[1];
+        const cell3mth = rowHtml.match(/<tdclass="bc3monthviews-fieldviews-field-field-bc-3month"headers="view-field-bc-3month-table-column">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
+        const cell2yr = rowHtml.match(/<tdheaders="view-field-bc-2year-table-column"class="views-fieldviews-field-field-bc-2year">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
+        const cell10yr = rowHtml.match(/<tdheaders="view-field-bc-10year-table-column"class="views-fieldviews-field-field-bc-10year">(.*?)<\/td>/g)?.[0]?.match(/>(.*?)<\/td>/)?.[1];
 
         return {
           'date': date?.split('T')[0] ?? '--', // YYYY-MM-DD
@@ -172,7 +173,7 @@ const toIsoString = (mdyy: string) => {
   if (!mdyy) return '--';
   // expecting 12/25/90 as M/D/YY
   // this is the format in csv
-  const [m, d, y] = mdyy.split('/').map(Number);
+  const [m = NaN, d = NaN, y = NaN] = mdyy.split('/').map(Number);
 
   // handle 2-digit year — assume 1900s for 90, or 2000s for < current year
   const fullYear = y < 100 ? (y < 50 ? 2000 + y : 1900 + y) : y;
@@ -190,7 +191,9 @@ const findValidStartIndex = (from: CalendarDate, arr: TreasuryChartRowData[]) =>
   if (index >= 0) return index;
 
   // Stop if beyond last date in array
-  const lastDate = parseDate(arr[arr.length - 1].date);
+  const last = arr.at(-1);
+  if (!last) return -1;
+  const lastDate = parseDate(last.date);
   if (from.compare(lastDate) > 0) return -1;
 
   // Try next day
@@ -208,7 +211,9 @@ const findValidEndIndex = (to: CalendarDate, arr: TreasuryChartRowData[]) => {
   if (index >= 0) return index;
 
   // limit guard: Stop if earlier than in array
-  const firstDate = parseDate(arr[0].date);
+  const first = arr[0];
+  if (!first) return -1;
+  const firstDate = parseDate(first.date);
   if (to.compare(firstDate) < 0) return -1;
 
   // Try previous day

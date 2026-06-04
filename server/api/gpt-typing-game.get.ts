@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import type { z } from 'zod';
 import type { FetchError } from 'ofetch';
-import type { CharacterSchema } from '~/schemas/typing-game';
+import type { CharacterSchema } from '~~/schemas/typing-game';
 
 type Character = z.infer<typeof CharacterSchema>;
 

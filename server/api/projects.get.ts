@@ -1,5 +1,5 @@
 import type { FetchError } from 'ofetch';
-import { STRAPI_ENDPOINTS } from '~/server/utils/api';
+import { STRAPI_ENDPOINTS } from '~~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
