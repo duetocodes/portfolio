@@ -164,7 +164,7 @@
             </span>
             <UTooltip
               v-if="feedbackData?.feedback"
-              :text="$t(TEXTS.AIGeneratedContent)"
+              :text="TEXTS.AIGeneratedContent"
               :delay-duration="200">
               <UBadge
                 class="select-none"
@@ -226,7 +226,7 @@
           {{ data.topic }}
         </span>
         <UTooltip
-          :text="$t(TEXTS.AIGeneratedContent)"
+          :text="TEXTS.AIGeneratedContent"
           :delay-duration="200">
           <UBadge
             class="select-none"
