@@ -89,7 +89,7 @@ import {
   parseDate,
 } from '@internationalized/date';
 
-import type { PickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~~/types';
 
 const { t: $t, localeProperties } = useI18n();
 

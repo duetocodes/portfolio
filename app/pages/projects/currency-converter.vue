@@ -146,8 +146,8 @@
                 {{ exchangeRate }}
               </p>
               <NuxtTime
-                v-if="rates"
-                :datetime="rates[0].time"
+                v-if="latestRate"
+                :datetime="latestRate.time"
                 :locale="locale"
                 year="numeric"
                 month="long"
@@ -376,6 +376,8 @@ const {
   },
 );
 
+const latestRate = computed(() => rates.value?.[0] ?? null);
+
 watch(
   () => [state.source, state.target],
   ([newSource, newTarget]) => {
@@ -385,8 +387,10 @@ watch(
 );
 
 const conversionResult = computed((): string => {
-  if (rates.value && state.amount && state.source && state.target) {
-    const calculated = (Number(state.amount) * Number(rates.value[0].rate));
+  const rate = latestRate.value;
+
+  if (rate && state.amount && state.source && state.target) {
+    const calculated = Number(state.amount) * rate.rate;
 
     const amt = getLocalizedFiat(state.amount);
     const result = getLocalizedFiat(calculated.toString());
@@ -397,8 +401,10 @@ const conversionResult = computed((): string => {
 });
 
 const exchangeRate = computed((): string => {
-  if (rates.value && state.source && state.target) {
-    return `${state.source.symbol} 1 = ${rates.value[0].rate} ${state.target.code}`;
+  const rate = latestRate.value;
+
+  if (rate && state.source && state.target) {
+    return `${state.source.symbol} 1 = ${rate.rate} ${state.target.code}`;
   }
   else return '';
 });

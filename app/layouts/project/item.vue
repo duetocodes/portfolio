@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import type { BreadcrumbItem } from '@nuxt/ui';
-import type { ProjectItemPageMeta } from '~/types';
+import type { ProjectItemPageMeta } from '~~/types';
 
 const route = useRoute();
 const pageMeta = route.meta as ProjectItemPageMeta;

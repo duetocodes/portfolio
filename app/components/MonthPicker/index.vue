@@ -20,7 +20,7 @@ next planned feature:
 
 <script setup lang="ts">
 import type { CalendarDate } from '@internationalized/date';
-import type { PickerTypeRange } from '~/types';
+import type { PickerTypeRange } from '~~/types';
 
 // iso friendly
 const MIN_YEAR = 1;
