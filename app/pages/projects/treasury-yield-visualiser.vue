@@ -262,13 +262,6 @@ const {
   },
 );
 
-useHead({
-  link: [{
-    rel: 'canonical',
-    href: `https://duetocodes.com${route.path}`,
-  }],
-});
-
 useSeoMeta({
   title: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
@@ -282,7 +275,6 @@ useSeoMeta({
     height: overview.value?.data?.[0]?.preview?.image?.height,
     type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
-  ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),

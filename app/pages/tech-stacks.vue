@@ -78,13 +78,6 @@ const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
 
-useHead({
-  link: [{
-    rel: 'canonical',
-    href: `https://duetocodes.com${route.path}`,
-  }],
-});
-
 useSeoMeta({
   title: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   description: () => TEXTS.TechStackHelpText,
@@ -92,7 +85,6 @@ useSeoMeta({
   ogTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => TEXTS.TechStackHelpText,
   ogImage: '/og_banner.png',
-  ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterDescription: () => TEXTS.TechStackHelpText,

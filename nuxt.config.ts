@@ -4,10 +4,10 @@
 const i18nDefaultLocale = 'en';
 
 const i18nLocales = [
-  { code: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
-  { code: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
-  { code: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
-  { code: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
+  { code: 'en', language: 'en', name: 'EN', dir: 'ltr', file: 'en.json', dateLocale: 'en-GB' },
+  { code: 'th', language: 'th', name: 'ไทย', dir: 'ltr', file: 'th.json', dateLocale: 'th-TH-u-ca-gregory' }, // for gregory calendar in Thai locale (its Buddhist calendar by default)
+  { code: 'tr', language: 'tr', name: 'Türkçe', dir: 'ltr', file: 'tr.json', dateLocale: 'tr' },
+  { code: 'zh', language: 'zh', name: '简体中文', dir: 'ltr', file: 'zh.json', dateLocale: 'zh' },
 ] as const;
 
 const basePrerenderRoutes = [
@@ -86,6 +86,7 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
+    baseUrl: 'https://duetocodes.com',
     defaultLocale: i18nDefaultLocale,
     locales: i18nLocales,
     lazy: true,

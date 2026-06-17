@@ -201,6 +201,7 @@ import type { z } from 'zod';
 
 const nuxtApp = useNuxtApp();
 const route = useRoute();
+
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
@@ -238,13 +239,6 @@ const {
   },
 );
 
-useHead({
-  link: [{
-    rel: 'canonical',
-    href: `https://duetocodes.com${route.path}`,
-  }],
-});
-
 useSeoMeta({
   title: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
@@ -258,7 +252,6 @@ useSeoMeta({
     height: overview.value?.data?.[0]?.preview?.image?.height,
     type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
-  ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.KnowYourViewport} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
