@@ -1,11 +1,41 @@
-# AGENTS.md
+# duetocodes project guide
+This is my personal portfolio site: duetocodes.com
+
+## Business Goals
+- This portfolio is intended to rank for:
+  - frontend developer
+  - vue developer
+  - vue.js developer
+  - nuxt developer
+  - nuxt.js developer
+- SEO and discoverability are important.
+- Accessibility and performance are important.
+- Prefer solutions that improve Core Web Vitals.
+- Avoid changes that reduce SSR or crawlability.
+
+## Major Features
+- Portfolio project showcase
+- Homepage
+- Tech Stack page
+- Currency Converter
+- Treasury Yield Visualiser
+- Typing Speed Game
+- Multi-language support
+- Strapi-backed content
+
+## Stack
+- Nuxt 4
+- Vue 3
+- TypeScript
+- Tailwind CSS
+- i18n locales: en, zh, th, tr
+- Deployed on Vercel
 
 ## Scope
 - These instructions apply to the entire repository.
-- This is a Nuxt 3 SSR portfolio application. Keep changes focused and preserve the existing Nuxt auto-import and Vue Composition API patterns.
+- This is a Nuxt 4 SSR portfolio application. Keep changes focused and preserve the existing Nuxt auto-import and Vue Composition API patterns.
 
 ## Runtime and Setup
-- Use a Node version supported by the checked-in Nuxt/Vite toolchain: `^20.19.0 || >=22.12.0`.
 - Install dependencies with `npm ci` when starting from a clean checkout.
 - Start local development with `npm run dev`.
 
@@ -28,7 +58,39 @@
 - Wise backs the currency converter through `/api/wise-currencies` and `/api/wise-rates`. Configure `NUXT_WISE_API_BASE` and `NUXT_WISE_READ_ONLY_TOKEN`.
 - OpenAI backs the typing-game passage and coaching feedback routes. Configure `NUXT_OPENAI_API_KEY`.
 - The treasury-yield visualiser fetches historical CSV data and scrapes recent yield data from `home.treasury.gov`.
-- Update `.env.example` whenever adding or renaming runtime configuration.
+
+## SEO Rules
+- Preserve SSR rendering.
+- Prefer semantic HTML.
+- Each page should have a unique title and description.
+- Use useSeoMeta for page metadata.
+- Preserve canonical URLs and hreflang tags.
+- Avoid introducing client-only rendering for important content.
+- Do not remove prerendered routes without justification.
+
+## Routing Rules
+- Preserve existing URL structures.
+- Do not rename routes without explanation.
+- Locale routes must remain consistent across languages.
+- New pages should integrate with sitemap generation.
+- Consider SEO impact before introducing dynamic routes.
+
+## i18n Rules
+- Supported locales:
+  - en
+  - zh
+  - th
+  - tr
+- English is the source locale.
+- New translation keys must first be added to en.json.
+- Do not hardcode user-facing text.
+- Prefer existing translation keys before creating new ones.
+
+## Content Ownership
+- Portfolio content originates from Strapi unless otherwise specified.
+- Do not move CMS-managed content into static files.
+- Maintain compatibility between frontend expectations and Strapi response structures.
+- Preserve existing API contracts when possible.
 
 ## Editing Conventions
 - Preserve the repository ESLint style: semicolons are required, and existing single-quote usage should remain consistent.
@@ -36,3 +98,14 @@
 - When adding a project detail page, update the page metadata, shared navigation/headings where applicable, Strapi content expectations, and locale keys together.
 - Prefer existing Nuxt composables such as `useFetch`, `useSeoMeta`, `useHead`, and runtime config helpers over introducing parallel patterns.
 - Do not commit generated output or local-only files such as `.nuxt/`, `.output/`, `node_modules/`, or `.env` files.
+
+## Agent Behaviour
+Before making changes:
+1. Explain the problem.
+2. Explain the proposed solution.
+3. Identify impacted files.
+4. Prefer minimal changes.
+5. Avoid large refactors unless requested.
+When unsure:
+- Ask for clarification.
+- Do not guess business requirements.
