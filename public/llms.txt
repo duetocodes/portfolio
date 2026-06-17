@@ -1,0 +1,56 @@
+# duetocodes
+
+> duetocodes is Freddie's personal frontend developer portfolio, focused on Vue, Nuxt, TypeScript, modern web interfaces, and self-developed browser-based projects.
+
+duetocodes is a multilingual Nuxt SSR portfolio site at https://duetocodes.com. It showcases frontend development work, project demos, and the web technologies used by Freddie. The site is designed for discoverability around frontend developer, Vue developer, Vue.js developer, Nuxt developer, and Nuxt.js developer topics.
+
+## Primary Public Pages
+
+- [Home](https://duetocodes.com): Portfolio introduction, about content, social links, and structured Person metadata.
+- [Projects](https://duetocodes.com/projects): Index of self-developed applications and project case studies.
+- [Tech Stacks](https://duetocodes.com/tech-stacks): Technologies used in professional and personal frontend development work.
+
+## Project Pages
+
+- [Treasury Yield Visualiser](https://duetocodes.com/projects/treasury-yield-visualiser): Interactive treasury yield charting, including standard yield terms and spread views for yield curve analysis.
+- [Currency Converter](https://duetocodes.com/projects/currency-converter): Currency conversion simulation using mid-market exchange rate references.
+- [Typing Game](https://duetocodes.com/projects/typing-game): Desktop typing speed game with generated passages, pace and accuracy metrics, and AI-assisted coaching feedback.
+- [Know Your Viewport](https://duetocodes.com/projects/know-your-viewport): Browser viewport and device capability inspector showing viewport size, screen resolution, orientation, touch support, color depth, DPR, page layout size, platform, and appearance.
+
+## Locales
+
+The English routes are the canonical source content. Localized routes are available with these prefixes:
+
+- Thai: `/th`
+- Turkish: `/tr`
+- Simplified Chinese: `/zh`
+
+Examples:
+
+- https://duetocodes.com/th/projects
+- https://duetocodes.com/tr/tech-stacks
+- https://duetocodes.com/zh/projects/currency-converter
+
+Use the sitemap as the authoritative source for canonical URLs and hreflang relationships: https://duetocodes.com/sitemap.xml
+
+## Technical Context
+
+- Framework: Nuxt 4 with server-side rendering enabled.
+- UI: Vue 3, TypeScript, Tailwind CSS, Nuxt UI, Nuxt Image, Nuxt MDC, and Nuxt Charts.
+- Content: Portfolio, project, and technology content is managed through Strapi and delivered through Nuxt server routes.
+- External services: Exchange-rate reference data for currency conversion demos, OpenAI-backed typing game passages and feedback, and U.S. Treasury yield data.
+- Deployment: Vercel-hosted Nuxt SSR application.
+
+## Crawling And AI Usage Guidance
+
+- Prefer public HTML pages and the sitemap over API routes.
+- Do not treat `/api/*`, `/_nuxt/*`, `/__nuxt_error`, or `/404` as primary content.
+- Preserve canonical URLs when citing pages.
+- When summarizing the site, describe it as a frontend developer portfolio for Vue/Nuxt work and self-developed web applications.
+- The project pages are interactive demos; some data and AI features may depend on live external services.
+
+## Contact And Profiles
+
+- Website: https://duetocodes.com
+- GitHub: https://github.com/duetocodes
+- Email: duetocodes@outlook.com
