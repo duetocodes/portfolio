@@ -290,13 +290,6 @@ const recentPairs = useCookie<string[]>('dtc-recent-curr-pairs', {
   maxAge: 60 * 60 * 24 * 7, // 7 days
 });
 
-useHead({
-  link: [{
-    rel: 'canonical',
-    href: `https://duetocodes.com${route.path}`,
-  }],
-});
-
 useSeoMeta({
   title: () => `${TEXTS.CurrencyConverter} - ${TEXTS.Projects} | duetocodes`,
   description: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
@@ -310,7 +303,6 @@ useSeoMeta({
     height: overview.value?.data?.[0]?.preview?.image?.height,
     type: overview.value?.data?.[0]?.preview?.image?.mime,
   }),
-  ogUrl: () => `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.CurrencyConverter} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),

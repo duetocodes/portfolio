@@ -93,13 +93,6 @@ const {
   },
 );
 
-useHead({
-  link: [{
-    rel: 'canonical',
-    href: `https://duetocodes.com${route.path}`, // equals <loc>
-  }],
-});
-
 useSeoMeta({
   title: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   description: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
@@ -107,7 +100,6 @@ useSeoMeta({
   ogTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   ogImage: '/og_banner.png',
-  ogUrl: `https://duetocodes.com${route.path}`,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterCard: 'summary_large_image',

@@ -92,20 +92,9 @@ type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
 const route = useRoute();
 const nuxtApp = useNuxtApp();
+const i18nHead = useLocaleHead();
 const localePath = useLocalePath();
-
-const {
-  t: $t,
-  locale,
-  locales,
-} = useI18n();
-
-const lang = computed(() => locale.value);
-
-const dir = computed(() => {
-  const selected = locales.value.find(lang => lang.code === locale.value);
-  return selected?.dir;
-});
+const { t: $t } = useI18n();
 
 const {
   data: stacks,
@@ -128,12 +117,11 @@ const {
   },
 );
 
-useHead({
-  htmlAttrs: {
-    lang,
-    dir,
-  },
+useHead(() => ({
+  htmlAttrs: { ...(i18nHead.value.htmlAttrs || {}) },
+  meta: [...(i18nHead.value.meta || [])],
   link: [
+    ...(i18nHead.value.link || []),
     {
       rel: 'icon',
       type: 'image/x-icon',
@@ -164,7 +152,7 @@ useHead({
       }),
     },
   ],
-});
+}));
 
 const activePage = computed(() => {
   const path = route.path;
