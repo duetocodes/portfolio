@@ -74,8 +74,8 @@ const render = () => {
     '#turnstile-container',
     {
       'language': locale.value,
-      // 'sitekey': config.public.turnstileSiteKey,
-      'sitekey': '3x00000000000000000000FF',
+      'sitekey': config.public.turnstileSiteKey,
+      // 'sitekey': '3x00000000000000000000FF',
       'appearance': 'always',
       // 'execution': 'execute',
       'callback': (token: TurnstileToken) => {
