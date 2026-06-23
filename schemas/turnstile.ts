@@ -45,6 +45,9 @@ export const TurnstileAPISchema = z.object({
   execute: z.function()
     .args(z.string())
     .returns(z.void()),
+  isExpired: z.function()
+    .args(z.string())
+    .returns(z.boolean()),
 });
 
 export const CloudflareSiteVerifyResponseSchema = z.object({

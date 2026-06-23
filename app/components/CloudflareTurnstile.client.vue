@@ -1,9 +1,46 @@
 <template>
-  <div class="flex">
-    <div id="turnstile-container" />
-    <UButton
-      label="reset"
-      @click="onReset" />
+  <div class="flex flex-col">
+    <div class="mb-4 flex flex-col gap-2">
+      <p>
+        {{ widgetId || 'empty' }}
+      </p>
+      <div class="flex gap-2">
+        <UButton
+          label="render"
+          variant="subtle"
+          @click="onRender" />
+        <UButton
+          label="execute"
+          variant="subtle"
+          @click="onExecute" />
+      </div>
+      <div class="flex gap-2">
+        <UButton
+          label="reset"
+          color="error"
+          variant="subtle"
+          @click="onReset" />
+        <UButton
+          label="remove"
+          color="error"
+          variant="subtle"
+          @click="onRemove" />
+      </div>
+      <div class="flex gap-2">
+        <UButton
+          label="get-response"
+          color="info"
+          variant="subtle"
+          @click="onGetResponse" />
+        <UButton
+          label="isExpired"
+          color="info"
+          variant="subtle"
+          @click="checkIsExpired" />
+      </div>
+    </div>
+
+    <div id="dtc-turnstile-container" />
   </div>
 </template>
 
@@ -38,9 +75,10 @@ declare global {
 
 const { t: $t, locale } = useI18n();
 const toast = useToast();
+const hasScriptLoaded = ref(false);
 const config = useRuntimeConfig();
 
-const widgetId = ref<string | null>(null);
+const widgetId = ref<string>('');
 
 useHead(() => ({
   script: [
@@ -54,46 +92,59 @@ useHead(() => ({
         });
       },
       onload: () => {
-        render();
+        hasScriptLoaded.value = true;
       },
     },
   ],
 }));
 
-const render = () => {
+const onRender = () => {
+  if (!hasScriptLoaded.value) return;
   const turnstile = window.turnstile;
 
   if (!turnstile) {
-    return toast.add({
+    toast.add({
       title: $t('UnexpectedErrorOccurred'),
       color: 'error',
     });
+    return;
   }
 
   widgetId.value = turnstile.render(
-    '#turnstile-container',
+    '#dtc-turnstile-container',
     {
       'language': locale.value,
       'sitekey': config.public.turnstileSiteKey,
-      // 'sitekey': '3x00000000000000000000FF',
       'appearance': 'always',
-      // 'execution': 'execute',
+      'execution': 'execute', // manually execute challenge
       'callback': (token: TurnstileToken) => {
         onVerified(token);
       },
-      'error-callback': () => {
+      'error-callback': (err) => {
         if (widgetId.value && turnstile) {
-          // turnstile.reset(widgetId.value);
+          toast.add({
+            title: 'error-callback',
+            description: JSON.stringify(err) || '_undefined',
+            color: 'error',
+          });
         }
       },
-      'expired-callback': () => {
+      'expired-callback': (err) => {
         if (widgetId.value && turnstile) {
-          // turnstile.reset(widgetId.value);
+          toast.add({
+            title: 'error-callback',
+            description: JSON.stringify(err) || '_undefined',
+            color: 'error',
+          });
         }
       },
-      'timeout-callback': () => {
+      'timeout-callback': (err) => {
         if (widgetId.value && turnstile) {
-          turnstile.reset(widgetId.value);
+          toast.add({
+            title: 'error-callback',
+            description: JSON.stringify(err) || '_undefined',
+            color: 'error',
+          });
         }
       },
     },
@@ -115,8 +166,16 @@ const onVerified = async (token: TurnstileToken) => {
 
     if (data.value?.success) {
       toast.add({
-        title: 'SUCCESSFUL',
+        title: 'Server',
+        description: 'Successful server-side validation',
         color: 'success',
+      });
+    }
+    else {
+      toast.add({
+        title: 'Server',
+        description: 'Failed server-side validation',
+        color: 'error',
       });
     }
   }
@@ -131,9 +190,39 @@ const onVerified = async (token: TurnstileToken) => {
 
 const onReset = () => {
   const turnstile = window.turnstile;
-
   if (widgetId.value && turnstile) {
     turnstile.reset(widgetId.value);
   }
+  widgetId.value = '';
+};
+
+const onRemove = () => {
+  const turnstile = window.turnstile;
+  turnstile?.remove('#dtc-turnstile-container');
+  widgetId.value = '';
+};
+
+const onExecute = () => {
+  const turnstile = window.turnstile;
+
+  turnstile?.execute('#dtc-turnstile-container');
+};
+
+const onGetResponse = () => {
+  const turnstile = window.turnstile;
+  const resp = turnstile?.getResponse(widgetId.value);
+  toast.add({
+    title: JSON.stringify(resp) || '_undefined',
+    color: 'info',
+  });
+};
+
+const checkIsExpired = () => {
+  const turnstile = window.turnstile;
+  const bool = turnstile?.isExpired(widgetId.value);
+  toast.add({
+    title: JSON.stringify(bool) || '_undefined',
+    color: 'info',
+  });
 };
 </script>
