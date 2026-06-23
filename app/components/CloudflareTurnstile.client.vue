@@ -115,7 +115,7 @@ const onRender = () => {
     {
       'language': locale.value,
       'sitekey': config.public.turnstileSiteKey,
-      'appearance': 'always',
+      'appearance': 'interaction-only',
       'execution': 'execute', // manually execute challenge
       'callback': (token: TurnstileToken) => {
         onVerified(token);
