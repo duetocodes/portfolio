@@ -6,37 +6,12 @@
       </p>
       <div class="flex gap-2">
         <UButton
-          label="render"
+          label="TryAgain"
           variant="subtle"
-          @click="onRender" />
-        <UButton
-          label="execute"
-          variant="subtle"
-          @click="onExecute" />
-      </div>
-      <div class="flex gap-2">
-        <UButton
-          label="reset"
-          color="error"
-          variant="subtle"
-          @click="onReset" />
-        <UButton
-          label="remove"
-          color="error"
-          variant="subtle"
-          @click="onRemove" />
-      </div>
-      <div class="flex gap-2">
-        <UButton
-          label="get-response"
-          color="info"
-          variant="subtle"
-          @click="onGetResponse" />
-        <UButton
-          label="isExpired"
-          color="info"
-          variant="subtle"
-          @click="checkIsExpired" />
+          icon="material-symbols:app-badging-outline"
+          :loading="isLoading"
+          :disabled="Boolean(!widgetId)"
+          @click="onTryAgain" />
       </div>
     </div>
 
@@ -75,154 +50,169 @@ declare global {
 
 const { t: $t, locale } = useI18n();
 const toast = useToast();
-const hasScriptLoaded = ref(false);
 const config = useRuntimeConfig();
 
-const widgetId = ref<string>('');
+const widgetId = ref('');
+const isLoading = ref(false);
 
 useHead(() => ({
   script: [
     {
       src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit',
       defer: true,
+      onloadstart: () => {
+        isLoading.value = true;
+      },
+      onload: () => {
+        onRenderThenExecute();
+        isLoading.value = false;
+      },
       onerror: () => {
         toast.add({
           title: $t('UnexpectedErrorOccurred'),
           color: 'error',
         });
       },
-      onload: () => {
-        hasScriptLoaded.value = true;
-      },
     },
   ],
 }));
 
-const onRender = () => {
-  if (!hasScriptLoaded.value) return;
-  const turnstile = window.turnstile;
-
-  if (!turnstile) {
-    toast.add({
-      title: $t('UnexpectedErrorOccurred'),
-      color: 'error',
-    });
-    return;
-  }
-
-  widgetId.value = turnstile.render(
-    '#dtc-turnstile-container',
-    {
-      'language': locale.value,
-      'sitekey': config.public.turnstileSiteKey,
-      'appearance': 'interaction-only',
-      'execution': 'execute', // manually execute challenge
-      'callback': (token: TurnstileToken) => {
-        onVerified(token);
-      },
-      'error-callback': (err) => {
-        if (widgetId.value && turnstile) {
-          toast.add({
-            title: 'error-callback',
-            description: JSON.stringify(err) || '_undefined',
-            color: 'error',
-          });
-        }
-      },
-      'expired-callback': (err) => {
-        if (widgetId.value && turnstile) {
-          toast.add({
-            title: 'error-callback',
-            description: JSON.stringify(err) || '_undefined',
-            color: 'error',
-          });
-        }
-      },
-      'timeout-callback': (err) => {
-        if (widgetId.value && turnstile) {
-          toast.add({
-            title: 'error-callback',
-            description: JSON.stringify(err) || '_undefined',
-            color: 'error',
-          });
-        }
-      },
-    },
-  );
+const onTryAgain = () => {
+  onResetThenRemove();
+  onRenderThenExecute();
 };
 
-const onVerified = async (token: TurnstileToken) => {
+const onRenderThenExecute = () => {
   try {
-    const { data } = await useFetch(
-      '/api/turnstile',
+    const turnstile = window.turnstile;
+
+    if (!turnstile) {
+      toast.add({
+        title: $t('UnexpectedErrorOccurred'),
+        color: 'error',
+      });
+      return;
+    }
+
+    widgetId.value = turnstile.render(
+      '#dtc-turnstile-container',
       {
-        method: 'POST',
-        server: false,
-        body: {
-          token,
+        'language': locale.value,
+        'sitekey': config.public.turnstileSiteKey,
+        'appearance': 'always',
+        'execution': 'execute', // manually execute challenge
+        'callback': (token: TurnstileToken) => {
+          onVerified(token);
+        },
+        'error-callback': (err) => {
+          if (widgetId.value && turnstile) {
+            toast.add({
+              title: 'error-callback',
+              description: JSON.stringify(err) || '_undefined',
+              color: 'error',
+            });
+          }
+        },
+        'expired-callback': (err) => {
+          if (widgetId.value && turnstile) {
+            toast.add({
+              title: 'expired-callback',
+              description: JSON.stringify(err) || '_undefined',
+              color: 'error',
+            });
+          }
+        },
+        'timeout-callback': (err) => {
+          if (widgetId.value && turnstile) {
+            toast.add({
+              title: 'timeout-callback',
+              description: JSON.stringify(err) || '_undefined',
+              color: 'error',
+            });
+          }
         },
       },
     );
 
-    if (data.value?.success) {
-      toast.add({
-        title: 'Server',
-        description: 'Successful server-side validation',
-        color: 'success',
-      });
-    }
-    else {
-      toast.add({
-        title: 'Server',
-        description: 'Failed server-side validation',
-        color: 'error',
-      });
+    if (widgetId.value) {
+      turnstile.execute(widgetId.value);
     }
   }
-  catch (err) {
+  catch {
     toast.add({
       title: $t('UnexpectedErrorOccurred'),
-      description: JSON.stringify(err),
       color: 'error',
     });
   }
 };
 
-const onReset = () => {
+const onVerified = async (token: TurnstileToken) => {
+  isLoading.value = true;
+
+  $fetch(
+    '/api/turnstile',
+    {
+      method: 'POST',
+      body: {
+        token,
+      },
+    },
+  )
+    .then(({ success }) => {
+      if (success) {
+        toast.add({
+          title: 'Server',
+          description: 'Successful server-side validation',
+          color: 'success',
+        });
+      }
+      else {
+        toast.add({
+          title: 'Server',
+          description: 'Failed server-side validation',
+          color: 'error',
+        });
+      }
+    })
+    .catch(() => {
+      toast.add({
+        title: $t('UnexpectedErrorOccurred'),
+        color: 'error',
+      });
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+};
+
+const onResetThenRemove = () => {
   const turnstile = window.turnstile;
-  if (widgetId.value && turnstile) {
+  if (turnstile && widgetId.value) {
     turnstile.reset(widgetId.value);
+    turnstile.remove(widgetId.value);
+    widgetId.value = '';
   }
-  widgetId.value = '';
 };
 
-const onRemove = () => {
-  const turnstile = window.turnstile;
-  turnstile?.remove('#dtc-turnstile-container');
-  widgetId.value = '';
-};
+// const onGetResponse = () => {
+//   const turnstile = window.turnstile;
+//   if (turnstile && widgetId.value) {
+//     const resp = turnstile.getResponse(widgetId.value);
+//     toast.add({
+//       title: JSON.stringify(resp) || '_undefined',
+//       color: 'info',
+//     });
+//   }
+// };
 
-const onExecute = () => {
-  const turnstile = window.turnstile;
-
-  turnstile?.execute('#dtc-turnstile-container');
-};
-
-const onGetResponse = () => {
-  const turnstile = window.turnstile;
-  const resp = turnstile?.getResponse(widgetId.value);
-  toast.add({
-    title: JSON.stringify(resp) || '_undefined',
-    color: 'info',
-  });
-};
-
-const checkIsExpired = () => {
-  const turnstile = window.turnstile;
-  const bool = turnstile?.isExpired(widgetId.value);
-  toast.add({
-    title: JSON.stringify(bool) || '_undefined',
-    color: 'info',
-  });
-};
+// const checkIsExpired = () => {
+//   const turnstile = window.turnstile;
+//   if (turnstile && widgetId.value) {
+//     const bool = turnstile.isExpired(widgetId.value);
+//     toast.add({
+//       title: JSON.stringify(bool) || '_undefined',
+//       color: 'info',
+//     });
+//   }
+// };
 </script>
