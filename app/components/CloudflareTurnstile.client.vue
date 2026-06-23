@@ -1,17 +1,13 @@
 <template>
   <div class="flex flex-col">
     <div class="mb-4 flex flex-col gap-2">
-      <p>
-        {{ widgetId || 'empty' }}
-      </p>
       <div class="flex gap-2">
         <UButton
-          label="TryAgain"
+          :label="TEXTS.StartDemo"
           variant="subtle"
           icon="material-symbols:app-badging-outline"
           :loading="isLoading"
-          :disabled="Boolean(!widgetId)"
-          @click="onTryAgain" />
+          @click="resetThenRender" />
       </div>
     </div>
 
@@ -49,6 +45,7 @@ declare global {
 }
 
 const { t: $t, locale } = useI18n();
+const { TEXTS } = useNonReactiveTranslation();
 const toast = useToast();
 const config = useRuntimeConfig();
 
@@ -60,14 +57,8 @@ useHead(() => ({
     {
       src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit',
       defer: true,
-      onloadstart: () => {
-        isLoading.value = true;
-      },
-      onload: () => {
-        onRenderThenExecute();
-        isLoading.value = false;
-      },
       onerror: () => {
+        isLoading.value = false;
         toast.add({
           title: $t('UnexpectedErrorOccurred'),
           color: 'error',
@@ -77,12 +68,15 @@ useHead(() => ({
   ],
 }));
 
-const onTryAgain = () => {
-  onResetThenRemove();
-  onRenderThenExecute();
+const resetThenRender = () => {
+  resetThenRemove();
+
+  nextTick(() => {
+    renderThenExecute();
+  });
 };
 
-const onRenderThenExecute = () => {
+const renderThenExecute = () => {
   try {
     const turnstile = window.turnstile;
 
@@ -102,7 +96,7 @@ const onRenderThenExecute = () => {
         'appearance': 'always',
         'execution': 'execute', // manually execute challenge
         'callback': (token: TurnstileToken) => {
-          onVerified(token);
+          onVerifiedClientSide(token);
         },
         'error-callback': (err) => {
           if (widgetId.value && turnstile) {
@@ -112,6 +106,7 @@ const onRenderThenExecute = () => {
               color: 'error',
             });
           }
+          isLoading.value = false;
         },
         'expired-callback': (err) => {
           if (widgetId.value && turnstile) {
@@ -121,6 +116,7 @@ const onRenderThenExecute = () => {
               color: 'error',
             });
           }
+          isLoading.value = false;
         },
         'timeout-callback': (err) => {
           if (widgetId.value && turnstile) {
@@ -130,6 +126,7 @@ const onRenderThenExecute = () => {
               color: 'error',
             });
           }
+          isLoading.value = false;
         },
       },
     );
@@ -146,7 +143,7 @@ const onRenderThenExecute = () => {
   }
 };
 
-const onVerified = async (token: TurnstileToken) => {
+const onVerifiedClientSide = async (token: TurnstileToken) => {
   isLoading.value = true;
 
   $fetch(
@@ -185,7 +182,7 @@ const onVerified = async (token: TurnstileToken) => {
     });
 };
 
-const onResetThenRemove = () => {
+const resetThenRemove = () => {
   const turnstile = window.turnstile;
   if (turnstile && widgetId.value) {
     turnstile.reset(widgetId.value);
@@ -194,25 +191,7 @@ const onResetThenRemove = () => {
   }
 };
 
-// const onGetResponse = () => {
-//   const turnstile = window.turnstile;
-//   if (turnstile && widgetId.value) {
-//     const resp = turnstile.getResponse(widgetId.value);
-//     toast.add({
-//       title: JSON.stringify(resp) || '_undefined',
-//       color: 'info',
-//     });
-//   }
-// };
-
-// const checkIsExpired = () => {
-//   const turnstile = window.turnstile;
-//   if (turnstile && widgetId.value) {
-//     const bool = turnstile.isExpired(widgetId.value);
-//     toast.add({
-//       title: JSON.stringify(bool) || '_undefined',
-//       color: 'info',
-//     });
-//   }
-// };
+onBeforeRouteLeave(() => {
+  resetThenRemove();
+});
 </script>
