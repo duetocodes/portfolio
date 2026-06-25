@@ -1,22 +1,12 @@
 <template>
-  <div class="flex flex-col">
-    <div class="mb-4 flex flex-col gap-2">
-      <div class="flex gap-2">
-        <UButton
-          :label="TEXTS.StartDemo"
-          variant="subtle"
-          icon="material-symbols:app-badging-outline"
-          :loading="isLoading"
-          @click="resetThenRender" />
-      </div>
-    </div>
-
+  <div>
     <div id="dtc-turnstile-container" />
   </div>
 </template>
 
 <!--
 Approach:
+- a client-only component
 - to render turnstile explicitly
 - render client-side as this depends on the `window` object
 - Widget Mode: `Managed`
@@ -28,6 +18,7 @@ Approach:
 // timeout-callback: Triggered when an interactive challenge times out.
 
 test siteKeys
+https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-sitekeys
 1x00000000000000000000AA; Always passes Visible; Test successful form submissions
 2x00000000000000000000AB; Always fails Visible; Test error handling and retry logic
 1x00000000000000000000BB; Always passes Invisible; Test invisible widget success flows
@@ -44,13 +35,23 @@ declare global {
   }
 }
 
+const emits = defineEmits([
+  'on-success',
+  'on-error',
+]);
+
 const { t: $t, locale } = useI18n();
-const { TEXTS } = useNonReactiveTranslation();
 const toast = useToast();
 const config = useRuntimeConfig();
 
 const widgetId = ref('');
 const isLoading = ref(false);
+
+const props = defineProps({
+  siteKey: {
+    type: String,
+  },
+});
 
 useHead(() => ({
   script: [
@@ -68,118 +69,67 @@ useHead(() => ({
   ],
 }));
 
-const resetThenRender = () => {
-  resetThenRemove();
-
-  nextTick(() => {
-    renderThenExecute();
-  });
-};
-
 const renderThenExecute = () => {
-  try {
-    const turnstile = window.turnstile;
+  nextTick(() => {
+    try {
+      const turnstile = window.turnstile;
 
-    if (!turnstile) {
-      toast.add({
-        title: $t('UnexpectedErrorOccurred'),
-        color: 'error',
-      });
-      return;
-    }
-
-    widgetId.value = turnstile.render(
-      '#dtc-turnstile-container',
-      {
-        'language': locale.value,
-        'sitekey': config.public.turnstileSiteKey,
-        'appearance': 'always',
-        'execution': 'execute', // manually execute challenge
-        'callback': (token: TurnstileToken) => {
-          onVerifiedClientSide(token);
-        },
-        'error-callback': (err) => {
-          if (widgetId.value && turnstile) {
-            toast.add({
-              title: 'error-callback',
-              description: JSON.stringify(err) || '_undefined',
-              color: 'error',
-            });
-          }
-          isLoading.value = false;
-        },
-        'expired-callback': (err) => {
-          if (widgetId.value && turnstile) {
-            toast.add({
-              title: 'expired-callback',
-              description: JSON.stringify(err) || '_undefined',
-              color: 'error',
-            });
-          }
-          isLoading.value = false;
-        },
-        'timeout-callback': (err) => {
-          if (widgetId.value && turnstile) {
-            toast.add({
-              title: 'timeout-callback',
-              description: JSON.stringify(err) || '_undefined',
-              color: 'error',
-            });
-          }
-          isLoading.value = false;
-        },
-      },
-    );
-
-    if (widgetId.value) {
-      turnstile.execute(widgetId.value);
-    }
-  }
-  catch {
-    toast.add({
-      title: $t('UnexpectedErrorOccurred'),
-      color: 'error',
-    });
-  }
-};
-
-const onVerifiedClientSide = async (token: TurnstileToken) => {
-  isLoading.value = true;
-
-  $fetch(
-    '/api/turnstile',
-    {
-      method: 'POST',
-      body: {
-        token,
-      },
-    },
-  )
-    .then(({ success }) => {
-      if (success) {
+      if (!turnstile) {
         toast.add({
-          title: 'Server',
-          description: 'Successful server-side validation',
-          color: 'success',
-        });
-      }
-      else {
-        toast.add({
-          title: 'Server',
-          description: 'Failed server-side validation',
+          title: 'Turnstile',
+          description: $t('UnexpectedErrorOccurred'),
           color: 'error',
         });
+        return;
       }
-    })
-    .catch(() => {
+
+      widgetId.value = turnstile.render(
+        '#dtc-turnstile-container',
+        {
+          'language': locale.value,
+          'sitekey': props.siteKey || config.public.turnstileSiteKey,
+          'appearance': 'always',
+          'execution': 'execute', // manually execute challenge
+          'callback': (token: TurnstileToken) => {
+            emits('on-success', token);
+          },
+          'error-callback': (err) => {
+            if (widgetId.value && turnstile) {
+              emits('on-error', `'error-callback' ${JSON.stringify(err)}`);
+            }
+            isLoading.value = false;
+          },
+          'expired-callback': (err) => {
+            if (widgetId.value && turnstile) {
+              emits('on-error', `'expired-callback' ${JSON.stringify(err)}`);
+            }
+            isLoading.value = false;
+          },
+          'timeout-callback': (err) => {
+            if (widgetId.value && turnstile) {
+              emits('on-error', `'timeout-callback' ${JSON.stringify(err)}`);
+            }
+            isLoading.value = false;
+          },
+        },
+      );
+
+      if (widgetId.value) {
+        nextTick(() => {
+          turnstile.execute(widgetId.value);
+        });
+      }
+    }
+    catch {
+      emits('on-error');
+
       toast.add({
-        title: $t('UnexpectedErrorOccurred'),
+        title: 'Turnstile',
+        description: $t('UnexpectedErrorOccurred'),
         color: 'error',
       });
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    }
+  });
 };
 
 const resetThenRemove = () => {
@@ -193,5 +143,11 @@ const resetThenRemove = () => {
 
 onBeforeRouteLeave(() => {
   resetThenRemove();
+});
+
+defineExpose({
+  widgetId,
+  renderThenExecute,
+  resetThenRemove,
 });
 </script>

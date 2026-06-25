@@ -51,10 +51,18 @@ export const TurnstileAPISchema = z.object({
 });
 
 export const CloudflareSiteVerifyResponseSchema = z.object({
-  success: z.boolean(),
-  challenge_ts: z.string().datetime().optional(),
+  'success': z.boolean(),
+  'challenge_ts': z.string().datetime().optional(),
+  'error-codes': z.array(z.string()).optional(),
 });
 
+export type CloudflareTurnstileExpose = {
+  widgetId: string
+  renderThenExecute: () => void
+  resetThenRemove: () => void
+}
+
+export type CloudflareSiteVerifyResponse = z.infer<typeof CloudflareSiteVerifyResponseSchema>;
 export type TurnstileToken = z.infer<typeof TurnstileTokenSchema>;
 export type TurnstileTokenPayload = z.infer<typeof TurnstileTokenPayloadSchema>;
 export type TurnstileAPI = z.infer<typeof TurnstileAPISchema>;

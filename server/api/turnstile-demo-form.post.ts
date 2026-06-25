@@ -1,4 +1,5 @@
 // test secret-keys
+// https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys
 // 1x0000000000000000000000000000000AA; Always passes validation; Test successful token validation
 // 2x0000000000000000000000000000000AA; Always fails validation; Test validation error handling
 // 3x0000000000000000000000000000000AA; Returns "token already spent" error; Test duplicate token handling
@@ -6,15 +7,17 @@
 import type { FetchError } from 'ofetch';
 
 import {
-  TurnstileTokenPayloadSchema,
   CloudflareSiteVerifyResponseSchema,
 } from '~~/schemas/turnstile';
+
+import { TurnstileDemoPayloadSchema } from '~~/schemas/turnstile-demo-form';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
 
   // explicitly throw error with .parse (validation failed)
-  const body = await readValidatedBody(event, TurnstileTokenPayloadSchema.parse);
+  const body = await readValidatedBody(event, TurnstileDemoPayloadSchema.parse);
+  const key = body.isSimulateFail ? config.demoTurnstileSecretKey : config.turnstileSecretKey;
 
   try {
     const response = await $fetch(
@@ -25,8 +28,7 @@ export default defineEventHandler(async (event) => {
           'Content-Type': 'application/json',
         },
         body: {
-          secret: config.turnstileSecretKey,
-          // secret: '1x0000000000000000000000000000000AA',
+          secret: key,
           response: body.token,
         },
       },

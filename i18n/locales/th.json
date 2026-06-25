@@ -7,9 +7,11 @@
   "CurrencyConverter": "เครื่องแปลงสกุลเงิน",
   "TypingGame": "เกมพิมพ์",
   "KnowYourViewport": "รู้จักมุมมองของคุณ",
+  "TurnstileDemo": "การสาธิต Turnstile",
   "Continue": "ดำเนินการต่อ",
   "NotFound": "ไม่พบ",
   "ServerError": "ข้อผิดพลาดของเซิร์ฟเวอร์",
+  "Successful": "สำเร็จ",
   "Unsuccessful": "ไม่สำเร็จ 😅",
   "UnexpectedErrorOccurred": "เกิดข้อผิดพลาดที่ไม่คาดคิดขึ้น",
   "AIGeneratedContent": "เนื้อหาที่สร้างโดย AI",
@@ -95,5 +97,13 @@
   "WhatIsDevicePixelRatio": "Device Pixel Ratio คืออะไร?",
   "Tip1DPR": "1 หมายถึงหน้าจอมาตรฐาน",
   "Tip2DPR": "ค่ายิ่งสูง หน้าจอยิ่งคมชัด",
-  "Tip3DPR": "พิกเซลจริงต่อพิกเซล CSS"
+  "Tip3DPR": "พิกเซลจริงต่อพิกเซล CSS",
+  "Submit": "ส่ง",
+  "Reset": "รีเซ็ต",
+  "TypeAnything": "พิมพ์อะไรก็ได้...",
+  "SimulateFailure": "จำลองความล้มเหลว",
+  "Validated": "ตรวจสอบแล้ว",
+  "ClientSide": "ฝั่งไคลเอนต์",
+  "ServerSide": "ฝั่งเซิร์ฟเวอร์",
+  "Validation": "การตรวจสอบ"
 }

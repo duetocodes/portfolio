@@ -7,9 +7,11 @@
   "CurrencyConverter": "货币转换器",  
   "TypingGame": "打字游戏",
   "KnowYourViewport": "了解您的视口",
+  "TurnstileDemo": "Turnstile 演示",
   "Continue": "继续",
   "NotFound": "未找到",
   "ServerError": "服务器错误",
+  "Successful": "成功",
   "Unsuccessful": "操作失败 😅",
   "UnexpectedErrorOccurred": "发生了意外错误。",
   "AIGeneratedContent": "AI 生成的内容",
@@ -95,5 +97,13 @@
   "WhatIsDevicePixelRatio": "什么是 Device Pixel Ratio?",
   "Tip1DPR": "1 表示标准显示器",
   "Tip2DPR": "数值越高，显示越清晰",
-  "Tip3DPR": "每个 CSS 像素对应的物理像素数"
+  "Tip3DPR": "每个 CSS 像素对应的物理像素数",
+  "Submit": "提交",
+  "Reset": "重置",
+  "TypeAnything": "输入任意内容...",
+  "SimulateFailure": "模拟失败",
+  "Validated": "已验证",
+  "ClientSide": "客户端",
+  "ServerSide": "服务器端",
+  "Validation": "验证"
 }
