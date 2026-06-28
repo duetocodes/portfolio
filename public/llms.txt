@@ -16,6 +16,7 @@ duetocodes is a multilingual Nuxt SSR portfolio site at https://duetocodes.com. 
 - [Currency Converter](https://duetocodes.com/projects/currency-converter): Currency conversion simulation using mid-market exchange rate references.
 - [Typing Game](https://duetocodes.com/projects/typing-game): Desktop typing speed game with generated passages, pace and accuracy metrics, and AI-assisted coaching feedback.
 - [Know Your Viewport](https://duetocodes.com/projects/know-your-viewport): Browser viewport and device capability inspector showing viewport size, screen resolution, orientation, touch support, color depth, DPR, page layout size, platform, and appearance.
+- [Cloudflare Turnstile Demo](https://duetocodes.com/projects/cloudflare-turnstile-demo): Interactive form demo showing Cloudflare Turnstile client-side challenge execution, server-side token verification, testing keys, and action validation.
 
 ## Locales
 
