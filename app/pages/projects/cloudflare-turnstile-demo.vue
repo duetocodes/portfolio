@@ -25,7 +25,7 @@
                 ref="form"
                 class="w-[300px]"
                 :state="state"
-                :schema="schema"
+                :schema="demoInputSchema"
                 @submit="onSubmit">
                 <UFieldGroup>
                   <UFormField name="demoinput">
@@ -84,6 +84,7 @@
                     color="neutral"
                     variant="link"
                     size="sm"
+                    :aria-label="TEXTS.ViewDocumentation"
                     :ui="{ base: 'p-0' }">
                   </UButton>
                 </div>
@@ -156,6 +157,7 @@ import type { ProjectItemPageMeta } from '~~/types';
 import type { ProjectItemDataSchema } from '~~/schemas';
 import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schemas/cloudflare-turnstile';
 import type { TurnstileDemoPayload } from '~~/schemas/turnstile-demo-form';
+import { TURNSTILE_ACTION, TurnstileDemoInputSchema } from '~~/schemas/turnstile-demo-form';
 import type { TimelineItem, FormSubmitEvent } from '@nuxt/ui';
 
 const nuxtApp = useNuxtApp();
@@ -166,7 +168,6 @@ const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
 const SLUG_ID = 'cloudflare-turnstile-demo';
-const TURNSTILE_ACTION = 'turnstile-demo';
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 
@@ -183,9 +184,6 @@ const isLoading = ref(false);
 const result = ref<CloudflareSiteVerifyResponse | null>(null);
 const isMountTurstile = ref(false);
 
-const schema = z.object({
-  demoinput: z.string().min(3, 'Minimum 3 characters').max(100, 'Maximum 100 characters'),
-});
 const state = reactive({
   demoinput: '',
 });
@@ -196,8 +194,11 @@ const settings = reactive({
   siteKey: '',
 });
 
-type Schema = z.output<typeof schema>
-const onSubmit = (_event: FormSubmitEvent<Schema>) => {
+const demoInputSchema = z.object({
+  demoinput: TurnstileDemoInputSchema,
+});
+type DemoInput = z.infer<typeof demoInputSchema>
+const onSubmit = (_event: FormSubmitEvent<DemoInput>) => {
   step.value = 1;
 
   if (settings.simulateClientFail) {
@@ -328,7 +329,6 @@ const onSuccessClient = (token: TurnstileToken) => {
         token,
         demoinput: state.demoinput,
         isSimulateFail: settings.simulateServerFail,
-        action: TURNSTILE_ACTION,
       } satisfies TurnstileDemoPayload,
     },
   )

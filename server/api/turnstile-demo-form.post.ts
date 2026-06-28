@@ -4,7 +4,7 @@ import {
   CloudflareSiteVerifyResponseSchema,
 } from '~~/schemas/cloudflare-turnstile';
 
-import { TurnstileDemoPayloadSchema } from '~~/schemas/turnstile-demo-form';
+import { TurnstileDemoPayloadSchema, TURNSTILE_ACTION } from '~~/schemas/turnstile-demo-form';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     // when in production
     // SiteVerify should return the same `action` for the same token
     // https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
-    if (response?.action === body?.action) {
+    if (response?.action === TURNSTILE_ACTION) {
       return {
         'success': response.success,
         'challenge_ts': response.challenge_ts,
