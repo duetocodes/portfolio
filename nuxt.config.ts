@@ -17,6 +17,7 @@ const basePrerenderRoutes = [
   '/projects/currency-converter',
   '/projects/treasury-yield-visualiser',
   '/projects/know-your-viewport',
+  '/projects/cloudflare-turnstile-demo',
   '/tech-stacks',
 ] as const;
 
@@ -48,6 +49,13 @@ export default defineNuxtConfig({
     wiseReadOnlyToken: import.meta.env.NUXT_WISE_READ_ONLY_TOKEN,
     wiseApiBase: import.meta.env.NUXT_WISE_API_BASE,
     openAiSecretKey: import.meta.env.NUXT_OPENAI_API_KEY,
+    turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
+    demoTurnstileSecretKey: import.meta.env.NUXT_DEMO_TURNSTILE_SECRET_KEY,
+
+    public: {
+      turnstileSiteKey: import.meta.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
+      demoTurnstileSiteKey: import.meta.env.NUXT_PUBLIC_DEMO_TURNSTILE_SITE_KEY,
+    },
   },
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@nuxtjs/mdc', 'nuxt-charts', '@nuxt/image', '@vueuse/nuxt'],
   devtools: {
