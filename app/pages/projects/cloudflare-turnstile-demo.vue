@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <UTimeline :items="items">
+  <div class="flex">
+    <UTimeline
+      v-model="step"
+      :items="items"
+      color="neutral"
+      class="w-96">
       <template #demoform-description>
-        <div class="ml-2 mt-2 h-[65px]">
+        <div class="mt-2 h-[65px]">
           <UForm
             ref="form"
             class="w-[300px]"
@@ -28,37 +32,70 @@
         </div>
       </template>
 
+      <template #clientside-title="{ item }">
+        <div class="flex justify-between">
+          {{ TEXTS.Validation }}
+          <UBadge
+            :label="item.badgeLabel"
+            color="neutral"
+            variant="outline"
+            size="sm" />
+        </div>
+      </template>
       <template #clientside-description>
-        <div class="ml-2 mt-2 w-[300px] h-[65px]">
+        <div class="mt-2 w-full h-[65px]">
           <CloudflareTurnstile
             ref="turnstile"
             :site-key="settings.siteKey"
-            @on-success="onSuccessClient" />
+            :action="TURNSTILE_ACTION"
+            @on-success="onSuccessClient"
+            @on-error="onErrorClient" />
 
           <div
-            v-if="!turnstile?.widgetId"
-            class="w-[300px] h-[65px]">
-            <USwitch
-              v-model="settings.simulateClientFail"
-              size="sm"
-              :label="TEXTS.SimulateFailure"
-              @change="() => {
-                if (settings.simulateServerFail) {
-                  settings.simulateServerFail = false;
-                }
-              }" />
+            v-if="!turnstile?.widgetId">
+            <div class="flex justify-between">
+              <USwitch
+                v-model="settings.simulateClientFail"
+                size="sm"
+                :label="TEXTS.SimulateFailure"
+                @change="() => {
+                  if (settings.simulateServerFail) {
+                    settings.simulateServerFail = false;
+                  }
+                }">
+              </USwitch>
+              <UButton
+                to="https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-sitekeys"
+                target="_blank"
+                icon="material-symbols:help-outline"
+                color="neutral"
+                variant="link"
+                size="sm"
+                :ui="{ base: 'p-0' }">
+              </UButton>
+            </div>
           </div>
         </div>
       </template>
 
+      <template #serverside-title="{ item }">
+        <div class="flex justify-between">
+          {{ TEXTS.Validation }}
+          <UBadge
+            :label="item.badgeLabel"
+            color="neutral"
+            variant="outline"
+            size="sm" />
+        </div>
+      </template>
       <template #serverside-description>
-        <div class="ml-2 mt-2">
+        <div class="mt-2">
           <UAlert
-            v-if="result"
+            v-if="step === 2 && result && (result.success || !result.success)"
             class="w-[300px]"
             variant="soft"
-            :title="result?.success ? TEXTS.Successful : TEXTS.Unsuccessful"
-            :color="result?.success ? 'success' : 'error'">
+            :title="result.success ? TEXTS.Successful : TEXTS.Unsuccessful"
+            :color="result.success ? 'success' : 'error'">
             <template #description>
               <div class="flex flex-col gap-2">
                 <span v-if="result?.success">
@@ -73,12 +110,25 @@
               </div>
             </template>
           </UAlert>
-          <USwitch
+          <div
             v-else
-            v-model="settings.simulateServerFail"
-            size="sm"
-            :disabled="isLoading || settings.simulateClientFail"
-            :label="TEXTS.SimulateFailure" />
+            class="flex justify-between">
+            <USwitch
+              v-model="settings.simulateServerFail"
+              size="sm"
+              :disabled="isLoading || settings.simulateClientFail"
+              :label="TEXTS.SimulateFailure">
+            </USwitch>
+            <UButton
+              to="https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys"
+              target="_blank"
+              icon="material-symbols:help-outline"
+              color="neutral"
+              variant="link"
+              size="sm"
+              :ui="{ base: 'p-0' }">
+            </UButton>
+          </div>
         </div>
       </template>
     </UTimeline>
@@ -89,7 +139,7 @@
 import z from 'zod';
 import type { ProjectItemPageMeta } from '~~/types';
 import type { ProjectItemDataSchema } from '~~/schemas';
-import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schemas/turnstile';
+import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schemas/cloudflare-turnstile';
 import type { TurnstileDemoPayload } from '~~/schemas/turnstile-demo-form';
 import type { TimelineItem, FormSubmitEvent } from '@nuxt/ui';
 
@@ -100,7 +150,8 @@ const config = useRuntimeConfig();
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
-const SLUG_ID = 'turnstile-demo';
+const SLUG_ID = 'cloudflare-turnstile-demo';
+const TURNSTILE_ACTION = 'demo';
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 
@@ -110,6 +161,7 @@ definePageMeta({
   slugLabel: 'TurnstileDemo',
 } satisfies ProjectItemPageMeta);
 
+const step = ref(0);
 const form = useTemplateRef<{ submit: () => void }>('form');
 const turnstile = useTemplateRef<CloudflareTurnstileExpose>('turnstile');
 const isLoading = ref(false);
@@ -130,6 +182,8 @@ const settings = reactive({
 
 type Schema = z.output<typeof schema>
 const onSubmit = (_event: FormSubmitEvent<Schema>) => {
+  step.value = 1;
+
   if (settings.simulateClientFail) {
     settings.siteKey = config.public.demoTurnstileSiteKey;
   }
@@ -140,6 +194,7 @@ const onSubmit = (_event: FormSubmitEvent<Schema>) => {
 };
 
 const onReset = () => {
+  step.value = 0;
   state.demoinput = '';
   settings.simulateClientFail = false;
   settings.simulateServerFail = false;
@@ -148,29 +203,56 @@ const onReset = () => {
   turnstile.value?.resetThenRemove();
 };
 
-const items = computed(() => [
-  {
-    slot: 'demoform' as const,
-    value: 'demoform',
-    title: TEXTS.Form,
-    icon: 'i-lucide-rocket',
-  },
-  {
-    slot: 'clientside' as const,
-    title: `${TEXTS.Validation} - ${TEXTS.ClientSide} `,
-    icon: 'i-lucide-palette',
-    value: 'development',
-  },
-  {
-    slot: 'serverside' as const,
-    title: `${TEXTS.Validation} - ${TEXTS.ServerSide} `,
-    description: 'User research and design workshops. Created wireframes and prototypes for user testing.',
-    icon: 'material-symbols:app-badging-outline',
-    ui: {
-      indicator: isLoading.value ? 'animate-spin' : undefined,
+const items = computed(() => {
+  let icon;
+  switch (step.value) {
+    case 1: {
+      if (!result.value && isLoading.value)
+        icon = 'material-symbols:app-badging-outline';
+      else
+        icon = 'material-symbols:pending-actions';
+      break;
+    }
+    case 2: {
+      if (result.value) {
+        if (result.value.success)
+          icon = 'material-symbols:verified-outline';
+        else
+          icon = 'material-symbols:verified-off-outline';
+      }
+      break;
+    }
+    default:
+      icon = 'material-symbols:pending-actions';
+      break;
+  }
+
+  return [
+    {
+      slot: 'demoform' as const,
+      value: 'demoform',
+      title: TEXTS.Form,
+      icon: 'material-symbols:edit-document-outline',
+      ui: {
+        indicator: 'text-red-400',
+      },
     },
-  },
-] satisfies TimelineItem[]);
+    {
+      slot: 'clientside' as const,
+      badgeLabel: `${TEXTS.ClientSide}`,
+      icon: 'material-symbols:widgets-outline',
+      value: 'development',
+    },
+    {
+      slot: 'serverside' as const,
+      badgeLabel: `${TEXTS.ServerSide} `,
+      icon: icon,
+      ui: {
+        indicator: isLoading.value ? 'animate-spin' : undefined,
+      },
+    },
+  ] satisfies TimelineItem[];
+});
 
 const {
   // non-crucial data
@@ -230,17 +312,20 @@ const onSuccessClient = (token: TurnstileToken) => {
         token,
         demoinput: state.demoinput,
         isSimulateFail: settings.simulateServerFail,
+        action: TURNSTILE_ACTION,
       } satisfies TurnstileDemoPayload,
     },
   )
     .then((res: CloudflareSiteVerifyResponse) => {
-      const date = new Date(res?.challenge_ts || '');
-      const localized = new Intl.DateTimeFormat(undefined, {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      }).format(date);
+      if (res.challenge_ts) {
+        const date = new Date(res.challenge_ts);
+        const localized = new Intl.DateTimeFormat(undefined, {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        }).format(date);
 
-      res.challenge_ts = localized;
+        res.challenge_ts = localized;
+      }
       result.value = res;
     })
     .catch(() => {
@@ -250,7 +335,16 @@ const onSuccessClient = (token: TurnstileToken) => {
       };
     })
     .finally(() => {
+      step.value = 2;
       isLoading.value = false;
     });
+};
+
+const onErrorClient = () => {
+  result.value = {
+    success: false,
+  };
+  step.value = 2;
+  isLoading.value = false;
 };
 </script>

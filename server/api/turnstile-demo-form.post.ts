@@ -1,14 +1,8 @@
-// test secret-keys
-// https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys
-// 1x0000000000000000000000000000000AA; Always passes validation; Test successful token validation
-// 2x0000000000000000000000000000000AA; Always fails validation; Test validation error handling
-// 3x0000000000000000000000000000000AA; Returns "token already spent" error; Test duplicate token handling
-
 import type { FetchError } from 'ofetch';
 
 import {
   CloudflareSiteVerifyResponseSchema,
-} from '~~/schemas/turnstile';
+} from '~~/schemas/cloudflare-turnstile';
 
 import { TurnstileDemoPayloadSchema } from '~~/schemas/turnstile-demo-form';
 
@@ -20,21 +14,41 @@ export default defineEventHandler(async (event) => {
   const key = body.isSimulateFail ? config.demoTurnstileSecretKey : config.turnstileSecretKey;
 
   try {
-    const response = await $fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    const response = CloudflareSiteVerifyResponseSchema.parse(
+      await $fetch(
+        '/api/cloudflare-turnstile',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: {
+            secret: key,
+            response: body.token,
+          },
         },
-        body: {
-          secret: key,
-          response: body.token,
-        },
-      },
+      ),
     );
 
-    return CloudflareSiteVerifyResponseSchema.parse(response);
+    // when on localhost
+    // if (response?.metadata?.result_with_testing_key)
+    return response;
+
+    // when in production
+    // ensure matching form vs token
+    // if (response?.action === body?.action) {
+    //   return {
+    //     'success': response.success,
+    //     'challenge_ts': response.challenge_ts,
+    //     'error-codes': response['error-codes'],
+    //   };
+    // }
+    // else {
+    //   throw createError({
+    //     statusCode: 400,
+    //     statusMessage: 'Bad Request',
+    //   });
+    // }
   }
   catch (err) {
     const error = err as FetchError;

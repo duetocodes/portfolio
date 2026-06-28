@@ -31,7 +31,7 @@ const prerenderRoutes = i18nLocales.flatMap(({ code }) => {
 });
 
 export default defineNuxtConfig({
-  ssr: false,
+  ssr: true,
   app: {
     pageTransition: {
       name: 'fade-main',

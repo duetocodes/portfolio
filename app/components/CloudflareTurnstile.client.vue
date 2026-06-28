@@ -27,7 +27,7 @@ https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-siteke
 -->
 
 <script setup lang="ts">
-import type { TurnstileToken, TurnstileAPI } from '~~/schemas/turnstile';
+import type { TurnstileToken, TurnstileAPI } from '~~/schemas/cloudflare-turnstile';
 
 declare global {
   interface Window {
@@ -43,6 +43,7 @@ const emits = defineEmits([
 const { t: $t, locale } = useI18n();
 const toast = useToast();
 const config = useRuntimeConfig();
+const colorMode = useColorMode();
 
 const widgetId = ref('');
 const isLoading = ref(false);
@@ -50,6 +51,15 @@ const isLoading = ref(false);
 const props = defineProps({
   siteKey: {
     type: String,
+    required: true,
+  },
+  action: {
+    type: String,
+    default: () => undefined,
+  },
+  cdata: {
+    type: String,
+    default: () => undefined,
   },
 });
 
@@ -86,8 +96,11 @@ const renderThenExecute = () => {
       widgetId.value = turnstile.render(
         '#dtc-turnstile-container',
         {
+          'action': props.action,
+          'cData': props.cdata,
           'language': locale.value,
           'sitekey': props.siteKey || config.public.turnstileSiteKey,
+          'theme': colorMode.value === 'dark' ? 'dark' : 'light',
           'appearance': 'always',
           'execution': 'execute', // manually execute challenge
           'callback': (token: TurnstileToken) => {
@@ -96,6 +109,7 @@ const renderThenExecute = () => {
           'error-callback': (err) => {
             if (widgetId.value && turnstile) {
               emits('on-error', `'error-callback' ${JSON.stringify(err)}`);
+              // let auto-retry when verification un-successful
             }
             isLoading.value = false;
           },
