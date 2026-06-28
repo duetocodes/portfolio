@@ -59,6 +59,7 @@
           <template #clientside-description>
             <div class="mt-2 w-full h-[65px]">
               <CloudflareTurnstile
+                v-if="isMountTurstile"
                 ref="turnstile"
                 :site-key="settings.siteKey"
                 :action="TURNSTILE_ACTION"
@@ -180,6 +181,7 @@ const form = useTemplateRef<{ submit: () => void }>('form');
 const turnstile = useTemplateRef<CloudflareTurnstileExpose>('turnstile');
 const isLoading = ref(false);
 const result = ref<CloudflareSiteVerifyResponse | null>(null);
+const isMountTurstile = ref(false);
 
 const schema = z.object({
   demoinput: z.string().min(3, 'Minimum 3 characters').max(100, 'Maximum 100 characters'),
@@ -347,4 +349,8 @@ const onSuccessClient = (token: TurnstileToken) => {
       isLoading.value = false;
     });
 };
+
+onMounted(() => {
+  isMountTurstile.value = true;
+});
 </script>
