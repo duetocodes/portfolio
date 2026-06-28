@@ -6,138 +6,148 @@
       class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
       tag="article" />
 
-    <UTimeline
-      v-model="step"
-      :items="items"
-      color="neutral"
-      class="mx-auto max-w-96 pt-4 sm:pt-8">
-      <template #demoform-description>
-        <div class="mt-2 h-[65px]">
-          <UForm
-            ref="form"
-            class="w-[300px]"
-            :state="state"
-            :schema="schema"
-            @submit="onSubmit">
-            <UFieldGroup>
-              <UFormField name="demoinput">
-                <UInput
-                  v-model="state.demoinput"
-                  class="w-48"
-                  :placeholder="TEXTS.TypeAnything" />
-                <UButton
-                  :label="turnstile?.widgetId ? TEXTS.Reset : TEXTS.Submit"
-                  color="neutral"
-                  variant="subtle"
-                  :disabled="isLoading"
-                  :trailing-icon="turnstile?.widgetId ? 'material-symbols:restart-alt-rounded' : 'material-symbols:send-outline'"
-                  @click="turnstile?.widgetId ? onReset() : form?.submit()" />
-              </UFormField>
-            </UFieldGroup>
-          </UForm>
-        </div>
-      </template>
-
-      <template #clientside-title="{ item }">
-        <div class="flex justify-between">
-          {{ TEXTS.Validation }}
-          <UBadge
-            :label="item.badgeLabel"
-            color="neutral"
-            variant="outline"
-            size="sm" />
-        </div>
-      </template>
-      <template #clientside-description>
-        <div class="mt-2 w-full h-[65px]">
-          <CloudflareTurnstile
-            ref="turnstile"
-            :site-key="settings.siteKey"
-            :action="TURNSTILE_ACTION"
-            @on-success="onSuccessClient"
-            @on-error="onErrorClient" />
-
-          <div
-            v-if="!turnstile?.widgetId">
-            <div class="flex justify-between">
-              <USwitch
-                v-model="settings.simulateClientFail"
-                size="sm"
-                :label="TEXTS.SimulateFailure"
-                @change="() => {
-                  if (settings.simulateServerFail) {
-                    settings.simulateServerFail = false;
-                  }
-                }">
-              </USwitch>
-              <UButton
-                to="https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-sitekeys"
-                target="_blank"
-                icon="material-symbols:help-outline"
-                color="neutral"
-                variant="link"
-                size="sm"
-                :ui="{ base: 'p-0' }">
-              </UButton>
+    <div class="pt-4 sm:pt-8">
+      <UCard
+        variant="subtle"
+        :ui="{
+          root: 'max-w-sm mx-auto',
+          header: 'flex items-center justify-between',
+          body: 'space-y-4',
+        }">
+        <UTimeline
+          v-model="step"
+          :items="items"
+          size="xs"
+          color="neutral">
+          <template #demoform-description>
+            <div class="mt-2 h-[65px]">
+              <UForm
+                ref="form"
+                class="w-[300px]"
+                :state="state"
+                :schema="schema"
+                @submit="onSubmit">
+                <UFieldGroup>
+                  <UFormField name="demoinput">
+                    <UInput
+                      v-model="state.demoinput"
+                      class="w-48"
+                      :placeholder="TEXTS.TypeAnything" />
+                    <UButton
+                      :label="turnstile?.widgetId ? TEXTS.Reset : TEXTS.Submit"
+                      color="neutral"
+                      variant="subtle"
+                      :disabled="isLoading"
+                      :trailing-icon="turnstile?.widgetId ? 'material-symbols:restart-alt-rounded' : 'material-symbols:send-outline'"
+                      @click="turnstile?.widgetId ? onReset() : form?.submit()" />
+                  </UFormField>
+                </UFieldGroup>
+              </UForm>
             </div>
-          </div>
-        </div>
-      </template>
+          </template>
 
-      <template #serverside-title="{ item }">
-        <div class="flex justify-between">
-          {{ TEXTS.Validation }}
-          <UBadge
-            :label="item.badgeLabel"
-            color="neutral"
-            variant="outline"
-            size="sm" />
-        </div>
-      </template>
-      <template #serverside-description>
-        <div class="mt-2">
-          <UAlert
-            v-if="step === 2 && result && (result.success || !result.success)"
-            class="w-[300px]"
-            variant="soft"
-            :title="result.success ? TEXTS.Successful : TEXTS.Unsuccessful"
-            :color="result.success ? 'success' : 'error'">
-            <template #description>
-              <div class="flex flex-col gap-2">
-                <span v-if="result?.success">
-                  {{ TEXTS.Validated }}
-                  {{ result?.challenge_ts }}
-                </span>
-                <span v-else>
-                  <span v-if="result?.['error-codes']">
-                    {{ result?.['error-codes'].join(', ') }}.
-                  </span>
-                </span>
+          <template #clientside-title="{ item }">
+            <div class="flex justify-between">
+              {{ TEXTS.Validation }}
+              <UBadge
+                :label="item.badgeLabel"
+                color="neutral"
+                variant="outline"
+                size="sm" />
+            </div>
+          </template>
+          <template #clientside-description>
+            <div class="mt-2 w-full h-[65px]">
+              <CloudflareTurnstile
+                ref="turnstile"
+                :site-key="settings.siteKey"
+                :action="TURNSTILE_ACTION"
+                @on-success="onSuccessClient"
+                @on-error="onErrorClient" />
+  
+              <div
+                v-if="!turnstile?.widgetId">
+                <div class="flex justify-between">
+                  <USwitch
+                    v-model="settings.simulateClientFail"
+                    size="sm"
+                    :label="TEXTS.SimulateFailure"
+                    @change="() => {
+                      if (settings.simulateServerFail) {
+                        settings.simulateServerFail = false;
+                      }
+                    }">
+                  </USwitch>
+                  <UButton
+                    to="https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-sitekeys"
+                    target="_blank"
+                    icon="material-symbols:help-outline"
+                    color="neutral"
+                    variant="link"
+                    size="sm"
+                    :ui="{ base: 'p-0' }">
+                  </UButton>
+                </div>
               </div>
-            </template>
-          </UAlert>
-          <div
-            v-else
-            class="flex justify-between">
-            <USwitch
-              v-model="settings.simulateServerFail"
-              size="sm"
-              :disabled="isLoading || settings.simulateClientFail"
-              :label="TEXTS.SimulateFailure">
-            </USwitch>
-            <UButton
-              to="https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys"
-              target="_blank"
-              icon="material-symbols:help-outline"
-              color="neutral"
-              variant="link"
-              size="sm"
-              :ui="{ base: 'p-0' }">
-            </UButton>
-          </div>
-        </div>
-      </template>
-    </UTimeline>
+            </div>
+          </template>
+
+          <template #serverside-title="{ item }">
+            <div class="flex justify-between">
+              {{ TEXTS.Validation }}
+              <UBadge
+                :label="item.badgeLabel"
+                color="neutral"
+                variant="outline"
+                size="sm" />
+            </div>
+          </template>
+          <template #serverside-description>
+            <div class="mt-2">
+              <UAlert
+                v-if="step === 2 && result && (result.success || !result.success)"
+                class="w-[300px]"
+                variant="soft"
+                :title="result.success ? TEXTS.Successful : TEXTS.Unsuccessful"
+                :color="result.success ? 'success' : 'error'">
+                <template #description>
+                  <div class="flex flex-col gap-2">
+                    <span v-if="result?.success">
+                      {{ TEXTS.Validated }}
+                      {{ result?.challenge_ts }}
+                    </span>
+                    <span v-else>
+                      <span v-if="result?.['error-codes']">
+                        {{ result?.['error-codes'].join(', ') }}.
+                      </span>
+                    </span>
+                  </div>
+                </template>
+              </UAlert>
+              <div
+                v-else
+                class="flex justify-between">
+                <USwitch
+                  v-model="settings.simulateServerFail"
+                  size="sm"
+                  :disabled="isLoading || settings.simulateClientFail"
+                  :label="TEXTS.SimulateFailure">
+                </USwitch>
+                <UButton
+                  to="https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys"
+                  target="_blank"
+                  icon="material-symbols:help-outline"
+                  color="neutral"
+                  variant="link"
+                  size="sm"
+                  :ui="{ base: 'p-0' }">
+                </UButton>
+              </div>
+            </div>
+          </template>
+        </UTimeline>
+      </UCard>
+    </div>
   </div>
 </template>
 
@@ -333,6 +343,7 @@ const onSuccessClient = (token: TurnstileToken) => {
         res.challenge_ts = localized;
       }
       result.value = res;
+      step.value = 2;
     })
     .catch(() => {
       result.value = {
@@ -341,7 +352,6 @@ const onSuccessClient = (token: TurnstileToken) => {
       };
     })
     .finally(() => {
-      step.value = 2;
       isLoading.value = false;
     });
 };
@@ -350,7 +360,6 @@ const onErrorClient = () => {
   result.value = {
     success: false,
   };
-  step.value = 2;
   isLoading.value = false;
 };
 </script>

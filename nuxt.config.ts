@@ -17,6 +17,7 @@ const basePrerenderRoutes = [
   '/projects/currency-converter',
   '/projects/treasury-yield-visualiser',
   '/projects/know-your-viewport',
+  '/projects/cloudflare-turnstile-demo',
   '/tech-stacks',
 ] as const;
 

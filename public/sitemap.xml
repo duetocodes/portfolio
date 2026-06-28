@@ -68,6 +68,17 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/know-your-viewport" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/projects/know-your-viewport" />
   </url>
+  <url>
+    <loc>https://duetocodes.com/projects/know-your-viewport</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://duetocodes.com/projects/cloudflare-turnstile-demo" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://duetocodes.com/th/projects/cloudflare-turnstile-demo" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://duetocodes.com/tr/projects/cloudflare-turnstile-demo" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://duetocodes.com/zh/projects/cloudflare-turnstile-demo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duetocodes.com/projects/cloudflare-turnstile-demo" />
+  </url>
 
   <url>
     <loc>https://duetocodes.com/tech-stacks</loc>
