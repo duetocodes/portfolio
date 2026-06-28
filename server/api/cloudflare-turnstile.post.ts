@@ -5,7 +5,7 @@
 // 3x0000000000000000000000000000000AA; Returns "token already spent" error; Test duplicate token handling
 
 import type { FetchError } from 'ofetch';
-import { CloudflareSiteVerifyResponseSchema, CloudflareSiteVerifyPayloadSchema } from '~~/schemas/cloudflare-turnstile';
+import { CloudflareSiteVerifyPayloadSchema } from '~~/schemas/cloudflare-turnstile';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
       },
     );
 
-    return CloudflareSiteVerifyResponseSchema.parse(response);
+    return response;
   }
   catch (err) {
     const error = err as FetchError;

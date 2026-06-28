@@ -30,25 +30,27 @@ export default defineEventHandler(async (event) => {
       ),
     );
 
-    // when on localhost
-    // if (response?.metadata?.result_with_testing_key)
-    return response;
+    // when using test keys on localhost
+    if (response?.metadata?.result_with_testing_key)
+      return response;
 
     // when in production
-    // ensure matching form vs token
-    // if (response?.action === body?.action) {
-    //   return {
-    //     'success': response.success,
-    //     'challenge_ts': response.challenge_ts,
-    //     'error-codes': response['error-codes'],
-    //   };
-    // }
-    // else {
-    //   throw createError({
-    //     statusCode: 400,
-    //     statusMessage: 'Bad Request',
-    //   });
-    // }
+    // SiteVerify should return the same `action` for the same token
+    // https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+    if (response?.action === body?.action) {
+      return {
+        'success': response.success,
+        'challenge_ts': response.challenge_ts,
+        'error-codes': response['error-codes'],
+        'hostname': response.hostname,
+      };
+    }
+    else {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Bad Request',
+      });
+    }
   }
   catch (err) {
     const error = err as FetchError;
@@ -59,3 +61,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 });
+
+// Production side complete response from Site Verify
+// {
+//   "success": true,
+//   "challenge_ts": "2026-06-28T04:12:36.000Z",
+//   "error-codes": [],
+//   "action": "demo",
+//   "cdata": "",
+//   "hostname": "portfolio-9vasi74dn-duetocodes-projects.vercel.app",
+//   "metadata": {}
+// }

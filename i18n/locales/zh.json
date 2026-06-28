@@ -7,7 +7,7 @@
   "CurrencyConverter": "货币转换器",  
   "TypingGame": "打字游戏",
   "KnowYourViewport": "了解您的视口",
-  "TurnstileDemo": "Turnstile 演示",
+  "TurnstileDemo": "Cloudflare Turnstile 演示",
   "Continue": "继续",
   "NotFound": "未找到",
   "ServerError": "服务器错误",

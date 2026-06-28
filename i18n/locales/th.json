@@ -7,7 +7,7 @@
   "CurrencyConverter": "เครื่องแปลงสกุลเงิน",
   "TypingGame": "เกมพิมพ์",
   "KnowYourViewport": "รู้จักมุมมองของคุณ",
-  "TurnstileDemo": "การสาธิต Turnstile",
+  "TurnstileDemo": "การสาธิต Cloudflare Turnstile",
   "Continue": "ดำเนินการต่อ",
   "NotFound": "ไม่พบ",
   "ServerError": "ข้อผิดพลาดของเซิร์ฟเวอร์",

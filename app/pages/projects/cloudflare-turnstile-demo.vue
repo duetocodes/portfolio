@@ -1,10 +1,16 @@
 <template>
-  <div class="flex">
+  <div>
+    <MDC
+      v-if="overview?.data?.[0]?.description"
+      :value="overview.data[0].description"
+      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
+      tag="article" />
+
     <UTimeline
       v-model="step"
       :items="items"
       color="neutral"
-      class="w-96">
+      class="mx-auto max-w-96 pt-4 sm:pt-8">
       <template #demoform-description>
         <div class="mt-2 h-[65px]">
           <UForm
@@ -151,7 +157,7 @@ const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
 const SLUG_ID = 'cloudflare-turnstile-demo';
-const TURNSTILE_ACTION = 'demo';
+const TURNSTILE_ACTION = 'turnstile-demo';
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 
