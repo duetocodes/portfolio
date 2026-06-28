@@ -62,9 +62,7 @@
                 ref="turnstile"
                 :site-key="settings.siteKey"
                 :action="TURNSTILE_ACTION"
-                @on-success="onSuccessClient"
-                @on-error="onErrorClient" />
-  
+                @on-success="onSuccessClient" />
               <div
                 v-if="!turnstile?.widgetId">
                 <div class="flex justify-between">
@@ -105,7 +103,7 @@
           <template #serverside-description>
             <div class="mt-2">
               <UAlert
-                v-if="step === 2 && result && (result.success || !result.success)"
+                v-if="result && (result.success || !result.success)"
                 class="w-[300px]"
                 variant="soft"
                 :title="result.success ? TEXTS.Successful : TEXTS.Unsuccessful"
@@ -163,7 +161,7 @@ const nuxtApp = useNuxtApp();
 const route = useRoute();
 const config = useRuntimeConfig();
 
-const { t: $t, locale } = useI18n();
+const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
 const SLUG_ID = 'cloudflare-turnstile-demo';
@@ -345,21 +343,8 @@ const onSuccessClient = (token: TurnstileToken) => {
       result.value = res;
       step.value = 2;
     })
-    .catch(() => {
-      result.value = {
-        'success': false,
-        'error-codes': [$t('UnexpectedErrorOccurred')],
-      };
-    })
     .finally(() => {
       isLoading.value = false;
     });
-};
-
-const onErrorClient = () => {
-  result.value = {
-    success: false,
-  };
-  isLoading.value = false;
 };
 </script>
