@@ -46,10 +46,13 @@ export default defineEventHandler(async (event) => {
       };
     }
     else {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Bad Request',
-      });
+      // insist visible ui in production
+      return {
+        'success': false,
+        'challenge_ts': response.challenge_ts,
+        'error-codes': ['simulating-server-side-failure'],
+        'hostname': response.hostname,
+      };
     }
   }
   catch (err) {
