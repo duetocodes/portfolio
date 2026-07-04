@@ -22,8 +22,10 @@ export default defineEventHandler(async (event) => {
           'Content-Type': 'application/json',
         },
         body: {
-          secret: body.secret || config.turnstileSecretKey,
+          // secret: config.turnstileSecretKey, // this should be the actual approach
+          secret: body.secret || config.turnstileSecretKey, // just to accommodate for testing with test secret-keys, allow override of secret key in request body
           response: body.response, // token
+          remoteip: body?.remoteip, // optional
         },
       },
     );
