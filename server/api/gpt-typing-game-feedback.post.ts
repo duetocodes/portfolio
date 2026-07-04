@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const response = await openai.responses.create({
-      model: 'gpt-4.1',
+      model: 'gpt-5.4-mini',
       input: [
         {
           role: 'system',
