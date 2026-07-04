@@ -34,8 +34,8 @@ export const CloudflareSiteVerifyResponseSchema = z.object({
   'success': z.boolean(),
   'challenge_ts': z.iso.datetime().optional(),
   'error-codes': z.array(z.string()).optional(),
-  'action': z.string().max(32).regex(/^[A-Za-z0-9_-]+$/).optional(), // This can only contain up to 32 alphanumeric characters including _ and -,
-  'cdata': z.string().max(255).regex(/^[A-Za-z0-9_-]+$/).optional(), // This can only contain up to 255 alphanumeric characters including _ and -
+  'action': z.string().max(32).regex(/^[A-Za-z0-9_-]*$/).optional(), // This can only contain up to 32 alphanumeric characters including _ and -,
+  'cdata': z.string().max(255).regex(/^[A-Za-z0-9_-]*$/).optional(), // This can only contain up to 255 alphanumeric characters including _ and -
   'hostname': z.string().optional(),
   'metadata': z.object({
     result_with_testing_key: z.boolean().optional(),
