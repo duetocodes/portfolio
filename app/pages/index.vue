@@ -66,8 +66,6 @@
         </div>
       </div>
     </div>
-
-    <CloudflareTurnstile />
   </div>
 </template>
 

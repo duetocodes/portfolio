@@ -7,6 +7,7 @@
 <!--
 Approach:
 - a client-only component
+- only a single instance of the widget is allowed per page
 - to render turnstile explicitly
 - render client-side as this depends on the `window` object
 - Widget Mode: `Managed`
@@ -46,7 +47,6 @@ const config = useRuntimeConfig();
 const colorMode = useColorMode();
 
 const widgetId = ref('');
-const isLoading = ref(false);
 
 const props = defineProps({
   siteKey: {
@@ -69,7 +69,6 @@ useHead(() => ({
       src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit',
       defer: true,
       onerror: () => {
-        isLoading.value = false;
         toast.add({
           title: $t('UnexpectedErrorOccurred'),
           color: 'error',
@@ -106,24 +105,21 @@ const renderThenExecute = () => {
           'callback': (token: TurnstileToken) => {
             emits('on-success', token);
           },
-          'error-callback': (err) => {
+          'error-callback': (err: string) => {
             if (widgetId.value && turnstile) {
               emits('on-error', `'error-callback' ${JSON.stringify(err)}`);
               // let auto-retry when verification un-successful
             }
-            isLoading.value = false;
           },
-          'expired-callback': (err) => {
+          'expired-callback': (err: string) => {
             if (widgetId.value && turnstile) {
               emits('on-error', `'expired-callback' ${JSON.stringify(err)}`);
             }
-            isLoading.value = false;
           },
-          'timeout-callback': (err) => {
+          'timeout-callback': (err: string) => {
             if (widgetId.value && turnstile) {
               emits('on-error', `'timeout-callback' ${JSON.stringify(err)}`);
             }
-            isLoading.value = false;
           },
         },
       );
@@ -155,7 +151,7 @@ const resetThenRemove = () => {
   }
 };
 
-onBeforeRouteLeave(() => {
+onBeforeUnmount(() => {
   resetThenRemove();
 });
 
