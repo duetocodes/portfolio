@@ -55,7 +55,7 @@ This is my personal portfolio site: duetocodes.com
 
 ## External Services and Environment Variables
 - Strapi backs portfolio content through the `/api/about-me`, `/api/projects`, and `/api/tech-stacks` proxy routes. Configure `NUXT_STRAPI_API_BASE` and `NUXT_STRAPI_READ_ONLY_TOKEN`.
-- Wise backs the currency converter through `/api/wise-currencies` and `/api/wise-rates`. Configure `NUXT_WISE_API_BASE` and `NUXT_WISE_READ_ONLY_TOKEN`.
+- Wise backs the currency converter through `/api/wise-currencies` and `/api/wise-rates`. Configure `NUXT_WISE_SANDBOX_API_BASE` and `NUXT_WISE_SANDBOX_READ_ONLY_TOKEN`.
 - OpenAI backs the typing-game passage and coaching feedback routes. Configure `NUXT_OPENAI_API_KEY`.
 - The treasury-yield visualiser fetches historical CSV data and scrapes recent yield data from `home.treasury.gov`.
 

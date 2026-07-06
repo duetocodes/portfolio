@@ -4,7 +4,7 @@ export const STRAPI_ENDPOINTS = {
   AboutMe: '/portfolio-about-me',
 };
 
-export const WISE_ENDPOINTS = {
+export const WISE_SANDBOX_ENDPOINTS = {
   Rates: '/rates',
   Currencies: '/currencies',
 };
