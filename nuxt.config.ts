@@ -46,8 +46,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     strapiReadOnlyToken: import.meta.env.NUXT_STRAPI_READ_ONLY_TOKEN,
     strapiApiBase: import.meta.env.NUXT_STRAPI_API_BASE,
-    wiseReadOnlyToken: import.meta.env.NUXT_WISE_READ_ONLY_TOKEN,
-    wiseApiBase: import.meta.env.NUXT_WISE_API_BASE,
+    wiseSandboxReadOnlyToken: import.meta.env.NUXT_WISE_SANDBOX_READ_ONLY_TOKEN,
+    wiseSandboxApiBase: import.meta.env.NUXT_WISE_SANDBOX_API_BASE,
     openAiSecretKey: import.meta.env.NUXT_OPENAI_API_KEY,
     turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
     demoTurnstileSecretKey: import.meta.env.NUXT_DEMO_TURNSTILE_SECRET_KEY,

@@ -1,16 +1,16 @@
 // https://docs.wise.com/api-docs/api-reference/currencies
 import type { FetchError } from 'ofetch';
-import { WISE_ENDPOINTS } from '~~/server/utils/api';
+import { WISE_SANDBOX_ENDPOINTS } from '~~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
   const query = getQuery(event);
   try {
     const response = await $fetch(
-      config.wiseApiBase + WISE_ENDPOINTS.Currencies,
+      config.wiseSandboxApiBase + WISE_SANDBOX_ENDPOINTS.Currencies,
       {
         headers: {
-          Authorization: `Bearer ${config.wiseReadOnlyToken}`,
+          Authorization: `Bearer ${config.wiseSandboxReadOnlyToken}`,
         },
         query: {
           ...query,
