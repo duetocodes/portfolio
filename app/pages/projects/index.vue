@@ -47,11 +47,10 @@
               :label="item.tag" />
           </div>
 
-          <MDC
-            v-if="item.description"
-            :value="stripMarkdownLinks(item.description)"
-            class="line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted"
-            tag="article" />
+          <Comark
+            v-if="item.description?.trim()"
+            :markdown="stripMarkdownLinks(item.description)"
+            class="line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted" />
         </UCard>
       </ULink>
     </div>

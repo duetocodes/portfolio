@@ -1,11 +1,9 @@
 <template>
   <div class="w-full ">
-    <MDC
-      v-if="overview?.data?.[0]?.description"
-      :value="overview.data[0].description"
-      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
-      tag="article" />
-
+    <Comark
+      v-if="overview?.data?.[0]?.description?.trim()"
+      :markdown="overview.data[0].description"
+      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']" />
     <AppLoadingIndicator
       :is-loading="status === 'pending' && !error"
       icon="simple-icons:openai"
@@ -175,11 +173,10 @@
             </UTooltip>
           </template>
           <template #description>
-            <MDC
-              v-if="feedbackData?.feedback"
-              :value="feedbackData.feedback"
-              class="text-sm text-muted font-normal text-pretty whitespace-pre-line prose dark:prose-invert"
-              tag="article" />
+            <Comark
+              v-if="feedbackData?.feedback?.trim()"
+              :markdown="feedbackData.feedback"
+              class="text-sm text-muted font-normal text-pretty whitespace-pre-line prose dark:prose-invert" />
             <span
               v-else-if="feedbackStatus === 'pending'"
               class="text-sm text-muted font-normal">

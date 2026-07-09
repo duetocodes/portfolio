@@ -1,10 +1,9 @@
 <template>
   <div>
-    <MDC
-      v-if="overview?.data?.[0]?.description"
-      :value="overview.data[0].description"
-      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']"
-      tag="article" />
+    <Comark
+      v-if="overview?.data?.[0]?.description?.trim()"
+      :markdown="overview.data[0].description"
+      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']" />
 
     <div class="pt-4 sm:pt-8">
       <UForm
