@@ -13,9 +13,9 @@
       class="pt-4 sm:pt-8">
       <div class="max-sm:px-4 max-md:px-8 grid grid-cols-1 md:grid-flow-row md:grid-cols-6 max-md:gap-y-4 md:gap-2 md:px-12">
         <div class="md:col-span-3">
-          <MDC
-            v-if="about.data?.aboutMe"
-            :value="about.data.aboutMe"
+          <Comark
+            v-if="about.data?.aboutMe?.trim()"
+            :markdown="about.data.aboutMe"
             class="md:pr-12 prose text-lg text-pretty dark:prose-invert whitespace-pre-line text-accented [&_a:after]:content-['_↗']" />
         </div>
 

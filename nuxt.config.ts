@@ -57,7 +57,15 @@ export default defineNuxtConfig({
       demoTurnstileSiteKey: import.meta.env.NUXT_PUBLIC_DEMO_TURNSTILE_SITE_KEY,
     },
   },
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@nuxtjs/mdc', 'nuxt-charts', '@nuxt/image', '@vueuse/nuxt'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/ui',
+    '@nuxtjs/i18n',
+    '@comark/nuxt',
+    'nuxt-charts',
+    '@nuxt/image',
+    '@vueuse/nuxt',
+  ],
   devtools: {
     enabled: true,
   },

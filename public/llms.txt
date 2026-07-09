@@ -37,7 +37,7 @@ Use the sitemap as the authoritative source for canonical URLs and hreflang rela
 ## Technical Context
 
 - Framework: Nuxt 4 with server-side rendering enabled.
-- UI: Vue 3, TypeScript, Tailwind CSS, Nuxt UI, Nuxt Image, Nuxt MDC, and Nuxt Charts.
+- UI: Vue 3, TypeScript, Tailwind CSS, Nuxt UI, Nuxt Image, Comark, and Nuxt Charts.
 - Content: Portfolio, project, and technology content is managed through Strapi and delivered through Nuxt server routes.
 - External services: Exchange-rate reference data for currency conversion demos, OpenAI-backed typing game passages and feedback, and U.S. Treasury yield data.
 - Deployment: Vercel-hosted Nuxt SSR application.
