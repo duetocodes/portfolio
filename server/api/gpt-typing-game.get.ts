@@ -16,7 +16,7 @@ export default defineEventHandler(async () => {
 
   try {
     const response = await openai.responses.create({
-      model: 'gpt-5.4-mini',
+      model: 'gpt-5.4',
       temperature: 0.8,
       input: [
         {
