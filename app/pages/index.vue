@@ -17,6 +17,29 @@
             v-if="about.data?.aboutMe?.trim()"
             :markdown="about.data.aboutMe"
             class="md:pr-12 prose text-lg text-pretty dark:prose-invert whitespace-pre-line text-accented [&_a:after]:content-['_↗']" />
+          <div
+            v-if="about"
+            class="mt-6 flex max-sm:justify-center gap-x-8">
+            <UChip
+              v-for="(item, index) in about.data.socialMedia"
+              :key="index"
+              :text="TEXTS[item.type] ?? ''"
+              :show="Boolean(item.type)"
+              size="xl"
+              position="bottom-right"
+              :ui="{ base: 'text-[9px] p-1 bg-transparent text-muted' }">
+              <UButton
+                variant="link"
+                color="neutral"
+                size="xl"
+                :icon="item.icon"
+                :to="item.url"
+                :aria-label="item.platform"
+                rel="noopener noreferrer"
+                target="_blank"
+                :ui="{ base: 'p-1', leadingIcon: 'size-5 md:size-6' }" />
+            </UChip>
+          </div>
         </div>
 
         <div class="relative max-md:order-first md:col-span-3">
@@ -37,31 +60,6 @@
               class="size-20 lg:size-24 z-1 -translate-x-4 -translate-y-2 ml-auto rounded-full border border-white/50 shadow-sm select-none"
               sizes="120px"
               fit="contain" />
-          </div>
-
-          <div
-            v-if="about"
-            class="mt-4 flex justify-end gap-x-4">
-            <UChip
-              v-for="(item, index) in about.data.socialMedia"
-              :key="index"
-              :text="TEXTS.work"
-              :show="item.type === 'work'"
-              size="xl"
-              color="neutral"
-              position="bottom-right"
-              :ui="{ base: 'text-[9px] p-1' }">
-              <UButton
-                variant="link"
-                color="neutral"
-                size="xl"
-                :icon="item.icon"
-                :to="item.url"
-                :aria-label="item.platform"
-                rel="noopener noreferrer"
-                target="_blank"
-                :ui="{ base: 'p-1', leadingIcon: 'size-5 md:size-6' }" />
-            </UChip>
           </div>
         </div>
       </div>
