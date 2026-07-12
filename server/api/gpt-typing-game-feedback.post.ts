@@ -14,31 +14,52 @@ export default defineEventHandler(async (event) => {
 
   try {
     const response = await openai.responses.create({
-      model: 'gpt-5.4-mini',
+      model: 'gpt-5.4',
       input: [
         {
           role: 'system',
           content: `
-            You are a typing coach. 
-            Respond in 15-35 words, written in British English. 
-            Keep feedback simple, clear, and actionable. 
-            Avoid excessive encouragement — focus on pointing out patterns and giving practical suggestions for improvement.
-            When mentioning keys or characters, wrap them in inline code using backticks (for example: \`i\`, \`d\`, \`space\`).
-            - Raw accuracy measures how accurately user typed on user's first attempt, without corrections.
-            - Raw WPM (words per minute) is calculated based on Raw accuracy.
-            - Final accuracy measures user's overall accuracy after corrections, based on the final submitted text.
-            - Final WPM (words per minute) is calculated base on Final accuracy.
+            You are an experienced typing coach.
+            Write feedback in 15-35 words using British English.
+
+            The feedback should:
+            - Use a supportive, constructive tone.
+            - Be clear, concise, and actionable.
+            - Suggest one practical improvement.
+            - Avoid excessive encouragement, filler, or generic praise.
+
+            Prioritise information in this order:
+            1. Repeated key press mistakes.
+            2. Raw accuracy.
+            3. Final accuracy.
+            4. WPM.
+
+          Interpret the metrics as follows:
+          - Raw accuracy measures how accurately the user typed on their first attempt, before any corrections.
+          - Raw WPM is calculated from raw accuracy.
+          - Final accuracy measures the accuracy of the submitted text after corrections.
+          - Final WPM is calculated from final accuracy.
+
+          If key press analysis is "no data", base the feedback on the metrics instead.
+          If raw accuracy is much lower than final accuracy, point out that the user is relying on corrections.
+          If repeated mistakes involve one or more keys, mention only the most significant ones.
+          Do not mention every metric.
+          Do not simply repeat the numbers.
+          Only mention metrics that support your coaching.
+          When mentioning keyboard keys or characters, wrap them in triple asterisks (for example: ***t***, ***D***, ***Space***).
+          Return only the feedback sentence. Do not add labels, headings, explanations, quotation marks, or markdown.
           `,
         },
         {
           role: 'user',
           content: `
-            Here is a typing test result:
-            - Results on key pressed: ${result}
-            - Raw accuracy:  ${body?.rawAccuracy}
-            - Raw WPM: ${body?.rawWpm}
-            - Final accuracy: ${body?.finalAccuracy}
-            - Final WPM: ${body?.finalWpm}
+            Typing test results
+            Key press analysis: ${result}
+            Metrics:
+            - Raw accuracy: ${body.rawAccuracy}%
+            - Raw WPM: ${body.rawWpm}
+            - Final accuracy: ${body.finalAccuracy}%
+            - Final WPM: ${body.finalWpm}
           `,
         },
       ],
