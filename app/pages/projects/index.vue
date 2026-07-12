@@ -50,7 +50,7 @@
           <Comark
             v-if="item.description?.trim()"
             :markdown="stripMarkdownLinks(item.description)"
-            class="line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted" />
+            class="line-clamp-2 sm:line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted" />
         </UCard>
       </ULink>
     </div>
