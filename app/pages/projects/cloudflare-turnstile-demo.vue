@@ -3,7 +3,7 @@
     <Comark
       v-if="overview?.data?.[0]?.description?.trim()"
       :markdown="overview.data[0].description"
-      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']" />
+      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted prose-a:no-underline" />
 
     <div class="pt-4 sm:pt-8">
       <UCard

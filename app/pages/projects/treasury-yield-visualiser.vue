@@ -12,7 +12,7 @@
       <Comark
         v-if="overview?.data?.[0]?.description?.trim()"
         :markdown="overview.data[0].description"
-        class="text-md line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']" />
+        class="text-md line-clamp-5 text-pretty whitespace-pre-line prose dark:prose-invert text-muted prose-a:no-underline" />
 
       <div class="mt-4 sm:mt-8 flex flex-wrap [&>*]:py-2 [&>*]:px-2 md:[&>*]:px-4 sm:divide-x-1 sm:divide-dotted sm:divide-[var(--ui-border-muted)] border-y-1 border-dotted border-muted">
         <UFormField :label="TEXTS.Mode">
