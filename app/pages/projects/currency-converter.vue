@@ -203,7 +203,7 @@ import {
   AmountSchema,
   CurrencySelectSchema,
 } from '~~/schemas/currency-converter';
-import type { ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemPageMeta, ProjectSlugID } from '~~/types';
 
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
@@ -212,7 +212,7 @@ const route = useRoute();
 const toast = useToast();
 const form = useTemplateRef('form');
 
-const SLUG_ID = 'currency-converter';
+const SLUG_ID: ProjectSlugID = 'currency-converter';
 
 definePageMeta({
   layout: 'project-item',

@@ -30,3 +30,5 @@ export type ProjectItemPageMeta = {
 export type DeviceType = 'Phone' | 'Tablet' | 'Desktop';
 export type DeviceOrientation = 'portrait' | 'landscape'; // based on window.innerWidth/innerHeight
 export type DeviceOrientationDetail = 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary';
+
+export type ProjectSlugID = 'treasury-yield-visualiser' | 'currency-converter' | 'typing-game' | 'know-your-viewport' | 'cloudflare-turnstile-demo';

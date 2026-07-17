@@ -152,7 +152,7 @@
 
 <script setup lang="ts">
 import z from 'zod';
-import type { ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemPageMeta, ProjectSlugID } from '~~/types';
 import type { ProjectItemDataSchema } from '~~/schemas';
 import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schemas/cloudflare-turnstile';
 import type { TurnstileDemoPayload } from '~~/schemas/turnstile-demo-form';
@@ -166,7 +166,7 @@ const config = useRuntimeConfig();
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
-const SLUG_ID = 'cloudflare-turnstile-demo';
+const SLUG_ID: ProjectSlugID = 'cloudflare-turnstile-demo';
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 

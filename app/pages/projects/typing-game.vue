@@ -320,9 +320,9 @@ import type {
   TypingGameGptFeedbackPayloadSchema,
   TypingGameUpdatedDataSchema,
 } from '~~/schemas/typing-game';
-import type { ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemPageMeta, ProjectSlugID } from '~~/types';
 
-const SLUG_ID = 'typing-game';
+const SLUG_ID: ProjectSlugID = 'typing-game';
 
 definePageMeta({
   layout: 'project-item',

@@ -194,7 +194,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemPageMeta, ProjectSlugID } from '~~/types';
 import type { ProjectItemDataSchema } from '~~/schemas';
 import type { z } from 'zod';
 
@@ -207,7 +207,7 @@ const { TEXTS } = useNonReactiveTranslation();
 const device = useClientDevice();
 const isTooltip = ref(false);
 
-const SLUG_ID = 'know-your-viewport';
+const SLUG_ID: ProjectSlugID = 'know-your-viewport';
 
 type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 
