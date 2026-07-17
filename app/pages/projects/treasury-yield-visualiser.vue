@@ -139,8 +139,8 @@
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import type { z } from 'zod';
 import type { TabsItem } from '@nuxt/ui';
-import type { PickerTypeRange, ProjectItemPageMeta, ProjectSlugID } from '~~/types';
-import type { ProjectItemDataSchema } from '~~/schemas';
+import type { PickerTypeRange, ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
 import type {
   TreasuryChartRowDataSchema,
   TreasuryYieldPayloadSchema,

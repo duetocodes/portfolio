@@ -194,8 +194,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ProjectItemPageMeta, ProjectSlugID } from '~~/types';
-import type { ProjectItemDataSchema } from '~~/schemas';
+import type { ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
 import type { z } from 'zod';
 
 const nuxtApp = useNuxtApp();

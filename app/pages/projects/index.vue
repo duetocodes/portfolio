@@ -26,15 +26,19 @@
           <UButton
             as="div"
             class="p-0 text-md"
-            variant="link">
+            variant="link"
+            :leading-icon="PROJECT_SLUG_ENUM[item.slugId].icon"
+            :ui="{
+              leadingIcon: [PROJECT_SLUG_ENUM[item.slugId].iconColor, 'group-hover:text-primary'],
+            }">
             <h4 class="projectName text-md line-clamp-2 text-default text-left break-ellipsis group-hover:text-primary">
               {{ item.title }}
             </h4>
-            <template #trailing>
+            <!-- <template #trailing>
               <UIcon
                 name="material-symbols:link-rounded"
                 class="align-middle rotate-135 size-4 shrink-0 text-muted transition group-hover:text-primary group-hover:rotate-315" />
-            </template>
+            </template> -->
           </UButton>
           <div>
             <UBadge
@@ -65,7 +69,7 @@ type Project = z.infer<typeof ProjectSchema>;
 
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
-
+const { PROJECT_SLUG_ENUM } = useFrontend();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
