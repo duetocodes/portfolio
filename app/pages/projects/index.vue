@@ -27,9 +27,9 @@
             as="div"
             class="p-0 text-md"
             variant="link"
-            :leading-icon="PROJECT_SLUG_ENUM[item.slugId].icon"
+            :leading-icon="PROJECT_SLUG_ENUM[item.slugId]?.icon || 'material-symbols:widgets-outline'"
             :ui="{
-              leadingIcon: [PROJECT_SLUG_ENUM[item.slugId].iconColor, 'group-hover:text-primary'],
+              leadingIcon: [PROJECT_SLUG_ENUM[item.slugId]?.iconColor || 'text-default', 'group-hover:text-primary'],
             }">
             <h4 class="projectName text-md line-clamp-2 text-default text-left break-ellipsis group-hover:text-primary">
               {{ item.title }}
