@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import type { z } from 'zod';
-import type { AboutMeResponseSchema } from '~~/schemas';
+import type { AboutMeResponseSchema } from '~~/schema-types/shared';
 
 type AboutMeResponse = z.infer<typeof AboutMeResponseSchema>;
 

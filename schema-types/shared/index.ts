@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { CalendarDate } from '@internationalized/date';
 
 export const dateSchema = z.object({
   year: z.coerce.number().int().min(1).max(9999),
@@ -114,3 +115,32 @@ export const ProjectSchema = z.object({
   locale: z.string(),
   slugId: ProjectSlugIDSchema,
 });
+
+// see https://github.com/unjs/ufo/blob/main/src/query.ts (not sure how to import these)
+export type QueryValue =
+  | string
+  | number
+  | undefined
+  | null
+  | boolean
+  | Array<QueryValue>
+  | Record<string, unknown>;
+export type QueryObject = Record<string, QueryValue | Array<QueryValue>>;
+
+// https://nuxt.com/docs/3.x/api/composables/use-fetch#type
+export type AsyncDataRequestStatus = 'idle' | 'pending' | 'success' | 'error'
+
+export type PickerTypeRange = {
+  start: CalendarDate | null
+  end: CalendarDate | null
+}
+
+export type ProjectItemPageMeta = {
+  layout: 'project-item' // layouts/project/item.vue
+  slugId: ProjectSlugID
+  slugLabel: string
+}
+
+export type DeviceType = 'Phone' | 'Tablet' | 'Desktop';
+export type DeviceOrientation = 'portrait' | 'landscape'; // based on window.innerWidth/innerHeight
+export type DeviceOrientationDetail = 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary';

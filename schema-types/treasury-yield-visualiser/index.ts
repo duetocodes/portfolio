@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { dateSchema } from './index';
+import { dateSchema } from '../shared';
 
 export const TreasuryChartRowDataSchema = z.object({
   'date': z.string(),

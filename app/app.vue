@@ -86,7 +86,7 @@
 import { Analytics } from '@vercel/analytics/nuxt';
 import type { z } from 'zod';
 import type { NavigationMenuItem } from '@nuxt/ui';
-import type { TechStackResponseSchema } from '~~/schemas';
+import type { TechStackResponseSchema } from '~~/schema-types/shared';
 
 type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 

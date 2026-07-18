@@ -152,14 +152,13 @@
 
 <script setup lang="ts">
 import z from 'zod';
-import type { ProjectItemPageMeta } from '~~/types';
-import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
-import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schemas/cloudflare-turnstile';
+import type { ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
+import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schema-types/cloudflare-turnstile';
 import {
   type TurnstileDemoPayload,
   TURNSTILE_ACTION,
   TurnstileDemoInputSchema,
-} from '~~/schemas/turnstile-demo-form';
+} from '~~/schema-types/turnstile-demo-form';
 import type { TimelineItem, FormSubmitEvent } from '@nuxt/ui';
 
 const nuxtApp = useNuxtApp();

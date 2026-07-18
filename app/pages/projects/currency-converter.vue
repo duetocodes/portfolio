@@ -196,14 +196,13 @@
 
 <script setup lang="ts">
 import { z } from 'zod';
-import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
+import type { ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import {
   type CurrencyItemSchema,
   type RatesItemSchema,
   AmountSchema,
   CurrencySelectSchema,
-} from '~~/schemas/currency-converter';
-import type { ProjectItemPageMeta } from '~~/types';
+} from '~~/schema-types/currency-converter';
 
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();

@@ -1,4 +1,4 @@
-import type { ProjectSlugID } from '~~/schemas';
+import type { ProjectSlugID } from '~~/schema-types/shared';
 
 export default function () {
   const PROJECT_SLUG_ENUM: Record<ProjectSlugID, { icon: string, iconColor: string }> = {

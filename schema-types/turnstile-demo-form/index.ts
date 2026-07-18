@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TurnstileTokenSchema } from './cloudflare-turnstile';
+import { TurnstileTokenSchema } from '../cloudflare-turnstile';
 
 export const TURNSTILE_ACTION = 'turnstile-demo';
 
@@ -12,4 +12,4 @@ export const TurnstileDemoPayloadSchema = z.object({
   token: TurnstileTokenSchema,
 });
 
-export type TurnstileDemoPayload = z.output<typeof TurnstileDemoPayloadSchema>
+export type TurnstileDemoPayload = z.infer<typeof TurnstileDemoPayloadSchema>
