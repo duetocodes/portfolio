@@ -3,7 +3,7 @@
     <Comark
       v-if="overview?.data?.[0]?.description?.trim()"
       :markdown="overview.data[0].description"
-      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']" />
+      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted prose-a:no-underline" />
     <AppLoadingIndicator
       :is-loading="status === 'pending' && !error"
       icon="simple-icons:openai"
@@ -311,7 +311,7 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { z } from 'zod';
-import type { ProjectItemDataSchema } from '~~/schemas';
+import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
 import type {
   CharacterSchema,
   TypingGameSchema,
@@ -322,7 +322,7 @@ import type {
 } from '~~/schemas/typing-game';
 import type { ProjectItemPageMeta } from '~~/types';
 
-const SLUG_ID = 'typing-game';
+const SLUG_ID: ProjectSlugID = 'typing-game';
 
 definePageMeta({
   layout: 'project-item',

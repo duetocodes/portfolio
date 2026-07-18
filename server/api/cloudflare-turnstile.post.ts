@@ -1,9 +1,3 @@
-// test secret-keys
-// https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys
-// 1x0000000000000000000000000000000AA; Always passes validation; Test successful token validation
-// 2x0000000000000000000000000000000AA; Always fails validation; Test validation error handling
-// 3x0000000000000000000000000000000AA; Returns "token already spent" error; Test duplicate token handling
-
 import type { FetchError } from 'ofetch';
 import { CloudflareSiteVerifyPayloadSchema } from '~~/schemas/cloudflare-turnstile';
 
@@ -22,15 +16,13 @@ export default defineEventHandler(async (event) => {
           'Content-Type': 'application/json',
         },
         body: {
-          // secret: config.turnstileSecretKey, // this should be the actual approach
-          secret: body.secret || config.turnstileSecretKey, // just to accommodate for testing with test secret-keys, allow override of secret key in request body
-          response: body.response, // token
+          secret: config.turnstileSecretKey,
+          response: body.response, // token from frontend
           remoteip: body?.remoteip, // optional
         },
       },
     );
-
-    return response;
+    return response; // return everything as-is
   }
   catch (err) {
     const error = err as FetchError;
@@ -41,3 +33,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 });
+
+// Production side complete response from Site Verify
+// {
+//   "success": true,
+//   "challenge_ts": "2026-06-28T04:12:36.000Z",
+//   "error-codes": [],
+//   "action": "demo",
+//   "cdata": "",
+//   "hostname": "portfolio-9vasi74dn-duetocodes-projects.vercel.app",
+//   "metadata": {}
+// }

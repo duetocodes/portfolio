@@ -3,8 +3,7 @@
     <Comark
       v-if="overview?.data?.[0]?.description?.trim()"
       :markdown="overview.data[0].description"
-      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted [&_a:after]:content-['_↗']" />
-
+      class="line-clamp-5 text-md text-pretty whitespace-pre-line prose dark:prose-invert text-muted prose-a:no-underline" />
     <div class="pt-4 sm:pt-8">
       <UForm
         ref="form"
@@ -197,7 +196,7 @@
 
 <script setup lang="ts">
 import { z } from 'zod';
-import type { ProjectItemDataSchema } from '~~/schemas';
+import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
 import {
   type CurrencyItemSchema,
   type RatesItemSchema,
@@ -213,7 +212,7 @@ const route = useRoute();
 const toast = useToast();
 const form = useTemplateRef('form');
 
-const SLUG_ID = 'currency-converter';
+const SLUG_ID: ProjectSlugID = 'currency-converter';
 
 definePageMeta({
   layout: 'project-item',

@@ -92,6 +92,15 @@ export const AboutMeResponseSchema = z.object({
   socialMedia: z.array(SocialMediaItemSchema),
 });
 
+export const ProjectSlugIDSchema = z.enum([
+  'treasury-yield-visualiser',
+  'currency-converter',
+  'typing-game',
+  'know-your-viewport',
+  'cloudflare-turnstile-demo',
+]);
+export type ProjectSlugID = z.infer<typeof ProjectSlugIDSchema>;
+
 export const ProjectSchema = z.object({
   id: z.number(),
   documentId: z.string(),
@@ -103,5 +112,5 @@ export const ProjectSchema = z.object({
   updatedAt: z.string(),
   publishedAt: z.string(),
   locale: z.string(),
-  slugId: z.string(),
+  slugId: ProjectSlugIDSchema,
 });

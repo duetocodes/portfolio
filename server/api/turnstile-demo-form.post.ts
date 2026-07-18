@@ -1,3 +1,9 @@
+// test secret-keys
+// https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys
+// 1x0000000000000000000000000000000AA; Always passes validation; Test successful token validation
+// 2x0000000000000000000000000000000AA; Always fails validation; Test validation error handling
+// 3x0000000000000000000000000000000AA; Returns "token already spent" error; Test duplicate token handling
+
 import type { FetchError } from 'ofetch';
 
 import {
@@ -11,12 +17,23 @@ export default defineEventHandler(async (event) => {
 
   // explicitly throw error with .parse (validation failed)
   const body = await readValidatedBody(event, TurnstileDemoPayloadSchema.parse);
-  const key = body.isSimulateFail ? config.demoTurnstileSecretKey : config.turnstileSecretKey;
+  let key = config.turnstileSecretKey;
+
+  if (import.meta.dev) {
+    if (body.isSimulateFail)
+      key = '3x0000000000000000000000000000000AA';
+    else
+      key = '1x0000000000000000000000000000000AA';
+  }
+  else {
+    if (body.isSimulateFail)
+      key = '3x0000000000000000000000000000000AA';
+  }
 
   try {
     const response = CloudflareSiteVerifyResponseSchema.parse(
       await $fetch(
-        '/api/cloudflare-turnstile',
+        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
         {
           method: 'POST',
           headers: {
@@ -29,7 +46,6 @@ export default defineEventHandler(async (event) => {
         },
       ),
     );
-
     // when using test keys on localhost
     if (response?.metadata?.result_with_testing_key)
       return response;
@@ -64,14 +80,3 @@ export default defineEventHandler(async (event) => {
     });
   }
 });
-
-// Production side complete response from Site Verify
-// {
-//   "success": true,
-//   "challenge_ts": "2026-06-28T04:12:36.000Z",
-//   "error-codes": [],
-//   "action": "demo",
-//   "cdata": "",
-//   "hostname": "portfolio-9vasi74dn-duetocodes-projects.vercel.app",
-//   "metadata": {}
-// }
