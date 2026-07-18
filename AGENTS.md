@@ -50,7 +50,7 @@ This is my personal portfolio site: duetocodes.com
 - `pages/` contains the public routes. Project demos live under `pages/projects/`.
 - `layouts/project/item.vue` is the shared project-detail layout. Project detail pages set `layout: 'project-item'`, `slugId`, and `slugLabel` with `definePageMeta`.
 - `server/api/` contains Nitro API routes. Keep upstream credentials server-side through private runtime config; never expose tokens to client code.
-- `schemas/` contains shared Zod schemas. Reuse schema validation at request boundaries instead of adding ad hoc validation.
+- `schema-types/` contains shared Zod schemas and their inferred TypeScript types. Reuse schema validation at request boundaries instead of adding ad hoc validation.
 - `i18n/locales/` contains flat locale JSON files. Treat `i18n/locales/en.json` as the source of truth for keys and placeholders.
 
 ## External Services and Environment Variables
