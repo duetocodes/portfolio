@@ -1,8 +1,7 @@
 import type { FetchError } from 'ofetch';
-import type { TreasuryChartRowDataSchema } from '~~/schema-types/treasury-yield-visualiser';
+import type { TreasuryChartRowData } from '~~/schema-types/treasury-yield-visualiser';
 import { TreasuryYieldPayloadSchema } from '~~/schema-types/treasury-yield-visualiser';
-import type { dateSchema } from '~~/schema-types/shared';
-import type { z } from 'zod';
+import type { CalendarDateValue } from '~~/schema-types/shared';
 import {
   CalendarDate,
   parseDate,
@@ -11,8 +10,6 @@ import {
   startOfMonth,
   endOfMonth,
 } from '@internationalized/date';
-
-type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
 
 export default defineEventHandler(async (event) => {
   // explicitly throw error with .parse (validation failed)
@@ -135,8 +132,8 @@ const getPerYearChartData = async (year: string) => {
 // helpers
 const getCleanData = (
   searchBy: number,
-  calFrom: z.infer<typeof dateSchema>,
-  calTo: z.infer<typeof dateSchema>,
+  calFrom: CalendarDateValue,
+  calTo: CalendarDateValue,
   data: TreasuryChartRowData[],
 ) => {
   const from = new CalendarDate(calFrom.year, calFrom.month, calFrom.day);

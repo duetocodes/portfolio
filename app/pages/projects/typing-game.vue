@@ -310,15 +310,14 @@
 
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
-import type { z } from 'zod';
-import type { ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
+import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import type {
-  CharacterSchema,
-  TypingGameSchema,
-  TypingGameStatsSchema,
-  TypingGameFeedbackRequestCharacterSchema,
-  TypingGameGptFeedbackPayloadSchema,
-  TypingGameUpdatedDataSchema,
+  Character,
+  TypingGame,
+  TypingGameStats,
+  TypingGameFeedbackRequestCharacter,
+  TypingGameGptFeedbackPayload,
+  TypingGameUpdatedData,
 } from '~~/schema-types/typing-game';
 
 const SLUG_ID: ProjectSlugID = 'typing-game';
@@ -328,14 +327,6 @@ definePageMeta({
   slugId: SLUG_ID,
   slugLabel: 'TypingGame',
 } satisfies ProjectItemPageMeta);
-
-type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
-type Character = z.infer<typeof CharacterSchema>;
-type TypingGame = z.infer<typeof TypingGameSchema>;
-type TypingGameStats = z.infer<typeof TypingGameStatsSchema>;
-type TypingGameFeedbackRequestCharacter = z.infer<typeof TypingGameFeedbackRequestCharacterSchema>;
-type TypingGameGptFeedbackPayload = z.input<typeof TypingGameGptFeedbackPayloadSchema>;
-type TypingGameUpdatedData = z.infer<typeof TypingGameUpdatedDataSchema>;
 
 const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
 // true or false compared to ssrWidth. Go mobile-first approach, and aimed for true onMounted

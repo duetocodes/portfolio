@@ -68,10 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import type { z } from 'zod';
-import type { TechStackResponseSchema } from '~~/schema-types/shared';
-
-type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
+import type { TechStackResponse } from '~~/schema-types/shared';
 
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();

@@ -57,10 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import type { z } from 'zod';
-import type { ProjectSchema } from '~~/schema-types/shared';
-
-type Project = z.infer<typeof ProjectSchema>;
+import type { Project } from '~~/schema-types/shared';
 
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();

@@ -137,12 +137,11 @@
 
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
-import type { z } from 'zod';
 import type { TabsItem } from '@nuxt/ui';
-import type { PickerTypeRange, ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
+import type { PickerTypeRange, ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import type {
-  TreasuryChartRowDataSchema,
-  TreasuryYieldPayloadSchema,
+  TreasuryChartRowData,
+  TreasuryYieldPayload,
 } from '~~/schema-types/treasury-yield-visualiser';
 
 const SLUG_ID: ProjectSlugID = 'treasury-yield-visualiser';
@@ -152,10 +151,6 @@ definePageMeta({
   slugId: SLUG_ID,
   slugLabel: 'TreasuryYieldVisualiser',
 } satisfies ProjectItemPageMeta);
-
-type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
-type TreasuryChartRowData = z.infer<typeof TreasuryChartRowDataSchema>;
-type TreasuryYieldPayload = z.infer<typeof TreasuryYieldPayloadSchema>;
 
 const { t: $t, locale, localeProperties } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
@@ -242,7 +237,7 @@ const {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemDataObj[] }>(
+} = useFetch<{ data: ProjectItemData[] }>(
   '/api/projects',
   {
     method: 'GET',

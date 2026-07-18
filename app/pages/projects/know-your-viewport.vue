@@ -194,8 +194,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
-import type { z } from 'zod';
+import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 
 const nuxtApp = useNuxtApp();
 const route = useRoute();
@@ -208,8 +207,6 @@ const isTooltip = ref(false);
 
 const SLUG_ID: ProjectSlugID = 'know-your-viewport';
 
-type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
-
 definePageMeta({
   layout: 'project-item',
   slugId: SLUG_ID,
@@ -219,7 +216,7 @@ definePageMeta({
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemDataObj[] }>(
+} = useFetch<{ data: ProjectItemData[] }>(
   '/api/projects',
   {
     method: 'GET',

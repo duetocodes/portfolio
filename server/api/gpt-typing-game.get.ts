@@ -1,9 +1,6 @@
 import OpenAI from 'openai';
-import type { z } from 'zod';
 import type { FetchError } from 'ofetch';
-import type { CharacterSchema } from '~~/schema-types/typing-game';
-
-type Character = z.infer<typeof CharacterSchema>;
+import type { Character } from '~~/schema-types/typing-game';
 
 const config = useRuntimeConfig();
 

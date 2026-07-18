@@ -196,10 +196,10 @@
 
 <script setup lang="ts">
 import { z } from 'zod';
-import type { ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
+import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import {
-  type CurrencyItemSchema,
-  type RatesItemSchema,
+  type CurrencyItem,
+  type RatesItem,
   AmountSchema,
   CurrencySelectSchema,
 } from '~~/schema-types/currency-converter';
@@ -219,10 +219,6 @@ definePageMeta({
   slugLabel: 'CurrencyConverter',
 } satisfies ProjectItemPageMeta);
 
-type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
-type CurrencyItem = z.infer<typeof CurrencyItemSchema>;
-type RatesItem = z.infer<typeof RatesItemSchema>;
-
 const LocalizedAmountSchema = AmountSchema
   .refine(val => val.trim().length > 0,
     { message: TEXTS.Required },
@@ -236,7 +232,7 @@ const LocalizedAmountSchema = AmountSchema
   },
   );
 
-const _localisedCurrencySelectSchema = CurrencySelectSchema
+const LocalizedCurrencySelectSchema = CurrencySelectSchema
   .required()
   .nullable()
   .refine(
@@ -248,14 +244,14 @@ const _localisedCurrencySelectSchema = CurrencySelectSchema
 
 const CurrencyFormSchema = z.object({
   amount: LocalizedAmountSchema,
-  source: _localisedCurrencySelectSchema,
-  target: _localisedCurrencySelectSchema,
+  source: LocalizedCurrencySelectSchema,
+  target: LocalizedCurrencySelectSchema,
 });
 
-type FormSchema = z.input<typeof CurrencyFormSchema>;
-type CurrencySelect = z.infer<typeof _localisedCurrencySelectSchema>;
+type CurrencyForm = z.input<typeof CurrencyFormSchema>;
+type LocalizedCurrencySelect = z.infer<typeof LocalizedCurrencySelectSchema>;
 
-const state = reactive<FormSchema>({
+const state = reactive<CurrencyForm>({
   amount: '',
   source: null,
   target: null,
@@ -398,7 +394,7 @@ const exchangeRate = computed((): string => {
   else return '';
 });
 
-const currenciesList = computed((): CurrencySelect[] | [] => {
+const currenciesList = computed((): LocalizedCurrencySelect[] | [] => {
   if (currencies.value?.length) {
     return currencies.value.map((item) => {
       const countryCode = item?.code?.toLowerCase() || 'wise';
@@ -432,7 +428,7 @@ const onOpenSelect = async () => {
   }
 };
 
-const onChangeSource = (selected: CurrencySelect | null) => {
+const onChangeSource = (selected: LocalizedCurrencySelect | null) => {
   if (!selected?.supportsDecimals) {
     const truncated = state.amount?.split('.')[0];
     nextTick(() => {

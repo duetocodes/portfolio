@@ -24,7 +24,7 @@
                 ref="form"
                 class="w-[300px]"
                 :state="state"
-                :schema="demoInputSchema"
+                :schema="DemoInputSchema"
                 @submit="onSubmit">
                 <UFieldGroup>
                   <UFormField name="demoinput">
@@ -152,7 +152,7 @@
 
 <script setup lang="ts">
 import z from 'zod';
-import type { ProjectItemDataSchema, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
+import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schema-types/cloudflare-turnstile';
 import {
   type TurnstileDemoPayload,
@@ -168,8 +168,6 @@ const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
 const SLUG_ID: ProjectSlugID = 'cloudflare-turnstile-demo';
-
-type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
 
 definePageMeta({
   layout: 'project-item',
@@ -194,10 +192,10 @@ const settings = reactive({
   siteKey: '',
 });
 
-const demoInputSchema = z.object({
+const DemoInputSchema = z.object({
   demoinput: TurnstileDemoInputSchema,
 });
-type DemoInput = z.infer<typeof demoInputSchema>
+type DemoInput = z.infer<typeof DemoInputSchema>
 const onSubmit = (_event: FormSubmitEvent<DemoInput>) => {
   step.value = 1;
 
@@ -274,7 +272,7 @@ const items = computed(() => {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemDataObj[] }>(
+} = useFetch<{ data: ProjectItemData[] }>(
   '/api/projects',
   {
     method: 'GET',
