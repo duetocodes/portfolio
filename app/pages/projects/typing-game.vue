@@ -36,14 +36,14 @@
                 size="lg"
                 color="info"
                 icon="material-symbols:u-turn-right-rounded"
-                @click="navigateTo(localePath('/projects'))" />
+                @click="navigateToProjects" />
               <UButton
                 :label="TEXTS.Continue"
                 :aria-label="TEXTS.Continue"
                 size="lg"
                 color="info"
                 icon="material-symbols:play-arrow"
-                @click="isPrompt = false" />
+                @click="dismissPrompt" />
             </div>
           </template>
         </UAlert>
@@ -363,6 +363,14 @@ const { TEXTS } = useNonReactiveTranslation();
 const localePath = useLocalePath();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
+
+const navigateToProjects = () => {
+  void navigateTo(localePath('/projects'));
+};
+
+const dismissPrompt = () => {
+  isPrompt.value = false;
+};
 
 const gameStats = computed((): TypingGameStats => {
   const pressed = (data.value?.mappedPassage || []).filter(char => char.status !== 'pending');

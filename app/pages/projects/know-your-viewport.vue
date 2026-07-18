@@ -129,7 +129,7 @@
                       size="xs"
                       color="neutral"
                       variant="ghost"
-                      @click="isTooltip = true" />
+                      @click="openTooltip" />
                   </UTooltip>
                 </section>
                 <span class="text-center col-span-15">
@@ -204,6 +204,10 @@ const { TEXTS } = useNonReactiveTranslation();
 
 const device = useClientDevice();
 const isTooltip = ref(false);
+
+const openTooltip = () => {
+  isTooltip.value = true;
+};
 
 const SLUG_ID: ProjectSlugID = 'know-your-viewport';
 

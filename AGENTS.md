@@ -41,7 +41,8 @@ This is my personal portfolio site: duetocodes.com
 
 ## Verification
 - Run `npm run lint` after code changes.
-- Run `npm run test:i18n` when changing locale files or user-facing copy. This is also the current Husky pre-commit check.
+- Run `npm run typecheck` after TypeScript or Vue changes. This runs on every commit through Husky.
+- Run `npm run test:i18n` when changing locale files or user-facing copy. This also runs on every commit through Husky.
 - Run `npm run build` for changes that affect Nuxt config, dependencies, routing, layouts, pages, server routes, or production rendering.
 - The production build prerenders routes and may exercise server-side content fetching. If it fails, distinguish code failures from missing environment variables or unavailable external services.
 
