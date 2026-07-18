@@ -25,6 +25,12 @@ https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-siteke
 1x00000000000000000000BB; Always passes Invisible; Test invisible widget success flows
 2x00000000000000000000BB; Always fails Invisible; Test invisible widget error handling
 3x00000000000000000000FF; Forces interactive challenge; Visible Test user interaction scenarios
+
+// test secret-keys
+// https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-secret-keys
+// 1x0000000000000000000000000000000AA; Always passes validation; Test successful token validation
+// 2x0000000000000000000000000000000AA; Always fails validation; Test validation error handling
+// 3x0000000000000000000000000000000AA; Returns "token already spent" error; Test duplicate token handling
 -->
 
 <script setup lang="ts">
@@ -51,7 +57,7 @@ const widgetId = ref('');
 const props = defineProps({
   siteKey: {
     type: String,
-    required: true,
+    default: () => '',
   },
   action: {
     type: String,

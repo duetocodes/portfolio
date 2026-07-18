@@ -50,11 +50,9 @@ export default defineNuxtConfig({
     wiseSandboxApiBase: import.meta.env.NUXT_WISE_SANDBOX_API_BASE,
     openAiSecretKey: import.meta.env.NUXT_OPENAI_API_KEY,
     turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
-    demoTurnstileSecretKey: import.meta.env.NUXT_DEMO_TURNSTILE_SECRET_KEY,
 
     public: {
       turnstileSiteKey: import.meta.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
-      demoTurnstileSiteKey: import.meta.env.NUXT_PUBLIC_DEMO_TURNSTILE_SITE_KEY,
     },
   },
   modules: [

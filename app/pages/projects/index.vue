@@ -34,11 +34,6 @@
             <h4 class="projectName text-md line-clamp-2 text-default text-left break-ellipsis group-hover:text-primary">
               {{ item.title }}
             </h4>
-            <!-- <template #trailing>
-              <UIcon
-                name="material-symbols:link-rounded"
-                class="align-middle rotate-135 size-4 shrink-0 text-muted transition group-hover:text-primary group-hover:rotate-315" />
-            </template> -->
           </UButton>
           <div>
             <UBadge

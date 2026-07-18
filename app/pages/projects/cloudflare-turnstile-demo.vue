@@ -155,13 +155,15 @@ import z from 'zod';
 import type { ProjectItemPageMeta } from '~~/types';
 import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
 import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schemas/cloudflare-turnstile';
-import type { TurnstileDemoPayload } from '~~/schemas/turnstile-demo-form';
-import { TURNSTILE_ACTION, TurnstileDemoInputSchema } from '~~/schemas/turnstile-demo-form';
+import {
+  type TurnstileDemoPayload,
+  TURNSTILE_ACTION,
+  TurnstileDemoInputSchema,
+} from '~~/schemas/turnstile-demo-form';
 import type { TimelineItem, FormSubmitEvent } from '@nuxt/ui';
 
 const nuxtApp = useNuxtApp();
 const route = useRoute();
-const config = useRuntimeConfig();
 
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
@@ -201,7 +203,7 @@ const onSubmit = (_event: FormSubmitEvent<DemoInput>) => {
   step.value = 1;
 
   if (settings.simulateClientFail) {
-    settings.siteKey = config.public.demoTurnstileSiteKey;
+    settings.siteKey = '2x00000000000000000000AB'; // Always fails Visible; Test error handling and retry logic;
   }
 
   nextTick(() => {
