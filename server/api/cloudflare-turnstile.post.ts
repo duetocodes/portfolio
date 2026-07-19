@@ -1,5 +1,5 @@
 import type { FetchError } from 'ofetch';
-import { CloudflareSiteVerifyPayloadSchema } from '~~/schemas/cloudflare-turnstile';
+import { CloudflareSiteVerifyPayloadSchema } from '~~/schema-types/cloudflare-turnstile';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);

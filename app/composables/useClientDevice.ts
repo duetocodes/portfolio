@@ -2,7 +2,7 @@ import type {
   DeviceType,
   DeviceOrientation,
   DeviceOrientationDetail,
-} from '~~/types';
+} from '~~/schema-types/shared';
 
 // tailwind breakpoints
 const BREAKPOINTS = {

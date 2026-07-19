@@ -10,7 +10,7 @@
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-left"
-        @click="counter--" />
+        @click="showPreviousDecade" />
 
       <div class="text-center text-sm font-medium">
         {{ label }}
@@ -23,7 +23,7 @@
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-right"
-        @click="counter++" />
+        @click="showNextDecade" />
     </template>
 
     <div class="grid grid-cols-3 gap-1.5">
@@ -78,7 +78,7 @@ const disabledYear = (cal: CalendarDate) => {
 -->
 
 <script setup lang="ts">
-import type { PickerTypeRange } from '~~/types';
+import type { PickerTypeRange } from '~~/schema-types/shared';
 import {
   CalendarDate,
   isSameYear,
@@ -90,6 +90,14 @@ const { t: $t } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 
 const counter = ref(0);
+
+const showPreviousDecade = () => {
+  counter.value--;
+};
+
+const showNextDecade = () => {
+  counter.value++;
+};
 
 const getCurrentCalendarDate = () => today(getLocalTimeZone());
 

@@ -129,7 +129,7 @@
                       size="xs"
                       color="neutral"
                       variant="ghost"
-                      @click="isTooltip = true" />
+                      @click="openTooltip" />
                   </UTooltip>
                 </section>
                 <span class="text-center col-span-15">
@@ -194,9 +194,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProjectItemPageMeta } from '~~/types';
-import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
-import type { z } from 'zod';
+import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 
 const nuxtApp = useNuxtApp();
 const route = useRoute();
@@ -207,9 +205,11 @@ const { TEXTS } = useNonReactiveTranslation();
 const device = useClientDevice();
 const isTooltip = ref(false);
 
-const SLUG_ID: ProjectSlugID = 'know-your-viewport';
+const openTooltip = () => {
+  isTooltip.value = true;
+};
 
-type ProjectItemDataObj = z.infer<typeof ProjectItemDataSchema>;
+const SLUG_ID: ProjectSlugID = 'know-your-viewport';
 
 definePageMeta({
   layout: 'project-item',
@@ -220,7 +220,7 @@ definePageMeta({
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemDataObj[] }>(
+} = useFetch<{ data: ProjectItemData[] }>(
   '/api/projects',
   {
     method: 'GET',

@@ -10,7 +10,7 @@
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-left"
-        @click="counterYear--" />
+        @click="showPreviousYear" />
 
       <div class="text-center text-sm font-medium">
         {{ counterYear }}
@@ -23,7 +23,7 @@
         color="neutral"
         variant="ghost"
         icon="material-symbols:chevron-right"
-        @click="counterYear++" />
+        @click="showNextYear" />
     </template>
 
     <div class="grid grid-cols-3 gap-1.5">
@@ -89,7 +89,7 @@ import {
   parseDate,
 } from '@internationalized/date';
 
-import type { PickerTypeRange } from '~~/types';
+import type { PickerTypeRange } from '~~/schema-types/shared';
 
 const { t: $t, localeProperties } = useI18n();
 
@@ -101,6 +101,14 @@ const getCurrentCalendarDate = (): CalendarDate => {
 
 const currentCalendarDate = ref<CalendarDate>(getCurrentCalendarDate());
 const counterYear = ref<number>(currentCalendarDate.value.year);
+
+const showPreviousYear = () => {
+  counterYear.value--;
+};
+
+const showNextYear = () => {
+  counterYear.value++;
+};
 
 const range = ref<PickerTypeRange>({
   start: null,

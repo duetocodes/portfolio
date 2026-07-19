@@ -68,10 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import type { z } from 'zod';
-import type { AboutMeResponseSchema } from '~~/schemas';
-
-type AboutMeResponse = z.infer<typeof AboutMeResponseSchema>;
+import type { AboutMeResponse } from '~~/schema-types/shared';
 
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();

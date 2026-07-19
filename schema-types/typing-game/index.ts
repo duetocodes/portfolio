@@ -9,6 +9,7 @@ export const CharacterSchema = z.object({
   numberOfTry: z.number(),
   firstTryAt: z.number().optional(),
 });
+export type Character = z.infer<typeof CharacterSchema>;
 
 export const TypingGameSchema = z.object({
   hasFocus: z.boolean(),
@@ -16,6 +17,7 @@ export const TypingGameSchema = z.object({
   timeLeft: z.number(),
   status: z.enum(['standby', 'playing', 'gameover']),
 });
+export type TypingGame = z.infer<typeof TypingGameSchema>;
 
 export const TypingGameStatsSchema = z.object({
   rawWpm: z.number(),
@@ -23,12 +25,14 @@ export const TypingGameStatsSchema = z.object({
   finalWpm: z.number(),
   finalAccuracy: z.number(),
 });
+export type TypingGameStats = z.infer<typeof TypingGameStatsSchema>;
 
 export const TypingGameUpdatedDataSchema = z.object({
   id: z.string(),
   topic: z.string(),
   mappedPassage: z.array(CharacterSchema),
 });
+export type TypingGameUpdatedData = z.infer<typeof TypingGameUpdatedDataSchema>;
 
 export const TypingGameFeedbackRequestCharacterSchema = z.object({
   expectedKey: z.string(),
@@ -37,6 +41,7 @@ export const TypingGameFeedbackRequestCharacterSchema = z.object({
   numberOfTry: z.number(),
   firstTryAt: z.number().optional(),
 });
+export type TypingGameFeedbackRequestCharacter = z.infer<typeof TypingGameFeedbackRequestCharacterSchema>;
 
 export const TypingGameGptFeedbackPayloadSchema = z.object({
   result: z.array(TypingGameFeedbackRequestCharacterSchema),
@@ -45,3 +50,4 @@ export const TypingGameGptFeedbackPayloadSchema = z.object({
   finalWpm: z.number(),
   finalAccuracy: z.number(),
 });
+export type TypingGameGptFeedbackPayload = z.infer<typeof TypingGameGptFeedbackPayloadSchema>;

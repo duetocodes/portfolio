@@ -41,7 +41,8 @@ This is my personal portfolio site: duetocodes.com
 
 ## Verification
 - Run `npm run lint` after code changes.
-- Run `npm run test:i18n` when changing locale files or user-facing copy. This is also the current Husky pre-commit check.
+- Run `npm run typecheck` after TypeScript or Vue changes. This runs on every commit through Husky.
+- Run `npm run test:i18n` when changing locale files or user-facing copy. This also runs on every commit through Husky.
 - Run `npm run build` for changes that affect Nuxt config, dependencies, routing, layouts, pages, server routes, or production rendering.
 - The production build prerenders routes and may exercise server-side content fetching. If it fails, distinguish code failures from missing environment variables or unavailable external services.
 
@@ -50,7 +51,7 @@ This is my personal portfolio site: duetocodes.com
 - `pages/` contains the public routes. Project demos live under `pages/projects/`.
 - `layouts/project/item.vue` is the shared project-detail layout. Project detail pages set `layout: 'project-item'`, `slugId`, and `slugLabel` with `definePageMeta`.
 - `server/api/` contains Nitro API routes. Keep upstream credentials server-side through private runtime config; never expose tokens to client code.
-- `schemas/` contains shared Zod schemas. Reuse schema validation at request boundaries instead of adding ad hoc validation.
+- `schema-types/` contains shared Zod schemas and their inferred TypeScript types. Reuse schema validation at request boundaries instead of adding ad hoc validation.
 - `i18n/locales/` contains flat locale JSON files. Treat `i18n/locales/en.json` as the source of truth for keys and placeholders.
 
 ## External Services and Environment Variables

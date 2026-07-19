@@ -8,9 +8,9 @@ import type { FetchError } from 'ofetch';
 
 import {
   CloudflareSiteVerifyResponseSchema,
-} from '~~/schemas/cloudflare-turnstile';
+} from '~~/schema-types/cloudflare-turnstile';
 
-import { TurnstileDemoPayloadSchema, TURNSTILE_ACTION } from '~~/schemas/turnstile-demo-form';
+import { TurnstileDemoPayloadSchema, TURNSTILE_ACTION } from '~~/schema-types/turnstile-demo-form';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);

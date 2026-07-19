@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import type { FetchError } from 'ofetch';
-import type { AsyncDataRequestStatus } from '~~/types';
+import type { AsyncDataRequestStatus } from '~~/schema-types/shared';
 
 const { TEXTS } = useNonReactiveTranslation();
 

@@ -34,7 +34,7 @@ https://developers.cloudflare.com/turnstile/troubleshooting/testing/#test-siteke
 -->
 
 <script setup lang="ts">
-import type { TurnstileToken, TurnstileAPI } from '~~/schemas/cloudflare-turnstile';
+import type { TurnstileToken, TurnstileAPI } from '~~/schema-types/cloudflare-turnstile';
 
 declare global {
   interface Window {

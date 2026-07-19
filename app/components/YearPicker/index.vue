@@ -19,7 +19,7 @@ next planned feature:
 -->
 
 <script setup lang="ts">
-import type { PickerTypeRange } from '~~/types';
+import type { PickerTypeRange } from '~~/schema-types/shared';
 import type { CalendarDate } from '@internationalized/date';
 
 // iso compliant

@@ -16,7 +16,7 @@
             size="lg"
             color="error"
             icon="material-symbols:home-outline-rounded"
-            @click="navigateTo(localePath('/'))" />
+            @click="navigateHome" />
         </div>
       </template>
     </UAlert>
@@ -28,6 +28,10 @@ import type { NuxtError } from '#app';
 
 const { TEXTS } = useNonReactiveTranslation();
 const localePath = useLocalePath();
+
+const navigateHome = () => {
+  void navigateTo(localePath('/'));
+};
 
 const props = defineProps({
   error: Object as () => NuxtError,

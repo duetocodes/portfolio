@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import type { BreadcrumbItem } from '@nuxt/ui';
-import type { ProjectItemPageMeta } from '~~/types';
+import type { ProjectItemPageMeta } from '~~/schema-types/shared';
 
 const BASE_FILE_URL = 'https://github.com/duetocodes/portfolio/blob/main/app/pages/projects';
 const route = useRoute();

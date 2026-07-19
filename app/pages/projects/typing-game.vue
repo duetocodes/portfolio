@@ -36,14 +36,14 @@
                 size="lg"
                 color="info"
                 icon="material-symbols:u-turn-right-rounded"
-                @click="navigateTo(localePath('/projects'))" />
+                @click="navigateToProjects" />
               <UButton
                 :label="TEXTS.Continue"
                 :aria-label="TEXTS.Continue"
                 size="lg"
                 color="info"
                 icon="material-symbols:play-arrow"
-                @click="isPrompt = false" />
+                @click="dismissPrompt" />
             </div>
           </template>
         </UAlert>
@@ -310,17 +310,15 @@
 
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
-import type { z } from 'zod';
-import type { ProjectItemDataSchema, ProjectSlugID } from '~~/schemas';
+import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import type {
-  CharacterSchema,
-  TypingGameSchema,
-  TypingGameStatsSchema,
-  TypingGameFeedbackRequestCharacterSchema,
-  TypingGameGptFeedbackPayloadSchema,
-  TypingGameUpdatedDataSchema,
-} from '~~/schemas/typing-game';
-import type { ProjectItemPageMeta } from '~~/types';
+  Character,
+  TypingGame,
+  TypingGameStats,
+  TypingGameFeedbackRequestCharacter,
+  TypingGameGptFeedbackPayload,
+  TypingGameUpdatedData,
+} from '~~/schema-types/typing-game';
 
 const SLUG_ID: ProjectSlugID = 'typing-game';
 
@@ -329,14 +327,6 @@ definePageMeta({
   slugId: SLUG_ID,
   slugLabel: 'TypingGame',
 } satisfies ProjectItemPageMeta);
-
-type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
-type Character = z.infer<typeof CharacterSchema>;
-type TypingGame = z.infer<typeof TypingGameSchema>;
-type TypingGameStats = z.infer<typeof TypingGameStatsSchema>;
-type TypingGameFeedbackRequestCharacter = z.infer<typeof TypingGameFeedbackRequestCharacterSchema>;
-type TypingGameGptFeedbackPayload = z.input<typeof TypingGameGptFeedbackPayloadSchema>;
-type TypingGameUpdatedData = z.infer<typeof TypingGameUpdatedDataSchema>;
 
 const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
 // true or false compared to ssrWidth. Go mobile-first approach, and aimed for true onMounted
@@ -373,6 +363,14 @@ const { TEXTS } = useNonReactiveTranslation();
 const localePath = useLocalePath();
 const route = useRoute();
 const nuxtApp = useNuxtApp();
+
+const navigateToProjects = () => {
+  void navigateTo(localePath('/projects'));
+};
+
+const dismissPrompt = () => {
+  isPrompt.value = false;
+};
 
 const gameStats = computed((): TypingGameStats => {
   const pressed = (data.value?.mappedPassage || []).filter(char => char.status !== 'pending');
