@@ -108,10 +108,19 @@ export default defineNuxtConfig({
     baseUrl: 'https://duetocodes.com',
     defaultLocale: i18nDefaultLocale,
     locales: i18nLocales,
-    lazy: true,
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       cookieKey: 'dtc-pref-locale',
+    },
+  },
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@comark/vue',
+        '@vercel/analytics/nuxt',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+      ],
     },
   },
 });
