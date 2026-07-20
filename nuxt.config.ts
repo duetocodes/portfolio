@@ -108,7 +108,6 @@ export default defineNuxtConfig({
     baseUrl: 'https://duetocodes.com',
     defaultLocale: i18nDefaultLocale,
     locales: i18nLocales,
-    lazy: true,
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       cookieKey: 'dtc-pref-locale',
