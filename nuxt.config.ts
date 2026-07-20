@@ -113,4 +113,14 @@ export default defineNuxtConfig({
       cookieKey: 'dtc-pref-locale',
     },
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@comark/vue',
+        '@vercel/analytics/nuxt',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+      ],
+    },
+  },
 });
