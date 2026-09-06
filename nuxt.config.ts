@@ -73,6 +73,11 @@ export default defineNuxtConfig({
       routes: prerenderRoutes,
     },
   },
+  $development: {
+    experimental: {
+      payloadExtraction: false, // don't consume cached payloads during dev
+    },
+  },
   css: ['~/assets/css/main.css'],
   image: {
     format: ['webp', 'png'],

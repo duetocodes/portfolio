@@ -73,7 +73,6 @@ import type { TechStackResponse } from '~~/schema-types/shared';
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
-const nuxtApp = useNuxtApp();
 
 useSeoMeta({
   title: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
@@ -101,10 +100,6 @@ const {
     key: route.path,
     query: {
       locale: locale.value,
-    },
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
     },
   },
 );
