@@ -52,6 +52,7 @@ export default defineNuxtConfig({
     turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
 
     public: {
+      cloudinaryCloudName: import.meta.env.NUXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
       turnstileSiteKey: import.meta.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
     },
   },
