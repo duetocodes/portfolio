@@ -44,6 +44,8 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    i18nDefaultLocale,
+    i18nLocaleCodes: i18nLocales.map(locale => locale.code),
     strapiReadOnlyToken: import.meta.env.NUXT_STRAPI_READ_ONLY_TOKEN,
     strapiApiBase: import.meta.env.NUXT_STRAPI_API_BASE,
     wiseSandboxReadOnlyToken: import.meta.env.NUXT_WISE_SANDBOX_READ_ONLY_TOKEN,

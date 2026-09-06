@@ -14,10 +14,10 @@
 <script setup lang="ts">
 import { Cloudinary } from '@cloudinary/url-gen';
 import { scale } from '@cloudinary/url-gen/actions/resize';
-import type { CloudinaryMedia } from '~~/schema-types/shared';
+import type { CloudinaryImage } from '~~/schema-types/shared';
 
 const props = withDefaults(defineProps<{
-  publicId: CloudinaryMedia['publicId']
+  publicId: CloudinaryImage['publicId']
   alt?: string | null
   width?: number | null
   height?: number | null

@@ -28,14 +28,21 @@
             as="div"
             class="p-0 text-md"
             variant="link">
-            <img
-              class="dark:hidden mr-2 h-8 max-w-[100px] object-contain select-none"
-              :src="item.icon_default?.url"
-              :alt="item.icon_default.alternativeText || item.name" />
-            <img
-              class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none"
-              :src="item.icon_dark?.url ?? item.icon_default?.url"
-              :alt="item.icon_default.alternativeText || item.name" />
+            <CloudinaryImage
+              :public-id="item.icon_default?.publicId"
+              :alt="item.icon_default?.alt"
+              :width="item.icon_default?.width"
+              :height="item.icon_default?.height"
+              :class="{ 'dark:hidden': item.icon_dark }"
+              class="mr-2 h-8 max-w-[100px] object-contain select-none" />
+            <CloudinaryImage
+              v-if="item.icon_dark"
+              :public-id="item.icon_dark?.publicId ?? item.icon_default?.publicId"
+              :alt="item.icon_dark?.alt ?? item.icon_default?.alt"
+              :width="item.icon_dark?.width ?? item.icon_default?.width"
+              :height="item.icon_dark?.height ?? item.icon_default?.height"
+              loading="eager"
+              class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none" />
             <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
               {{ item.name }}
             </h4>
@@ -68,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TechStackResponse } from '~~/schema-types/shared';
+import type { TechStackApiResponse } from '~~/schema-types/shared';
 
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
@@ -93,7 +100,7 @@ const {
   refresh,
   data: stacks,
   error,
-} = useFetch<{ data: TechStackResponse[] }>(
+} = useFetch<TechStackApiResponse>(
   `/api/tech-stacks`,
   {
     method: 'GET',

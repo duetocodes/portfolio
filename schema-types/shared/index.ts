@@ -28,24 +28,42 @@ export type ImageData = z.infer<typeof ImageDataSchema>;
 const TagItemSchema = z.object({
   id: z.number(),
   tag: z.string(),
-  description: z.string().optional(),
+  description: z.string().nullable(),
 });
+
+export const CloudinaryImageSchema = z.object({
+  id: z.number(),
+  publicId: z.string().min(1),
+  alt: z.string().nullable(),
+  width: z.number().int().nonnegative().nullable(),
+  height: z.number().int().nonnegative().nullable(),
+});
+export type CloudinaryImage = z.infer<typeof CloudinaryImageSchema>;
 
 export const TechStackResponseSchema = z.object({
   id: z.number(),
   documentId: z.string(),
   name: z.string(),
   description: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  locale: z.string(),
   website: z.string().url(),
   tech_stack_tags: z.array(TagItemSchema),
-  icon_default: ImageDataSchema,
-  icon_dark: ImageDataSchema,
+  icon_default: CloudinaryImageSchema,
+  icon_dark: CloudinaryImageSchema.nullable(),
 });
 export type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
+
+export const TechStackApiResponseSchema = z.object({
+  data: z.array(TechStackResponseSchema),
+  meta: z.object({
+    pagination: z.object({
+      page: z.number().int().positive(),
+      pageSize: z.number().int().positive(),
+      pageCount: z.number().int().nonnegative(),
+      total: z.number().int().nonnegative(),
+    }),
+  }),
+});
+export type TechStackApiResponse = z.infer<typeof TechStackApiResponseSchema>;
 
 export const AvatarImageSchema = z.object({
   documentId: z.string(),
