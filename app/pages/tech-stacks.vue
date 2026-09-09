@@ -6,7 +6,8 @@
       :has-error="status === 'error' || Boolean(error)"
       :error="error"
       :status="status"
-      @try-again="refresh" />
+      :button-label="TEXTS.BackToHome"
+      @try-again="navigateHome" />
 
     <div
       v-if="stacks?.data"
@@ -80,6 +81,7 @@ import type { TechStackApiResponse } from '~~/schema-types/shared';
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
+const localePath = useLocalePath();
 
 useSeoMeta({
   title: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
@@ -97,7 +99,6 @@ useSeoMeta({
 
 const {
   status,
-  refresh,
   data: stacks,
   error,
 } = useFetch<TechStackApiResponse>(
@@ -110,6 +111,10 @@ const {
     },
   },
 );
+
+const navigateHome = () => {
+  void navigateTo(localePath('/'));
+};
 </script>
 
 <style scoped>

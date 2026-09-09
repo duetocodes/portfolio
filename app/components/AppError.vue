@@ -16,8 +16,8 @@
           </p>
           <div class="flex justify-end mt-8">
             <UButton
-              :label="TEXTS.TryAgain"
-              :aria-label="TEXTS.TryAgain"
+              :label="props.buttonLabel || TEXTS.TryAgain"
+              :aria-label="props.buttonLabel || TEXTS.TryAgain"
               size="lg"
               color="error"
               icon="material-symbols:app-badging-outline"
@@ -38,6 +38,7 @@ import type { AsyncDataRequestStatus } from '~~/schema-types/shared';
 const { TEXTS } = useNonReactiveTranslation();
 
 const props = withDefaults(defineProps<{
+  buttonLabel?: string
   hasError?: boolean
   error?: FetchError | null
   status: AsyncDataRequestStatus
