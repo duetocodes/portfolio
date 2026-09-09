@@ -34,7 +34,7 @@
               :width="item.icon_default?.width"
               :height="item.icon_default?.height"
               :class="{ 'dark:hidden': item.icon_dark }"
-              class="mr-2 h-8 max-w-[100px] object-contain select-none" />
+              class="mr-2 h-8 w-auto max-w-[100px] object-contain select-none" />
             <CloudinaryImage
               v-if="item.icon_dark"
               :public-id="item.icon_dark?.publicId ?? item.icon_default?.publicId"
@@ -42,7 +42,7 @@
               :width="item.icon_dark?.width ?? item.icon_default?.width"
               :height="item.icon_dark?.height ?? item.icon_default?.height"
               loading="eager"
-              class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none" />
+              class="hidden dark:block mr-2 h-8 w-auto max-w-[100px] object-contain select-none" />
             <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
               {{ item.name }}
             </h4>
