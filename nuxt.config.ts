@@ -70,9 +70,11 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
+  // https://nitro.build/config
   nitro: {
     prerender: {
       routes: prerenderRoutes,
+      failOnError: true,
     },
   },
   $development: {

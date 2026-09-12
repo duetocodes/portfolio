@@ -27,11 +27,11 @@ export default defineEventHandler(async (event) => {
           ...query,
           // all fields here are top-level
           'sort': 'sortIndex:asc',
+          'status': 'published',
           'fields': ['name', 'description', 'website'],
           'populate[icon_dark][fields]': ['publicId', 'alt', 'width', 'height'],
           'populate[icon_default][fields]': ['publicId', 'alt', 'width', 'height'],
           'populate[tech_stack_tags][fields]': ['tag', 'description'],
-          'status': 'published',
         },
         timeout: 7000,
       });
