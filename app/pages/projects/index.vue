@@ -94,12 +94,24 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
-  ogImage: '/og_banner.png',
+  ogImage: () => ({
+    url: '/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
   ogType: 'website',
   twitterTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterCard: 'summary_large_image',
   twitterDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
-  twitterImage: '/og_banner.png',
+  twitterImage: () => ({
+    url: '/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
 });
 </script>
 

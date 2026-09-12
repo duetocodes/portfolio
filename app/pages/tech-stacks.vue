@@ -89,12 +89,24 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => TEXTS.TechStackHelpText,
-  ogImage: '/og_banner.png',
+  ogImage: () => ({
+    url: '/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterDescription: () => TEXTS.TechStackHelpText,
   twitterCard: 'summary_large_image',
-  twitterImage: '/og_banner.png',
+  twitterImage: () => ({
+    url: '/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
 });
 
 const {
