@@ -3,7 +3,7 @@
     <AppLoadingIndicator :is-loading="status === 'pending'" />
 
     <AppError
-      :has-error="status === 'error'"
+      :has-error="status === 'error' || Boolean(error)"
       :error="error"
       :status="status"
       @try-again="refresh" />
@@ -21,9 +21,9 @@
             v-if="about"
             class="mt-6 flex max-sm:justify-center gap-x-8">
             <UChip
-              v-for="(item, index) in about.data.socialMedia"
-              :key="index"
-              :text="TEXTS[item.type] ?? ''"
+              v-for="item in about.data.socialMedia"
+              :key="item.id"
+              :text="item.type ? TEXTS[item.type] : ''"
               :show="Boolean(item.type)"
               size="xl"
               position="bottom-right"
@@ -43,23 +43,25 @@
         </div>
 
         <div class="relative max-md:order-first md:col-span-3">
-          <NuxtImg
-            :src="about.data.hero_light.image.url"
-            :alt="about.data.hero_light.image.alternativeText ?? TEXTS.Image"
-            class="rounded-xl w-full select-none"
-            width="640"
-            fit="contain" />
+          <CloudinaryImage
+            v-if="about.data.heroImage?.publicId"
+            class="rounded-xl w-full select-none object-cover object-center"
+            :public-id="about.data.heroImage.publicId"
+            :alt="about.data.heroImage.alt ?? TEXTS.Image"
+            :width="about.data.heroImage.width"
+            :height="about.data.heroImage.height" />
 
           <div class="absolute top-4 right-4 md:col-start-5 md:col-span-1">
             <p class="px-3 py-1.5 font-mono bottom-2 right-2 text-[var(--ui-color-neutral-800)] text-lg sm:text-xl rounded-lg bg-white/40 backdrop-blur-lg">
               {{ TEXTS.metaTitle }}
             </p>
-            <NuxtImg
-              :src="about.data.avatar_light.image.url"
-              :alt="about.data.avatar_light.image.alternativeText || TEXTS.Image"
-              class="size-20 lg:size-24 z-1 -translate-x-4 -translate-y-2 ml-auto rounded-full border border-white/50 shadow-sm select-none"
-              sizes="120px"
-              fit="contain" />
+            <CloudinaryImage
+              v-if="about.data.meImage?.publicId"
+              :public-id="about.data.meImage.publicId"
+              :alt="about.data.meImage.alt ?? TEXTS.Image"
+              :width="about.data.meImage.width"
+              :height="about.data.meImage.height"
+              class="size-20 lg:size-24 z-1 -translate-x-4 -translate-y-2 ml-auto rounded-full border border-white/50 shadow-sm select-none" />
           </div>
         </div>
       </div>
@@ -73,24 +75,19 @@ import type { AboutMeResponse } from '~~/schema-types/shared';
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
-const nuxtApp = useNuxtApp();
 
 const {
   status,
-  refresh,
   data: about,
+  refresh,
   error,
-} = useFetch<{ data: AboutMeResponse }>(
+} = useFetch<AboutMeResponse>(
   '/api/about-me',
   {
     method: 'GET',
     key: route.path,
     query: {
       locale: locale.value,
-    },
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
     },
   },
 );
@@ -102,7 +99,7 @@ useSeoMeta({
   ogTitle: () => `duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => TEXTS.metaDescription,
   ogImage: () => ({
-    url: '/og_banner.png',
+    url: 'https://duetocodes.com/og_banner.png',
     alt: TEXTS.Image,
     width: 1200,
     height: 630,
@@ -113,7 +110,7 @@ useSeoMeta({
   twitterDescription: () => TEXTS.metaDescription,
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
-    url: '/og_banner.png',
+    url: 'https://duetocodes.com/og_banner.png',
     alt: TEXTS.Image,
     width: 1200,
     height: 630,

@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TechStackApiResponse } from '~~/schema-types/shared';
+import type { TechStackResponse } from '~~/schema-types/shared';
 
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
@@ -90,7 +90,7 @@ useSeoMeta({
   ogTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => TEXTS.TechStackHelpText,
   ogImage: () => ({
-    url: '/og_banner.png',
+    url: 'https://duetocodes.com/og_banner.png',
     alt: TEXTS.Image,
     width: 1200,
     height: 630,
@@ -101,7 +101,7 @@ useSeoMeta({
   twitterDescription: () => TEXTS.TechStackHelpText,
   twitterCard: 'summary_large_image',
   twitterImage: () => ({
-    url: '/og_banner.png',
+    url: 'https://duetocodes.com/og_banner.png',
     alt: TEXTS.Image,
     width: 1200,
     height: 630,
@@ -113,7 +113,7 @@ const {
   status,
   data: stacks,
   error,
-} = useFetch<TechStackApiResponse>(
+} = useFetch<TechStackResponse>(
   `/api/tech-stacks`,
   {
     method: 'GET',

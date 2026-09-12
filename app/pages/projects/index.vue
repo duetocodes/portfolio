@@ -95,7 +95,7 @@ useSeoMeta({
   ogTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   ogImage: () => ({
-    url: '/og_banner.png',
+    url: 'https://duetocodes.com/og_banner.png',
     alt: TEXTS.Image,
     width: 1200,
     height: 630,
@@ -106,7 +106,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
   twitterImage: () => ({
-    url: '/og_banner.png',
+    url: 'https://duetocodes.com/og_banner.png',
     alt: TEXTS.Image,
     width: 1200,
     height: 630,

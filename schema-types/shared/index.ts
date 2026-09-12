@@ -8,29 +8,6 @@ export const CalendarDateValueSchema = z.object({
 });
 export type CalendarDateValue = z.infer<typeof CalendarDateValueSchema>;
 
-export const ImageDataSchema = z.object({
-  id: z.number(),
-  url: z.string().url(),
-  name: z.string(),
-  ext: z.string(),
-  mime: z.string(),
-  size: z.number(),
-  width: z.number(),
-  height: z.number(),
-  provider: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  alternativeText: z.string(),
-});
-export type ImageData = z.infer<typeof ImageDataSchema>;
-
-const TagItemSchema = z.object({
-  id: z.number(),
-  tag: z.string(),
-  description: z.string().nullable(),
-});
-
 export const CloudinaryImageSchema = z.object({
   id: z.number(),
   publicId: z.string().min(1),
@@ -41,19 +18,21 @@ export const CloudinaryImageSchema = z.object({
 export type CloudinaryImage = z.infer<typeof CloudinaryImageSchema>;
 
 export const TechStackResponseSchema = z.object({
-  id: z.number(),
-  documentId: z.string(),
-  name: z.string(),
-  description: z.string(),
-  website: z.string().url(),
-  tech_stack_tags: z.array(TagItemSchema),
-  icon_default: CloudinaryImageSchema,
-  icon_dark: CloudinaryImageSchema.nullable(),
-});
-export type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
-
-export const TechStackApiResponseSchema = z.object({
-  data: z.array(TechStackResponseSchema),
+  data: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      description: z.string(),
+      website: z.url(),
+      tech_stack_tags: z.array(z.object({
+        id: z.number(),
+        tag: z.string(),
+        description: z.string().nullable(),
+      })),
+      icon_default: CloudinaryImageSchema,
+      icon_dark: CloudinaryImageSchema.nullable(),
+    }),
+  ),
   meta: z.object({
     pagination: z.object({
       page: z.number().int().positive(),
@@ -63,7 +42,7 @@ export const TechStackApiResponseSchema = z.object({
     }),
   }),
 });
-export type TechStackApiResponse = z.infer<typeof TechStackApiResponseSchema>;
+export type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
 export const AvatarImageSchema = z.object({
   documentId: z.string(),
@@ -75,12 +54,6 @@ export const AvatarImageSchema = z.object({
   size: z.number(),
   url: z.string().url(),
 });
-export type AvatarImage = z.infer<typeof AvatarImageSchema>;
-
-const AvatarSchema = z.object({
-  id: z.number(),
-  image: AvatarImageSchema,
-});
 
 export const ProjectItemDataSchema = z.object({
   description: z.string(),
@@ -90,31 +63,22 @@ export const ProjectItemDataSchema = z.object({
 });
 export type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 
-export const SocialMediaItemSchema = z.object({
-  id: z.number(),
-  sortIndex: z.number(),
-  platform: z.string(),
-  type: z.enum(['personal', 'work']),
-  url: z.string().url(),
-  icon: z.string(),
-  description: z.string().nullable(),
-});
-export type SocialMediaItem = z.infer<typeof SocialMediaItemSchema>;
-
 export const AboutMeResponseSchema = z.object({
-  id: z.number(),
-  documentId: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  locale: z.string(),
-  aboutMe: z.string().nullable(),
-  og_banner: AvatarSchema,
-  avatar_light: AvatarSchema,
-  avatar_dark: AvatarSchema,
-  hero_light: AvatarSchema,
-  hero_dark: AvatarSchema,
-  socialMedia: z.array(SocialMediaItemSchema),
+  data: z.object({
+    id: z.number(),
+    aboutMe: z.string(),
+    heroImage: CloudinaryImageSchema.optional(),
+    meImage: CloudinaryImageSchema.optional(),
+    socialMedia: z.array(z.object({
+      id: z.number(),
+      sortIndex: z.number(),
+      platform: z.string(),
+      type: z.enum(['personal', 'work']).nullable(),
+      url: z.url(),
+      icon: z.string(),
+      description: z.string().nullable(),
+    })),
+  }),
 });
 export type AboutMeResponse = z.infer<typeof AboutMeResponseSchema>;
 

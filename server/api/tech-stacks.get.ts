@@ -1,6 +1,6 @@
 import z from 'zod';
 import type { FetchError } from 'ofetch';
-import { TechStackApiResponseSchema } from '~~/schema-types/shared';
+import { TechStackResponseSchema } from '~~/schema-types/shared';
 import { STRAPI_ENDPOINTS } from '~~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
@@ -26,12 +26,9 @@ export default defineEventHandler(async (event) => {
         query: {
           ...query,
           // all fields here are top-level
-          'sort': 'sortIndex:asc',
-          'status': 'published',
-          'fields': ['name', 'description', 'website'],
-          'populate[icon_dark][fields]': ['publicId', 'alt', 'width', 'height'],
-          'populate[icon_default][fields]': ['publicId', 'alt', 'width', 'height'],
-          'populate[tech_stack_tags][fields]': ['tag', 'description'],
+          populate: '*',
+          sort: 'sortIndex:asc',
+          status: 'published',
         },
         timeout: 7000,
       });
@@ -45,14 +42,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // validate Strapi's response first, before returning it to the client
-  const result = TechStackApiResponseSchema.safeParse(response);
+  // validate Strapi's response first, extract its shape with valid types
+  const result = TechStackResponseSchema.safeParse(response);
   if (!result.success) {
     throw createError({
       statusCode: 502,
       statusMessage: 'Bad Gateway',
     });
   }
-
   return result.data;
 });

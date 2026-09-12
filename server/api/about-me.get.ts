@@ -1,14 +1,19 @@
+import z from 'zod';
 import type { FetchError } from 'ofetch';
 import { STRAPI_ENDPOINTS } from '~~/server/utils/api';
+import { AboutMeResponseSchema } from '~~/schema-types/shared';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
-  const query = getQuery(event);
+  const schema = z.object({
+    locale: z.enum(config.i18nLocaleCodes).default(config.i18nDefaultLocale),
+  });
+  const query = await getValidatedQuery(event, schema.parse);
 
-  const fields = ['url', 'alternativeText', 'width', 'height', 'mime'];
+  let response: unknown;
 
   try {
-    const response = await $fetch(
+    response = await $fetch(
       config.strapiApiBase + STRAPI_ENDPOINTS.AboutMe,
       {
         headers: {
@@ -16,22 +21,29 @@ export default defineEventHandler(async (event) => {
         },
         query: {
           ...query,
-          'fields': ['aboutMe'],
-          'populate[og_banner][populate][image][fields]': fields,
-          'populate[avatar_light][populate][image][fields]': fields,
-          'populate[hero_light][populate][image][fields]': fields,
+          'status': 'published',
+          'populate[heroImage]': '*',
+          'populate[meImage]': '*',
           'populate[socialMedia][sort]': 'sortIndex:asc',
         },
         timeout: 7000, // 7 seconds
       });
-    return response;
   }
   catch (err) {
     const error = err as FetchError;
 
     throw createError({
-      statusCode: error?.statusCode,
-      statusMessage: error?.statusMessage,
+      statusCode: error?.statusCode ?? 502,
+      statusMessage: error?.statusMessage ?? 'Bad Gateway',
     });
   }
+
+  const result = AboutMeResponseSchema.safeParse(response);
+  if (!result.success) {
+    throw createError({
+      statusCode: 502,
+      statusMessage: 'Bad Gateway',
+    });
+  }
+  return result.data;
 });
