@@ -6,7 +6,8 @@
       :has-error="status === 'error' || Boolean(error)"
       :error="error"
       :status="status"
-      @try-again="refresh" />
+      :button-label="TEXTS.BackToHome"
+      @try-again="navigateHome" />
 
     <div
       v-if="stacks?.data"
@@ -28,14 +29,21 @@
             as="div"
             class="p-0 text-md"
             variant="link">
-            <img
-              class="dark:hidden mr-2 h-8 max-w-[100px] object-contain select-none"
-              :src="item.icon_default?.url"
-              :alt="item.icon_default.alternativeText || item.name" />
-            <img
-              class="hidden dark:block mr-2 h-8 max-w-[100px] object-contain select-none"
-              :src="item.icon_dark?.url ?? item.icon_default?.url"
-              :alt="item.icon_default.alternativeText || item.name" />
+            <CloudinaryImage
+              :public-id="item.icon_default?.publicId"
+              :alt="item.icon_default?.alt"
+              :width="item.icon_default?.width"
+              :height="item.icon_default?.height"
+              :class="{ 'dark:hidden': item.icon_dark }"
+              class="mr-2 h-8 w-auto max-w-[100px] object-contain select-none" />
+            <CloudinaryImage
+              v-if="item.icon_dark"
+              :public-id="item.icon_dark?.publicId ?? item.icon_default?.publicId"
+              :alt="item.icon_dark?.alt ?? item.icon_default?.alt"
+              :width="item.icon_dark?.width ?? item.icon_default?.width"
+              :height="item.icon_dark?.height ?? item.icon_default?.height"
+              loading="eager"
+              class="hidden dark:block mr-2 h-8 w-auto max-w-[100px] object-contain select-none" />
             <h4 class="stackName transition text-default group-hover:text-primary line-clamp-2">
               {{ item.name }}
             </h4>
@@ -73,7 +81,7 @@ import type { TechStackResponse } from '~~/schema-types/shared';
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 const route = useRoute();
-const nuxtApp = useNuxtApp();
+const localePath = useLocalePath();
 
 useSeoMeta({
   title: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
@@ -81,20 +89,31 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => TEXTS.TechStackHelpText,
-  ogImage: '/og_banner.png',
+  ogImage: () => ({
+    url: 'https://duetocodes.com/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TechStacks} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterDescription: () => TEXTS.TechStackHelpText,
   twitterCard: 'summary_large_image',
-  twitterImage: '/og_banner.png',
+  twitterImage: () => ({
+    url: 'https://duetocodes.com/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
 });
 
 const {
   status,
-  refresh,
   data: stacks,
   error,
-} = useFetch<{ data: TechStackResponse[] }>(
+} = useFetch<TechStackResponse>(
   `/api/tech-stacks`,
   {
     method: 'GET',
@@ -102,12 +121,12 @@ const {
     query: {
       locale: locale.value,
     },
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
-    },
   },
 );
+
+const navigateHome = () => {
+  void navigateTo(localePath('/'));
+};
 </script>
 
 <style scoped>

@@ -8,95 +8,66 @@ export const CalendarDateValueSchema = z.object({
 });
 export type CalendarDateValue = z.infer<typeof CalendarDateValueSchema>;
 
-export const ImageDataSchema = z.object({
+export const CloudinaryImageSchema = z.object({
   id: z.number(),
-  url: z.string().url(),
-  name: z.string(),
-  ext: z.string(),
-  mime: z.string(),
-  size: z.number(),
-  width: z.number(),
-  height: z.number(),
-  provider: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  alternativeText: z.string(),
+  publicId: z.string().min(1),
+  alt: z.string().nullable(),
+  width: z.number().int().nonnegative().nullable(),
+  height: z.number().int().nonnegative().nullable(),
 });
-export type ImageData = z.infer<typeof ImageDataSchema>;
-
-const TagItemSchema = z.object({
-  id: z.number(),
-  tag: z.string(),
-  description: z.string().optional(),
-});
+export type CloudinaryImage = z.infer<typeof CloudinaryImageSchema>;
 
 export const TechStackResponseSchema = z.object({
-  id: z.number(),
-  documentId: z.string(),
-  name: z.string(),
-  description: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  locale: z.string(),
-  website: z.string().url(),
-  tech_stack_tags: z.array(TagItemSchema),
-  icon_default: ImageDataSchema,
-  icon_dark: ImageDataSchema,
+  data: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      description: z.string(),
+      website: z.url(),
+      tech_stack_tags: z.array(z.object({
+        id: z.number(),
+        tag: z.string(),
+        description: z.string().nullable(),
+      })),
+      icon_default: CloudinaryImageSchema,
+      icon_dark: CloudinaryImageSchema.nullable(),
+    }),
+  ),
+  meta: z.object({
+    pagination: z.object({
+      page: z.number().int().positive(),
+      pageSize: z.number().int().positive(),
+      pageCount: z.number().int().nonnegative(),
+      total: z.number().int().nonnegative(),
+    }),
+  }),
 });
 export type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
-export const AvatarImageSchema = z.object({
-  documentId: z.string(),
-  name: z.string(),
-  alternativeText: z.string(),
-  width: z.number(),
-  height: z.number(),
-  mime: z.enum(['image/jpeg', 'image/gif', 'image/png']),
-  size: z.number(),
-  url: z.string().url(),
-});
-export type AvatarImage = z.infer<typeof AvatarImageSchema>;
-
-const AvatarSchema = z.object({
-  id: z.number(),
-  image: AvatarImageSchema,
-});
-
 export const ProjectItemDataSchema = z.object({
-  description: z.string(),
-  preview: z.object({
-    image: AvatarImageSchema,
-  }),
+  data: z.array(z.object({
+    description: z.string(),
+    ogSocialImage: CloudinaryImageSchema.nullish(),
+  })),
 });
 export type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 
-export const SocialMediaItemSchema = z.object({
-  id: z.number(),
-  sortIndex: z.number(),
-  platform: z.string(),
-  type: z.enum(['personal', 'work']),
-  url: z.string().url(),
-  icon: z.string(),
-  description: z.string().nullable(),
-});
-export type SocialMediaItem = z.infer<typeof SocialMediaItemSchema>;
-
 export const AboutMeResponseSchema = z.object({
-  id: z.number(),
-  documentId: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  locale: z.string(),
-  aboutMe: z.string().nullable(),
-  og_banner: AvatarSchema,
-  avatar_light: AvatarSchema,
-  avatar_dark: AvatarSchema,
-  hero_light: AvatarSchema,
-  hero_dark: AvatarSchema,
-  socialMedia: z.array(SocialMediaItemSchema),
+  data: z.object({
+    id: z.number(),
+    aboutMe: z.string(),
+    heroImage: CloudinaryImageSchema.nullable(),
+    meImage: CloudinaryImageSchema.nullable(),
+    socialMedia: z.array(z.object({
+      id: z.number(),
+      sortIndex: z.number(),
+      platform: z.string(),
+      type: z.enum(['personal', 'work']).nullable(),
+      url: z.url(),
+      icon: z.string(),
+      description: z.string().nullable(),
+    })),
+  }),
 });
 export type AboutMeResponse = z.infer<typeof AboutMeResponseSchema>;
 
@@ -110,30 +81,18 @@ export const ProjectSlugIDSchema = z.enum([
 export type ProjectSlugID = z.infer<typeof ProjectSlugIDSchema>;
 
 export const ProjectSchema = z.object({
-  id: z.number(),
-  documentId: z.string(),
-  title: z.string(),
-  description: z.string(),
-  tag: z.string(),
-  sortIndex: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  locale: z.string(),
-  slugId: ProjectSlugIDSchema,
+  data: z.array(z.object({
+    id: z.number(),
+    title: z.string(),
+    description: z.string(),
+    tag: z.string().nullable(),
+    sortIndex: z.number(),
+    locale: z.string(),
+    ogSocialImage: CloudinaryImageSchema.nullish(),
+    slugId: ProjectSlugIDSchema,
+  })),
 });
-export type Project = z.infer<typeof ProjectSchema>;
-
-// see https://github.com/unjs/ufo/blob/main/src/query.ts (not sure how to import these)
-export type QueryValue =
-  | string
-  | number
-  | undefined
-  | null
-  | boolean
-  | Array<QueryValue>
-  | Record<string, unknown>;
-export type QueryObject = Record<string, QueryValue | Array<QueryValue>>;
+export type Projects = z.infer<typeof ProjectSchema>;
 
 // https://nuxt.com/docs/3.x/api/composables/use-fetch#type
 export type AsyncDataRequestStatus = 'idle' | 'pending' | 'success' | 'error'

@@ -44,6 +44,8 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    i18nDefaultLocale,
+    i18nLocaleCodes: i18nLocales.map(locale => locale.code),
     strapiReadOnlyToken: import.meta.env.NUXT_STRAPI_READ_ONLY_TOKEN,
     strapiApiBase: import.meta.env.NUXT_STRAPI_API_BASE,
     wiseSandboxReadOnlyToken: import.meta.env.NUXT_WISE_SANDBOX_READ_ONLY_TOKEN,
@@ -52,6 +54,7 @@ export default defineNuxtConfig({
     turnstileSecretKey: import.meta.env.NUXT_TURNSTILE_SECRET_KEY,
 
     public: {
+      cloudinaryCloudName: import.meta.env.NUXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
       turnstileSiteKey: import.meta.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
     },
   },
@@ -61,27 +64,24 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@comark/nuxt',
     'nuxt-charts',
-    '@nuxt/image',
     '@vueuse/nuxt',
   ],
   devtools: {
     enabled: true,
   },
+  // https://nitro.build/config
   nitro: {
     prerender: {
       routes: prerenderRoutes,
+      failOnError: true,
+    },
+  },
+  $development: {
+    experimental: {
+      payloadExtraction: false, // don't consume cached payloads during dev
     },
   },
   css: ['~/assets/css/main.css'],
-  image: {
-    format: ['webp', 'png'],
-    provider: 'vercel',
-    domains: ['thoughtful-bracelet-33c79aabd8.media.strapiapp.com'],
-    screens: {
-      myAvatar: 120,
-      myAvatar2x: 240,
-    },
-  },
   compatibilityDate: '2024-11-01',
   icon: {
     clientBundle: {

@@ -1,6 +1,6 @@
 import z from 'zod';
 import type { FetchError } from 'ofetch';
-import { TechStackResponseSchema } from '~~/schema-types/shared';
+import { ProjectSchema } from '~~/schema-types/shared';
 import { STRAPI_ENDPOINTS } from '~~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
@@ -8,25 +8,19 @@ export default defineEventHandler(async (event) => {
   const schema = z.object({
     locale: z.enum(config.i18nLocaleCodes).default(config.i18nDefaultLocale),
   });
-
-  const query = await getValidatedQuery(
-    event,
-    schema.parse,
-  );
+  const query = await getValidatedQuery(event, schema.parse);
 
   let response: unknown;
 
   try {
     response = await $fetch(
-      config.strapiApiBase + STRAPI_ENDPOINTS.TechStacks,
+      config.strapiApiBase + STRAPI_ENDPOINTS.Projects,
       {
         headers: {
           Authorization: `Bearer ${config.strapiReadOnlyToken}`,
         },
         query: {
           ...query,
-          // all fields here are top-level
-          populate: '*',
           sort: 'sortIndex:asc',
           status: 'published',
         },
@@ -42,8 +36,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // validate Strapi's response first, extract its shape with valid types
-  const result = TechStackResponseSchema.safeParse(response);
+  const result = ProjectSchema.safeParse(response);
   if (!result.success) {
     throw createError({
       statusCode: 502,

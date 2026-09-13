@@ -136,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import { Cloudinary } from '@cloudinary/url-gen';
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import type { TabsItem } from '@nuxt/ui';
 import type { PickerTypeRange, ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
@@ -154,8 +155,17 @@ definePageMeta({
 
 const { t: $t, locale, localeProperties } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
-const nuxtApp = useNuxtApp();
+const config = useRuntimeConfig();
 const route = useRoute();
+
+const cloudinary = new Cloudinary({
+  cloud: {
+    cloudName: config.public.cloudinaryCloudName,
+  },
+  url: {
+    analytics: false,
+  },
+});
 
 const EARLIEST_RECORD = {
   year: 1990,
@@ -237,23 +247,31 @@ const {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemData[] }>(
-  '/api/projects',
+} = await useFetch<ProjectItemData>(
+  `/api/projects/${SLUG_ID}`,
   {
     method: 'GET',
     key: route.path,
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
-    },
     query: {
-      'locale': locale.value,
-      'filters[slugId][$eq]': SLUG_ID,
-      'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
-      'fields': 'description',
+      locale: locale.value,
     },
   },
 );
+
+const ogSocialImage = computed(() => {
+  const image = overview.value?.data?.[0]?.ogSocialImage;
+
+  if (!image) {
+    return undefined;
+  }
+
+  return {
+    url: cloudinary.image(image.publicId).toURL(),
+    alt: image.alt ?? undefined,
+    width: image.width ?? undefined,
+    height: image.height ?? undefined,
+  };
+});
 
 useSeoMeta({
   title: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
@@ -261,24 +279,12 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   ogTitle: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogImage: () => ({
-    url: overview.value?.data?.[0]?.preview?.image?.url,
-    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
-    width: overview.value?.data?.[0]?.preview?.image?.width,
-    height: overview.value?.data?.[0]?.preview?.image?.height,
-    type: overview.value?.data?.[0]?.preview?.image?.mime,
-  }),
+  ogImage: () => ogSocialImage.value,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TreasuryYieldVisualiser} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
-  twitterImage: () => ({
-    url: overview.value?.data?.[0]?.preview?.image?.url,
-    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
-    width: overview.value?.data?.[0]?.preview?.image?.width,
-    height: overview.value?.data?.[0]?.preview?.image?.height,
-    type: overview.value?.data?.[0]?.preview?.image?.mime,
-  }),
+  twitterImage: () => ogSocialImage.value,
 });
 
 const termItems = computed(() => [

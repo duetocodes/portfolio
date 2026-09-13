@@ -1,34 +1,35 @@
 import z from 'zod';
 import type { FetchError } from 'ofetch';
-import { TechStackResponseSchema } from '~~/schema-types/shared';
+import { ProjectItemDataSchema, ProjectSlugIDSchema } from '~~/schema-types/shared';
 import { STRAPI_ENDPOINTS } from '~~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
-  const schema = z.object({
+  const querySchema = z.object({
     locale: z.enum(config.i18nLocaleCodes).default(config.i18nDefaultLocale),
   });
+  const paramsSchema = z.object({
+    slugId: ProjectSlugIDSchema,
+  });
 
-  const query = await getValidatedQuery(
-    event,
-    schema.parse,
-  );
+  const query = await getValidatedQuery(event, querySchema.parse);
+  const { slugId } = await getValidatedRouterParams(event, paramsSchema.parse);
 
   let response: unknown;
 
   try {
     response = await $fetch(
-      config.strapiApiBase + STRAPI_ENDPOINTS.TechStacks,
+      config.strapiApiBase + STRAPI_ENDPOINTS.Projects,
       {
         headers: {
           Authorization: `Bearer ${config.strapiReadOnlyToken}`,
         },
         query: {
           ...query,
-          // all fields here are top-level
-          populate: '*',
-          sort: 'sortIndex:asc',
-          status: 'published',
+          'filters[slugId][$eq]': slugId,
+          'fields': 'description',
+          'populate': '*',
+          'status': 'published',
         },
         timeout: 7000,
       });
@@ -42,8 +43,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // validate Strapi's response first, extract its shape with valid types
-  const result = TechStackResponseSchema.safeParse(response);
+  const result = ProjectItemDataSchema.safeParse(response);
   if (!result.success) {
     throw createError({
       statusCode: 502,

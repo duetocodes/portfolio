@@ -85,34 +85,34 @@
 <script setup lang="ts">
 import { Analytics } from '@vercel/analytics/nuxt';
 import type { NavigationMenuItem } from '@nuxt/ui';
-import type { TechStackResponse } from '~~/schema-types/shared';
+
+const KNOWS_ABOUT = [
+  'Vue.js',
+  'Nuxt.js',
+  'Zod',
+  'TypeScript',
+  'Strapi CMS',
+  'Tailwind CSS',
+  'Git & GitHub',
+  'Visual Studio Code',
+  'Vercel',
+  'Postman',
+  'Nuxt UI',
+  'Joi',
+  'OpenAI API',
+  'Element UI',
+  'Pinia',
+  'Vue Use',
+  'Airtable',
+  'HTML 5',
+  'JavaScript',
+  'CSS 3',
+];
 
 const route = useRoute();
-const nuxtApp = useNuxtApp();
 const i18nHead = useLocaleHead();
 const localePath = useLocalePath();
 const { t: $t } = useI18n();
-
-const {
-  data: stacks,
-} = await useFetch<string[]>(
-  `/api/tech-stacks`,
-  {
-    method: 'GET',
-    key: `root-app-stacks`,
-    query: {
-      locale: 'en',
-    },
-    onResponse({ response }) {
-      const payload = ((response._data as { data?: TechStackResponse[] } | undefined)?.data) ?? [];
-      response._data = payload.map((item: TechStackResponse) => item.name);
-    },
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
-    },
-  },
-);
 
 useHead(() => ({
   htmlAttrs: { ...(i18nHead.value.htmlAttrs || {}) },
@@ -142,7 +142,7 @@ useHead(() => ({
         'url': 'https://duetocodes.com',
         'jobTitle': $t('FrontendDeveloper'),
         'description': $t('metaDescription'),
-        'knowsAbout': stacks.value ?? [],
+        'knowsAbout': KNOWS_ABOUT,
         'sameAs': [
           'https://github.com/duetocodes',
         ],

@@ -57,13 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~~/schema-types/shared';
+import type { Projects } from '~~/schema-types/shared';
 
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 const { PROJECT_SLUG_ENUM } = useFrontend();
 const route = useRoute();
-const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
 
 const {
@@ -71,19 +70,13 @@ const {
   refresh,
   data: projects,
   error,
-} = useFetch<{ data: Project[] | null }>(
+} = useFetch<Projects>(
   `/api/projects`,
   {
     method: 'GET',
     key: route.path,
     query: {
-      'locale': locale.value,
-      'sort[0]': 'sortIndex:asc',
-      'fields': ['title', 'description', 'tag', 'sortIndex', 'slugId'],
-    },
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
+      locale: locale.value,
     },
   },
 );
@@ -94,12 +87,24 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   ogDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
-  ogImage: '/og_banner.png',
+  ogImage: () => ({
+    url: 'https://duetocodes.com/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
   ogType: 'website',
   twitterTitle: () => `${TEXTS.Projects} - duetocodes | ${TEXTS.FrontendDeveloper} (Vue & Nuxt)`,
   twitterCard: 'summary_large_image',
   twitterDescription: () => $t('SelfDevelopedApplications', projects.value?.data?.length ?? 3),
-  twitterImage: '/og_banner.png',
+  twitterImage: () => ({
+    url: 'https://duetocodes.com/og_banner.png',
+    alt: TEXTS.Image,
+    width: 1200,
+    height: 630,
+    type: 'image/png',
+  }),
 });
 </script>
 
