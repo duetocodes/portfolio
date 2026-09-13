@@ -57,13 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~~/schema-types/shared';
+import type { Projects } from '~~/schema-types/shared';
 
 const { t: $t, locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
 const { PROJECT_SLUG_ENUM } = useFrontend();
 const route = useRoute();
-const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
 
 const {
@@ -71,19 +70,13 @@ const {
   refresh,
   data: projects,
   error,
-} = useFetch<{ data: Project[] | null }>(
+} = useFetch<Projects>(
   `/api/projects`,
   {
     method: 'GET',
     key: route.path,
     query: {
-      'locale': locale.value,
-      'sort[0]': 'sortIndex:asc',
-      'fields': ['title', 'description', 'tag', 'sortIndex', 'slugId'],
-    },
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
+      locale: locale.value,
     },
   },
 );

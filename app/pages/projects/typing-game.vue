@@ -309,6 +309,7 @@
 </template>
 
 <script setup lang="ts">
+import { Cloudinary } from '@cloudinary/url-gen';
 import { breakpointsTailwind, useBreakpoints, useStorage } from '@vueuse/core';
 import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import type {
@@ -360,9 +361,18 @@ const game = reactive<TypingGame>({
 const currentIndex = ref(0); // where the cursor is now
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
+const config = useRuntimeConfig();
 const localePath = useLocalePath();
 const route = useRoute();
-const nuxtApp = useNuxtApp();
+
+const cloudinary = new Cloudinary({
+  cloud: {
+    cloudName: config.public.cloudinaryCloudName,
+  },
+  url: {
+    analytics: false,
+  },
+});
 
 const navigateToProjects = () => {
   void navigateTo(localePath('/projects'));
@@ -427,23 +437,31 @@ onUnmounted(() => {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemData[] }>(
-  '/api/projects',
+} = await useFetch<ProjectItemData>(
+  `/api/projects/${SLUG_ID}`,
   {
     method: 'GET',
     key: route.path,
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
-    },
     query: {
-      'locale': locale.value,
-      'filters[slugId][$eq]': SLUG_ID,
-      'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
-      'fields': 'description',
+      locale: locale.value,
     },
   },
 );
+
+const ogSocialImage = computed(() => {
+  const image = overview.value?.data?.[0]?.ogSocialImage;
+
+  if (!image) {
+    return undefined;
+  }
+
+  return {
+    url: cloudinary.image(image.publicId).toURL(),
+    alt: image.alt ?? undefined,
+    width: image.width ?? undefined,
+    height: image.height ?? undefined,
+  };
+});
 
 useSeoMeta({
   title: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
@@ -451,24 +469,12 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
   ogTitle: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogImage: () => ({
-    url: overview.value?.data?.[0]?.preview?.image?.url,
-    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
-    width: overview.value?.data?.[0]?.preview?.image?.width,
-    height: overview.value?.data?.[0]?.preview?.image?.height,
-    type: overview.value?.data?.[0]?.preview?.image?.mime,
-  }),
+  ogImage: () => ogSocialImage.value,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TypingGame} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
-  twitterImage: () => ({
-    url: overview.value?.data?.[0]?.preview?.image?.url,
-    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
-    width: overview.value?.data?.[0]?.preview?.image?.width,
-    height: overview.value?.data?.[0]?.preview?.image?.height,
-    type: overview.value?.data?.[0]?.preview?.image?.mime,
-  }),
+  twitterImage: () => ogSocialImage.value,
 });
 
 const {

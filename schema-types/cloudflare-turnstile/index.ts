@@ -1,9 +1,6 @@
 import { z } from 'zod';
 
 export const TurnstileTokenSchema = z.string().min(1).max(2048);
-export const TurnstileTokenPayloadSchema = z.object({
-  token: z.string().min(1).max(2048),
-});
 
 export type TurnstileOptions = {
   'action'?: string // This can only contain up to 32 alphanumeric characters including _ and -
@@ -54,7 +51,5 @@ export type CloudflareTurnstileExpose = {
   resetThenRemove: () => void
 }
 
-export type CloudflareSiteVerifyPayload = z.infer<typeof CloudflareSiteVerifyPayloadSchema>;
 export type CloudflareSiteVerifyResponse = z.infer<typeof CloudflareSiteVerifyResponseSchema>;
 export type TurnstileToken = z.infer<typeof TurnstileTokenSchema>;
-export type TurnstileTokenPayload = z.infer<typeof TurnstileTokenPayloadSchema>;

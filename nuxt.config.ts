@@ -64,7 +64,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@comark/nuxt',
     'nuxt-charts',
-    '@nuxt/image',
     '@vueuse/nuxt',
   ],
   devtools: {
@@ -83,15 +82,6 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/main.css'],
-  image: {
-    format: ['webp', 'png'],
-    provider: 'vercel',
-    domains: ['thoughtful-bracelet-33c79aabd8.media.strapiapp.com'],
-    screens: {
-      myAvatar: 120,
-      myAvatar2x: 240,
-    },
-  },
   compatibilityDate: '2024-11-01',
   icon: {
     clientBundle: {

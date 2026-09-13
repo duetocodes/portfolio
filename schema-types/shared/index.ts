@@ -44,22 +44,11 @@ export const TechStackResponseSchema = z.object({
 });
 export type TechStackResponse = z.infer<typeof TechStackResponseSchema>;
 
-export const AvatarImageSchema = z.object({
-  documentId: z.string(),
-  name: z.string(),
-  alternativeText: z.string(),
-  width: z.number(),
-  height: z.number(),
-  mime: z.enum(['image/jpeg', 'image/gif', 'image/png']),
-  size: z.number(),
-  url: z.string().url(),
-});
-
 export const ProjectItemDataSchema = z.object({
-  description: z.string(),
-  preview: z.object({
-    image: AvatarImageSchema,
-  }),
+  data: z.array(z.object({
+    description: z.string(),
+    ogSocialImage: CloudinaryImageSchema.nullish(),
+  })),
 });
 export type ProjectItemData = z.infer<typeof ProjectItemDataSchema>;
 
@@ -67,8 +56,8 @@ export const AboutMeResponseSchema = z.object({
   data: z.object({
     id: z.number(),
     aboutMe: z.string(),
-    heroImage: CloudinaryImageSchema.optional(),
-    meImage: CloudinaryImageSchema.optional(),
+    heroImage: CloudinaryImageSchema.nullable(),
+    meImage: CloudinaryImageSchema.nullable(),
     socialMedia: z.array(z.object({
       id: z.number(),
       sortIndex: z.number(),
@@ -92,30 +81,18 @@ export const ProjectSlugIDSchema = z.enum([
 export type ProjectSlugID = z.infer<typeof ProjectSlugIDSchema>;
 
 export const ProjectSchema = z.object({
-  id: z.number(),
-  documentId: z.string(),
-  title: z.string(),
-  description: z.string(),
-  tag: z.string(),
-  sortIndex: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  publishedAt: z.string(),
-  locale: z.string(),
-  slugId: ProjectSlugIDSchema,
+  data: z.array(z.object({
+    id: z.number(),
+    title: z.string(),
+    description: z.string(),
+    tag: z.string().nullable(),
+    sortIndex: z.number(),
+    locale: z.string(),
+    ogSocialImage: CloudinaryImageSchema.nullish(),
+    slugId: ProjectSlugIDSchema,
+  })),
 });
-export type Project = z.infer<typeof ProjectSchema>;
-
-// see https://github.com/unjs/ufo/blob/main/src/query.ts (not sure how to import these)
-export type QueryValue =
-  | string
-  | number
-  | undefined
-  | null
-  | boolean
-  | Array<QueryValue>
-  | Record<string, unknown>;
-export type QueryObject = Record<string, QueryValue | Array<QueryValue>>;
+export type Projects = z.infer<typeof ProjectSchema>;
 
 // https://nuxt.com/docs/3.x/api/composables/use-fetch#type
 export type AsyncDataRequestStatus = 'idle' | 'pending' | 'success' | 'error'

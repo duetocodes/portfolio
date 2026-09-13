@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const AmountSchema = z.string().trim();
-export type Amount = z.infer<typeof AmountSchema>;
 
 export const CurrencyItemSchema = z.object(
   {
@@ -39,4 +38,3 @@ export const CurrencySelectSchema = z.object(
     supportsDecimals: z.boolean(),
   },
 );
-export type CurrencySelect = z.infer<typeof CurrencySelectSchema>;

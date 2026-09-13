@@ -151,6 +151,7 @@
 </template>
 
 <script setup lang="ts">
+import { Cloudinary } from '@cloudinary/url-gen';
 import z from 'zod';
 import type { ProjectItemData, ProjectItemPageMeta, ProjectSlugID } from '~~/schema-types/shared';
 import type { TurnstileToken, CloudflareTurnstileExpose, CloudflareSiteVerifyResponse } from '~~/schema-types/cloudflare-turnstile';
@@ -161,11 +162,19 @@ import {
 } from '~~/schema-types/turnstile-demo-form';
 import type { TimelineItem, FormSubmitEvent } from '@nuxt/ui';
 
-const nuxtApp = useNuxtApp();
+const config = useRuntimeConfig();
 const route = useRoute();
-
 const { locale } = useI18n();
 const { TEXTS } = useNonReactiveTranslation();
+
+const cloudinary = new Cloudinary({
+  cloud: {
+    cloudName: config.public.cloudinaryCloudName,
+  },
+  url: {
+    analytics: false,
+  },
+});
 
 const SLUG_ID: ProjectSlugID = 'cloudflare-turnstile-demo';
 
@@ -272,23 +281,31 @@ const items = computed(() => {
 const {
   // non-crucial data
   data: overview,
-} = useFetch<{ data: ProjectItemData[] }>(
-  '/api/projects',
+} = await useFetch<ProjectItemData>(
+  `/api/projects/${SLUG_ID}`,
   {
     method: 'GET',
     key: route.path,
-    getCachedData(key) {
-      const data = nuxtApp.payload.data?.[key] ?? nuxtApp.static.data?.[key];
-      return data;
-    },
     query: {
-      'locale': locale.value,
-      'filters[slugId][$eq]': SLUG_ID,
-      'populate[preview][populate][image][fields]': ['url', 'alternativeText', 'width', 'height', 'mime'],
-      'fields': 'description',
+      locale: locale.value,
     },
   },
 );
+
+const ogSocialImage = computed(() => {
+  const image = overview.value?.data?.[0]?.ogSocialImage;
+
+  if (!image) {
+    return undefined;
+  }
+
+  return {
+    url: cloudinary.image(image.publicId).toURL(),
+    alt: image.alt ?? undefined,
+    width: image.width ?? undefined,
+    height: image.height ?? undefined,
+  };
+});
 
 useSeoMeta({
   title: () => `${TEXTS.TurnstileDemo} - ${TEXTS.Projects} | duetocodes`,
@@ -296,24 +313,12 @@ useSeoMeta({
   ogSiteName: () => `${TEXTS.TurnstileDemo} - ${TEXTS.Projects} | duetocodes`,
   ogTitle: () => `${TEXTS.TurnstileDemo} - ${TEXTS.Projects} | duetocodes`,
   ogDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
-  ogImage: () => ({
-    url: overview.value?.data?.[0]?.preview?.image?.url,
-    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
-    width: overview.value?.data?.[0]?.preview?.image?.width,
-    height: overview.value?.data?.[0]?.preview?.image?.height,
-    type: overview.value?.data?.[0]?.preview?.image?.mime,
-  }),
+  ogImage: () => ogSocialImage.value,
   ogType: 'website',
   twitterTitle: () => `${TEXTS.TurnstileDemo} - ${TEXTS.Projects} | duetocodes`,
   twitterDescription: () => stripMarkdownLinks(overview.value?.data?.[0]?.description || ''),
   twitterCard: 'summary_large_image',
-  twitterImage: () => ({
-    url: overview.value?.data?.[0]?.preview?.image?.url,
-    alt: overview.value?.data?.[0]?.preview?.image?.alternativeText,
-    width: overview.value?.data?.[0]?.preview?.image?.width,
-    height: overview.value?.data?.[0]?.preview?.image?.height,
-    type: overview.value?.data?.[0]?.preview?.image?.mime,
-  }),
+  twitterImage: () => ogSocialImage.value,
 });
 
 const onSuccessClient = (token: TurnstileToken) => {
